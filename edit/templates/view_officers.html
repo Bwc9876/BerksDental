@@ -1,0 +1,23 @@
+{% extends 'base_object_view.html' %}
+
+
+{% block objectTable %}
+
+<table style="border: 1px black solid;">
+  <tr>
+    <th>Name</th>
+    <th>Image</th>
+    <th>Biography</th>
+  </tr>
+  {% for officer in officers %}
+  <tr>
+    <td>{{ officer.name }}</td>
+    <td><img src="{{ officer.photo_link }}" alt="{{ officer.name }}'s Picture'"/></td>
+    <td>{{ officer.biography }}</td>
+    <td><a href="/admin/edit/officer?id={{ officer.id }}">Edit</a></td>
+    <td><a href="/admin/delete/officer?id={{ officer.id }}">Delete</a></td>
+  </tr>
+  {% endfor %}
+</table>
+
+{% endblock %}

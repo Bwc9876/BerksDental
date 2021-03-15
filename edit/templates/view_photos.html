@@ -1,0 +1,20 @@
+{% extends 'base_object_view.html' %}
+  
+{% block objectTable %}
+
+<table style="border: 1px black solid;">
+  <tr>
+    <th>Image</th>
+    <th>Caption</th>
+  </tr>
+  {% for photo in photos %}
+    <tr>
+      <td><img src="{{ photo.link }}" alt="{{ photo.caption }}"/></td>
+      <td>{{ photo.caption }}</td>
+      <td><a href="/admin/edit/photo?id={{ photo.id }}">Edit</a></td>
+      <td><a href="/admin/delete/photo/?id={{ photo.id }}">Delete</a></td>
+    </tr>
+  {% endfor %}
+</table>
+
+{% endblock %}

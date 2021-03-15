@@ -1,0 +1,16 @@
+{% comment %}
+    This file is used as a confirmation screen to make sure the user wants to delete an object from the database
+    We also use the {% csrf_token %} to ensure the deletion was invoked by the user, and not a malicous third-party
+{% endcomment %}
+{% extends 'base.html' %}
+
+
+{% block content %}
+    <form method="POST" enctype="multipart/form-data">
+      {% csrf_token %}
+      <h1> Delete {{ modelName|title }} </h1>
+      <h2> Are you sure you want to delete {{ objectName|title }}?</h2>
+      <a role="button" href="/admin/overview/{{ modelName }}/">Cancel</a>
+      <button type="submit">Confirm</button>
+    </form>
+{% endblock %}

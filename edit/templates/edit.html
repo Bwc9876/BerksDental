@@ -1,0 +1,47 @@
+{% comment %}
+    This file is used to edit an object in the database
+    This file will keep being rendered with the required errors until the forms is filled out correctly
+    We use the {% csrf_token %} tag to ensure the edit was invoked by the user, and not a malicous third-party
+    We loop through every field in the form and render it
+    We set the enctype to "multipart/form-data" so files can be uploaded
+{% endcomment %}
+{% extends 'base.html' %}
+
+{% block content %}
+
+  {% if form %}
+
+    {% if form.non_field_errors %}
+
+      <ul class="errors">
+        {% for error in form.non_field_errors %}
+          <li>{{ error }}</li>
+        {% endfor %}
+      </ul>
+
+    {% endif %}
+
+    <form method="POST" enctype="multipart/form-data">
+
+      {% csrf_token %}
+      {% for field in form %}
+        <fieldset id="{{ field.label }}_fieldset">
+          {% if field.errors %}
+            <ul>
+              {% for error in field.errors %}
+                <li>{{ error }}</li>
+              {% endfor %}
+            </ul>
+          {% endif %}
+          <label class="fieldLabel">{{ field.label|title }}</label>
+          {{ field }}
+        </fieldset>
+      {% endfor %}
+
+      <button type="submit">Submit</button>
+
+    </form> 
+
+  {% endif %}
+
+{% endblock %}

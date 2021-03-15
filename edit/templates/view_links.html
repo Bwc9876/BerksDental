@@ -1,0 +1,20 @@
+{% extends 'base_object_view.html' %}
+  
+{% block objectTable %}
+
+<table style="border: 1px black solid;">
+  <tr>
+    <th>Name</th>
+    <th>URL</th>
+  </tr>
+  {% for link in links %}
+  <tr>
+    <td>{{ link.display_name }}</td>
+    <td>{{ link.url }}</td>
+    <td><a href="/admin/edit/link?id={{ link.id }}">Edit</a></td>
+    <td><a href="/admin/delete/link?id={{ link.id }}">Delete</a></td>
+  </tr>
+  {% endfor %}
+</table>
+
+{% endblock %}

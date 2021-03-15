@@ -1,0 +1,23 @@
+{% comment %}
+    We use these comment tags instead of <!-- --> as this part of the file won't be sent to the user
+    This file is meant to be inherited by every other html file using the {% extends 'base.html' %} tag
+    The html files that are inheriting this can override the sections with the {% block ... %} tag
+    The links block is so files can set cutom css and js to link to
+    The content block is where the actual content of the page will go
+{% endcomment %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Berks Dental Assistants</title>
+  <script defer src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  {% block links %}{% endblock %}
+</head>
+<body>
+  {% block content %}
+      <h1>This html file is meant to be inherited! Please don't render the base version!</h1>
+  {% endblock %}
+</body>
+</html>
+
