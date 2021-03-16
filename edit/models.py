@@ -10,8 +10,8 @@ from django.db import models
 
 
 class GalleryPhoto(models.Model):
-    """This is a class meant to represent a table for gallery photos on the database
-    It is an extension of the :class:`django.models.Model` class
+    """ This is a class meant to represent a table for gallery photos on the database
+    It is an extension of the :class:`django.db.models.Model` class
 
     :attr id: A UUID To identify a specific picture
     :type id: class:`django.db.models.UUIDField`
@@ -26,7 +26,7 @@ class GalleryPhoto(models.Model):
 
     """
 
-    id = models.UUIDField(primary_key=True, default=uuid.uuid4)
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     picture = models.ImageField(upload_to="gallery-photos")
     caption = models.CharField(max_length=1000)
     date_posted = models.DateField(auto_now_add=True)
@@ -41,7 +41,7 @@ class GalleryPhoto(models.Model):
 
         return self.picture.name.split(".")[-1]
 
-    def link(self):
+    def photo_link(self):
         """ Gets the link to set as a src tag in a <img>
 
         :returns: The link to this GalleryPhoto's image
@@ -61,8 +61,8 @@ class GalleryPhoto(models.Model):
 
 
 class ExternalLink(models.Model):
-    """This is a class meant to represent a table for external links on the database
-    It is an extension of the :class:`django.models.Model` class
+    """ This is a class meant to represent a table for external links on the database
+    It is an extension of the :class:`django.db.models.Model` class
 
     :attr id: A UUID To identify a specific picture
     :type id: class:`django.db.models.UUIDField`
@@ -75,19 +75,13 @@ class ExternalLink(models.Model):
 
     """
 
-    id = models.UUIDField(primary_key=True, default=uuid.uuid4)
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     url = models.URLField(max_length=350)
     display_name = models.CharField(max_length=100)
-    sort_order = models.SmallIntegerField(default=0)
+    sort_order = models.PositiveSmallIntegerField(default=0)
 
-    def get_next_order(self):
-        """ Gets the next sort_order attribute depending on the amount of current links
-
-        :returns: The next sort_order attribute (amount of current links + 1)
-        :rtype: int
-        """
-
-        return len(list(self.objects.all())) + 1
+    class Meta:
+        ordering = ['sort_order']
 
     def __str__(self):
         """ Define how this object will be casted to a string
@@ -96,12 +90,12 @@ class ExternalLink(models.Model):
         :rtype: str
         """
 
-        return self.display_name
+        return f"Link To {self.display_name}"
 
 
 class Event(models.Model):
     """ This is a class meant to represent a table for events on the database
-    It is an extension of the :class:`django.models.Model` class
+    It is an extension of the :class:`django.db.models.Model` class
 
     :attr id: A UUID To identify a specific picture
     :type id: class:`django.db.models.UUIDField`
@@ -118,7 +112,7 @@ class Event(models.Model):
 
     """
 
-    id = models.UUIDField(primary_key=True, default=uuid.uuid4)
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     name = models.CharField(max_length=100)
     location = models.CharField(max_length=200)
     dateOf = models.DateField()
@@ -137,7 +131,7 @@ class Event(models.Model):
 
 class Officer(models.Model):
     """ This is a class meant to represent a table for gallery photos on the database
-    It is an extension of the :class:`django.models.Model` class
+    It is an extension of the :class:`django.db.models.Model` class
 
     :attr id: A UUID To identify a specific picture
     :type id: class:`django.db.models.UUIDField`
@@ -154,7 +148,7 @@ class Officer(models.Model):
 
     """
 
-    id = models.UUIDField(primary_key=True, default=uuid.uuid4)
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     name = models.CharField(max_length=100)
     picture = models.ImageField(upload_to="officer-photos")
     biography = models.CharField(max_length=2000)
@@ -187,3 +181,50 @@ class Officer(models.Model):
         """
 
         return self.name
+
+
+class Social(models.Model):
+    """ This is a class meant to represent a table for social media pages on the database
+    It is an extension of the :class:`django.db.models.Model` class
+
+    :attr id: A UUID To identify a specific picture
+    :type id: class:`django.db.models.UUIDField`
+    :attr service: The name of the social media service we're linking to, the icon displayed is based off this
+    :type service: class:`django.db.models.CharField`
+    :attr link: The link to the social media page
+    :type link: class:`django.models.URLField`
+
+    """  
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+
+    class Services(models.TextChoices):
+        """ This is an internal class used to specify what social media services you can chose from
+        It extends :class:`django.db.models.TextChoices`
+
+        """
+
+        TWITTER = "TW", "Twitter"
+        INSTAGRAM = "IG", "Instagram"
+        YOUTUBE = "YT", "YouTube"
+        FACEBOOK = "FB", "Facebook"
+
+    service = models.CharField(max_length=2, choices=Services.choices, default=Services.TWITTER)
+    link = models.URLField(max_length=350)
+
+    def service_label(self):
+        """ This function is used to get the label for the social media service this links to
+
+        :returns: The name of the social media service this links to
+        :rtype: str
+        """
+
+        return self.Services.labels[self.Services.values.index(self.service)]
+
+    def __str__(self):
+        """ Defines how this object will be casted to a string
+
+        :returns: The name of the social media service
+        :rtype: str
+        """
+
+        return f"Link To {self.service_label()}"

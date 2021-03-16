@@ -3,15 +3,17 @@
 
 {% block content %}
 
+  <ul>
+    <li><a href="{% url 'home' %}">View Site</a></li>
+    <li><a href="{% url 'logout' %}">Logout</a></li>
+  </ul>
 
   <ul>
-
-    <li><a href="/admin/overview/photo/">Add/Edit Photos</a></li>
-    <li><a href="/admin/overview/officer/">Add/Edit Officers</a></li>
-    <li><a href="/admin/overview/event/">Add/Edit Events</a></li>
-    <li><a href="/admin/overview/link/">Add/Edit External Links</a></li>
-
-  <ul>
-
+    <li><a href="{% url 'photo_view' %}">Add/Edit Photos</a></li>
+    <li><a href="{% url 'officer_view' %}">Add/Edit Officers</a></li>
+    <li><a href="{% url 'event_view' %}">Add/Edit Events</a></li>
+    <li><a href="{% url 'link_view' %}">Add/Edit External Links</a></li>
+    <li><a href="{% url 'social_media_page_view' %}">Add/Edit Social Media Pages</a></li>
+  </ul>
 
 {% endblock %}

@@ -1,4 +1,4 @@
-{% extends 'base_object_view.html' %}
+{% extends 'db/base_object_view.html' %}
   
 {% block objectTable %}
 
@@ -11,8 +11,8 @@
   <tr>
     <td>{{ link.display_name }}</td>
     <td>{{ link.url }}</td>
-    <td><a href="/admin/edit/link?id={{ link.id }}">Edit</a></td>
-    <td><a href="/admin/delete/link?id={{ link.id }}">Delete</a></td>
+    <td><a href="{% url 'link_edit' %}?id={{ link.id }}">Edit</a></td>
+    <td><a href="{% url 'link_delete' %}?id={{ link.id }}">Delete</a></td>
   </tr>
   {% endfor %}
 </table>

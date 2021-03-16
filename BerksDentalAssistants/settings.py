@@ -9,7 +9,7 @@ from pathlib import Path
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-SECRET_KEY = os.getenv("SECRET_KEY")
+SECRET_KEY = "a^0$j#*i7x-0=zpg1=vmti*9zhh2i!oi$kx$#bq&7)1jvl%ne&3z"
 
 DEBUG = True
 
@@ -80,6 +80,10 @@ AUTH_PASSWORD_VALIDATORS = [
         'django.contrib.auth.password_validation.NumericPasswordValidator',
     },
 ]
+
+LOGIN_URL = "/admin/login/"
+LOGIN_REDIRECT_URL = "/admin/"
+LOGOUT_REDIRECT_URL = "/"
 
 LANGUAGE_CODE = 'en-us'
 

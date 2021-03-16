@@ -3,8 +3,9 @@
     We can also call .save() to the database with this class to save it to the database
 """
 
-from django.forms import ModelForm
+from django.forms import ModelForm, ValidationError
 from django.forms.widgets import DateInput, TimeInput
+from django.template.defaultfilters import time
 
 from edit import models
 
@@ -37,6 +38,16 @@ class LinkForm(ModelForm):
         model = models.ExternalLink
         fields = ['url', 'display_name']
 
+
+class SocialForm(ModelForm):
+    """ This is a django Form object, which is used to edit the Link object in the database
+    It only displays the name, icon, and url properties of the Link
+    as the id fiels isn't meant to be edited manually
+    """   
+
+    class Meta:
+        model = models.Social
+        exclude = ['id']
 
 class PhotoForm(ModelForm):
     """ This is a django Form object, which is used to edit the GalleryPhoto object in the database
@@ -81,3 +92,14 @@ class EventForm(ModelForm):
     def __init__(self, *args, **kargs):
         super().__init__(*args, **kargs)
         self.fields['dateOf'].label = "Date"
+
+    def clean(self):
+        cleaned_data = super().clean()
+        startTime = cleaned_data.get("startTime")
+        endTime = cleaned_data.get("endTime")
+
+        if startTime and endTime:
+            if startTime > endTime:
+                raise ValidationError("%(start)s is after %(end)s!",  params={'start' : startTime.strftime("%I:%M %p"), 'end' : endTime.strftime("%I:%M %p")}, code="invalidTimes")
+
+

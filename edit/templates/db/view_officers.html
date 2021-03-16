@@ -1,4 +1,4 @@
-{% extends 'base_object_view.html' %}
+{% extends 'db/base_object_view.html' %}
 
 
 {% block objectTable %}
@@ -8,14 +8,18 @@
     <th>Name</th>
     <th>Image</th>
     <th>Biography</th>
+    <th>Email</th>
+    <th>Phone</th>
   </tr>
   {% for officer in officers %}
   <tr>
     <td>{{ officer.name }}</td>
     <td><img src="{{ officer.photo_link }}" alt="{{ officer.name }}'s Picture'"/></td>
     <td>{{ officer.biography }}</td>
-    <td><a href="/admin/edit/officer?id={{ officer.id }}">Edit</a></td>
-    <td><a href="/admin/delete/officer?id={{ officer.id }}">Delete</a></td>
+    <td>{{ officer.email|default:"Not Entered" }}</td>
+    <td>{{ officer.phone|default:"Not Entered" }}</td>
+    <td><a href="{% url 'officer_edit' %}?id={{ officer.id }}">Edit</a></td>
+    <td><a href="{% url 'officer_delete' %}?id={{ officer.id }}">Delete</a></td>
   </tr>
   {% endfor %}
 </table>

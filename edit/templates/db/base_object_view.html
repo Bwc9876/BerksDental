@@ -1,7 +1,7 @@
+{% extends 'base.html' %}
 {% comment %}
     This file is meant to be inherited in order to show a list of objects in the database.
 {% endcomment %}
-{% extends 'base.html' %}
 
 
 {% block content %}
@@ -12,7 +12,9 @@
         {% endblock %}
     </div>
     <ul id="universalActions">
-        <li><a href="/admin/edit/{{ modelName }}">Add</a></li>
-        <li><a href="/admin/">Back</a></li>
+        {% with viewSet.get_safe_name|add:"_edit" as add_link %}
+        <li><a href="{% url add_link %}">Add</a></li>
+        <li><a href="{% url 'admin_home' %}">Back</a></li>
+        {% endwith %}
     </ul>
 {% endblock %}

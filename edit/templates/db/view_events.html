@@ -1,4 +1,4 @@
-{% extends 'base_object_view.html' %}
+{% extends 'db/base_object_view.html' %}
   
 {% block objectTable %}
 
@@ -6,15 +6,17 @@
   <tr>
     <th>Name</th>
     <th>Location</th>
+    <th>Date</th>
     <th>Start Time - End Time</th>
   </tr>
   {% for event in events %}
   <tr>
     <td>{{ event.name }}</td>
     <td>{{ event.location }}</td>
+    <td>{{ event.dateOf }}</td>
     <td>{{ event.startTime }} - {{ event.endTime }}</td>
-    <td><a href="/admin/edit/event?id={{ event.id }}">Edit</a></td>
-    <td><a href="/admin/delete/event?id={{ event.id }}">Delete</a></td>
+    <td><a href="{% url 'event_edit' %}?id={{ event.id }}">Edit</a></td>
+    <td><a href="{% url 'event_delete' %}?id={{ event.id }}">Delete</a></td>
   </tr>
   {% endfor %}
 </table>

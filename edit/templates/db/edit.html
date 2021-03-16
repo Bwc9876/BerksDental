@@ -1,3 +1,4 @@
+{% extends 'base.html' %}
 {% comment %}
     This file is used to edit an object in the database
     This file will keep being rendered with the required errors until the forms is filled out correctly
@@ -5,7 +6,16 @@
     We loop through every field in the form and render it
     We set the enctype to "multipart/form-data" so files can be uploaded
 {% endcomment %}
-{% extends 'base.html' %}
+
+{% block links %}
+
+  <style>
+    .error {
+      color: red;
+    }
+  </style>
+
+{% endblock %}
 
 {% block content %}
 
@@ -15,7 +25,7 @@
 
       <ul class="errors">
         {% for error in form.non_field_errors %}
-          <li>{{ error }}</li>
+          <li class="error">{{ error }}</li>
         {% endfor %}
       </ul>
 
@@ -29,7 +39,7 @@
           {% if field.errors %}
             <ul>
               {% for error in field.errors %}
-                <li>{{ error }}</li>
+                <li class="error">{{ error }}</li>
               {% endfor %}
             </ul>
           {% endif %}
@@ -43,5 +53,9 @@
     </form> 
 
   {% endif %}
+
+    {% with viewSet.get_safe_name|add:"_view" as view_link %}
+        <a href="{% url view_link %}">Back</a>
+    {% endwith %}
 
 {% endblock %}

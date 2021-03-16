@@ -6,6 +6,7 @@
 
 
 from django.contrib import admin
+from django.contrib.auth.views import LoginView, LogoutView
 from django.urls import path
 from main import views as main_views
 from edit import views as edit_views
@@ -14,8 +15,10 @@ from django.conf.urls.static import static
 
 # Main URL config, this is the list read by django that determines what links go to what view
 urlpatterns = [
-    path('', main_views.home),
-    path('admin/', edit_views.admin_home),
+    path('', main_views.home, name="home"),
+    path('admin/', edit_views.admin_home, name="admin_home"),
+    path('admin/login/', LoginView.as_view(template_name="login.html", redirect_authenticated_user=True), name="login"),
+    path('admin/logout/', LogoutView.as_view(), name="logout")
 ]
 
 urlpatterns += edit_views.setup_viewsets()

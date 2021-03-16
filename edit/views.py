@@ -15,10 +15,14 @@ from django.forms import ValidationError
 from django.http import Http404
 from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import path
+from django.views.decorators.http import require_safe, require_http_methods
+from django.template.defaultfilters import slugify
 
 from edit import forms, models
 
 
+
+@require_safe
 @login_required
 def admin_home(request):
     """ A django view function, this will render and send the admin_home.html file
@@ -92,6 +96,17 @@ class EditViewSet:
 
         pass
 
+    def get_safe_name(self):
+        """ This function is run to get the name of this view set as a url/tempalte syntax safe string
+        it gets rid of spaces in favor of underscores, and makes the name lowercase
+
+        :returns: A safe name to be sued in tempalte syntax and url patterns
+        :rtype: str
+        """
+        currentName = self.displayName.lower()
+        currentName = slugify(currentName.replace(" ", "_"))
+        return currentName
+
     def get_overview_link(self):
         """ A function used to get the link that can be used to redirect to the overview page for this model
 
@@ -99,7 +114,7 @@ class EditViewSet:
         :rtype: str
         """
 
-        return "/admin/overview/" + self.displayName.lower()
+        return "/admin/overview/" + self.get_safe_name()
 
     def obj_add(self, request):
         """ A django view function, this will add the model to the database given form data
@@ -120,7 +135,7 @@ class EditViewSet:
             self.post_save(new_obj, True)
             return redirect(self.get_overview_link())
         else:
-            return render(request, "edit.html", {'form': form})
+            return render(request, "db/edit.html", {'form': form, 'viewSet': self})
 
     def obj_edit(self, request):
         """ A django view function, this will edit the model on the database given form data
@@ -142,7 +157,7 @@ class EditViewSet:
             self.post_save(edited_obj, False)
             return redirect(self.get_overview_link())
         else:
-            return render(request, "edit.html", {'form': form})
+            return render(request, "db/edit.html", {'form': form, 'viewSet': self})
 
     def obj_delete_view(self, request):
         """ A django view function, this will delete the model from the database given form data
@@ -163,7 +178,7 @@ class EditViewSet:
             return redirect(self.get_overview_link())
         else:
             target_obj = get_object_or_404(self.model, id=request.GET.get('id', ''))
-            return render(request, "delete.html", {'modelName': self.displayName.lower(), 'objectName': target_obj})
+            return render(request, "db/delete.html", {'viewSet': self, 'objectName': target_obj})
 
     def obj_edit_or_add_view(self, request):
         """ A django view function, this will add the model to the database given form data
@@ -196,7 +211,7 @@ class EditViewSet:
                 except ValidationError:
                     raise Http404()
 
-            return render(request, 'edit.html', {'form': form})
+            return render(request, 'db/edit.html', {'form': form, 'viewSet': self})
 
     def obj_overview_view(self, request):
         """ A django view function, this will add the model to the database given form data
@@ -209,26 +224,29 @@ class EditViewSet:
         """
 
         objects = self.model.objects.all()
-        return render(request, f'view_{self.displayName.lower()}s.html',
-                      {f'{self.displayName.lower()}s': objects, 'modelName': self.displayName.lower()})
+        return render(request, f'db/view_{self.get_safe_name()}s.html',
+                      {f'{self.get_safe_name()}s': objects, 'viewSet': self})
 
     def get_view_functions(self):
         """ This function sets up proxy functions
-        We need to use the @login_required decorator, yet we can't use this within classes
+        We need to use the @login_required and other decorators, yet we can't use this within classes
         So we create functions that have the decorator that use the class
 
         :returns: Three view functions (overview, edit/add, delete)
         :rtype: function(3)
         """
 
+        @require_http_methods(["GET", "POST"])
         @login_required
         def viewset_overview(request):
             return self.obj_overview_view(request)
 
+        @require_http_methods(["GET", "POST"])
         @login_required
         def viewset_edit_or_add(request):
             return self.obj_edit_or_add_view(request)
 
+        @require_http_methods(["GET", "POST"])
         @login_required
         def viewset_delete(request):
             return self.obj_delete_view(request)
@@ -246,6 +264,12 @@ class EventViewSet(EditViewSet):
     modelForm = forms.EventForm
 
 
+class SocialViewSet(EditViewSet):
+    displayName = "Social Media Page"
+    model = models.Social
+    modelForm = forms.SocialForm
+
+
 class LinkViewSet(EditViewSet):
     displayName = "Link"
     model = models.ExternalLink
@@ -258,7 +282,7 @@ class LinkViewSet(EditViewSet):
         """
 
         if new:
-            newObj.sort_order = len(list(models.ExternalLink.objects.all())) + 1
+            newObj.sort_order = len(list(models.ExternalLink.objects.all())) - 1
             newObj.save()
 
     def post_del(self, objDeleted):
@@ -330,14 +354,14 @@ def generate_paths_from_view_set(viewSet):
 
     view_set_instance = viewSet()
     if issubclass(viewSet, EditViewSet):
-        url_name = view_set_instance.displayName.lower()
+        url_name = view_set_instance.get_safe_name()
 
         overview, add_or_edit, delete = view_set_instance.get_view_functions()
 
         patterns_to_return = [
-            path(f'admin/overview/{url_name}/', overview),
-            path(f'admin/edit/{url_name}/', add_or_edit),
-            path(f'admin/delete/{url_name}/', delete)
+            path(f'admin/overview/{url_name}/', overview, name=f"{url_name}_view"),
+            path(f'admin/edit/{url_name}/', add_or_edit, name=f"{url_name}_edit"),
+            path(f'admin/delete/{url_name}/', delete, name=f"{url_name}_delete")
         ]
         return patterns_to_return
     else:
@@ -356,4 +380,5 @@ def setup_viewsets():
     new_patterns += generate_paths_from_view_set(LinkViewSet)
     new_patterns += generate_paths_from_view_set(GalleryPhotoViewSet)
     new_patterns += generate_paths_from_view_set(OfficerViewSet)
+    new_patterns += generate_paths_from_view_set(SocialViewSet)
     return new_patterns
