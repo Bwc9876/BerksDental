@@ -207,6 +207,8 @@ class Social(models.Model):
         INSTAGRAM = "IG", "Instagram"
         YOUTUBE = "YT", "YouTube"
         FACEBOOK = "FB", "Facebook"
+        LINKEDIN = "LI", "Linkedin"
+        PINTEREST = "PT", "Pinterest"
 
     service = models.CharField(max_length=2, choices=Services.choices, default=Services.TWITTER)
     link = models.URLField(max_length=350)
