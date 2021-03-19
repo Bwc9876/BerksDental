@@ -14,7 +14,12 @@
     <ul id="universalActions">
         {% with viewSet.get_safe_name|add:"_edit" as add_link %}
         <li><a href="{% url add_link %}">Add</a></li>
-        <li><a href="{% url 'admin_home' %}">Back</a></li>
         {% endwith %}
+        {% if viewSet.ordered %}
+            {% with viewSet.get_safe_name|add:"_order" as order_link %}
+            <li><a href="{% url order_link %}">Re-Order</a></li>
+            {% endwith %}
+        {% endif %}
+        <li><a href="{% url 'admin_home' %}">Back</a></li>
     </ul>
 {% endblock %}

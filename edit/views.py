@@ -51,6 +51,7 @@ class EditViewSet:
     displayName = "base"
     model = None
     modelForm = None
+    ordered = False
 
     def pre_save(self, newObj, new):
         """ The function to be run before an object is saved to the database
@@ -132,7 +133,10 @@ class EditViewSet:
         if form.is_valid():
             self.pre_save(None, True)
             new_obj = form.save()
-            self.post_save(new_obj, True)
+            if self.ordered:
+                new_obj.sort_order = len(list(self.model.objects.all())) - 1
+                new_obj.save()
+                self.post_save(new_obj, True)
             return redirect(self.get_overview_link())
         else:
             return render(request, "db/edit.html", {'form': form, 'viewSet': self})
@@ -174,6 +178,11 @@ class EditViewSet:
             target_obj = get_object_or_404(self.model, id=request.GET.get('id', ''))
             self.pre_del(target_obj)
             target_obj.delete()
+            if self.ordered:
+                objects_to_fix = list(self.model.objects.filter(sort_order__gt=target_obj.sort_order))
+                for object_to_fix in objects_to_fix:
+                    object_to_fix.sort_order -= 1
+                    object_to_fix.save()
             self.post_del(target_obj)
             return redirect(self.get_overview_link())
         else:
@@ -212,6 +221,33 @@ class EditViewSet:
                     raise Http404()
 
             return render(request, 'db/edit.html', {'form': form, 'viewSet': self})
+
+    def object_order(self, request):
+        """ This function allows the user to edit the order external links will appear with drag-and-drop
+        On the backend, we expect a list of ids, we then get the links these ids are associates with
+        and set the sort_order property of it to where the id is located from the incoming list
+
+        :param request: A request object sent by django
+        :type request: class:`django.http.HttpRequest`
+        :returns: Either a page where the user can edit the order of links, or a redirect back to the overview page
+        :rtype: :class:`django.http.HttpResponse`
+        """
+
+        if request.method == "POST":
+            new_order_raw = request.POST.get("new_order", "").split(",")
+            new_order = [UUID(raw_id) for raw_id in new_order_raw]
+            current_order = list(self.model.objects.values_list("id", flat=True).order_by("sort_order"))
+            if Counter(new_order) == Counter(current_order):
+                for target_id in current_order:
+                    object_to_be_sorted = self.model.objects.get(id=target_id)
+                    object_to_be_sorted.sort_order = new_order.index(target_id)
+                    object_to_be_sorted.save()
+                return redirect(self.get_overview_link())
+            else:
+                return render(request, 'db/order.html',
+                              {'error': 'Invalid List!', 'objects': self.model.objects.all, 'viewSet': self})
+        else:
+            return render(request, "db/order.html", {'objects': self.model.objects.all(), 'viewSet': self})
 
     def obj_overview_view(self, request):
         """ A django view function, this will add the model to the database given form data
@@ -253,6 +289,14 @@ class EditViewSet:
 
         return viewset_overview, viewset_edit_or_add, viewset_delete
 
+    def get_edit_order_view(self):
+        @require_http_methods(["GET", "POST"])
+        @login_required()
+        def edit_order_view(request):
+            return self.object_order(request)
+
+        return edit_order_view
+
 
 # The following classes inherit from EditViewSet class, and are used to add functionality to the models we want
 
@@ -267,65 +311,14 @@ class SocialViewSet(EditViewSet):
     displayName = "Social Media Page"
     model = models.Social
     modelForm = forms.SocialForm
+    ordered = True
 
 
 class LinkViewSet(EditViewSet):
     displayName = "Link"
     model = models.ExternalLink
     modelForm = forms.LinkForm
-
-    def post_save(self, newObj, new):
-        """ This function is run after an object is saved to the db
-        If this object is new, we assign it a sort_order attribute
-        """
-
-        if new:
-            newObj.sort_order = len(list(self.model.objects.all())) - 1
-            newObj.save()
-
-    def post_del(self, objDeleted):
-        """ This function is run after the link is deleted from the db
-        It will make sure the sort_order properties on all links are set correctly after deletion
-        """
-
-        links_to_fix = list(self.model.objects.filter(sort_order__gt=objDeleted.sort_order))
-        for link_object in links_to_fix:
-            link_object.sort_order -= 1
-            link_object.save()
-
-    def edit_order(self, request):
-        """ This function allows the user toe dit the order external links will appear
-
-        :param request: A request object sent by django
-        :type request: class:`django.http.HttpRequest`
-        :returns: Either a page where the user can edit the order of links, or a redirect back to the overview page
-        :rtype: :class:`django.http.HttpResponse`
-        """
-
-        if request.method == "POST":
-            new_order_raw = request.POST.get("new_order", "").split(",")
-            new_order = [UUID(raw_id) for raw_id in new_order_raw]
-            current_order = list(self.model.objects.values_list("id", flat=True).order_by("sort_order"))
-            if Counter(new_order) == Counter(current_order):
-                for target_id in current_order:
-                    object_to_be_sorted = self.model.objects.get(id=target_id)
-                    object_to_be_sorted.sort_order = new_order.index(target_id)
-                    object_to_be_sorted.save()
-                return redirect(self.get_overview_link())
-            else:
-                return render(request, 'db/link_order.html',
-                              {'error': 'Invalid List!', 'links': self.model.objects.all, 'viewSet': self})
-        else:
-            return render(request, "db/link_order.html", {'links': self.model.objects.all(), 'viewSet': self})
-
-    def get_edit_order_view(self):
-
-        @require_http_methods(["GET", "POST"])
-        @login_required()
-        def edit_order_view(request):
-            return self.edit_order(request)
-
-        return edit_order_view
+    ordered = True
 
 
 class GalleryPhotoViewSet(EditViewSet):
@@ -373,6 +366,7 @@ class OfficerViewSet(GalleryPhotoViewSet):
     model = models.Officer
     modelForm = forms.OfficerForm
     photoFolder = "officer-photos"
+    ordered = True
 
 
 def generate_paths_from_view_set(viewSet):
@@ -394,6 +388,11 @@ def generate_paths_from_view_set(viewSet):
             path(f'admin/edit/{url_name}/', add_or_edit, name=f"{url_name}_edit"),
             path(f'admin/delete/{url_name}/', delete, name=f"{url_name}_delete")
         ]
+
+        if view_set_instance.ordered:
+            patterns_to_return.append(path(f"admin/order/{url_name}/",
+                                           view_set_instance.get_edit_order_view(), name=f"{url_name}_order"))
+
         return patterns_to_return
     else:
         raise ValueError("Please pass the *class* of the viewset you want to add!")
@@ -409,7 +408,6 @@ def setup_viewsets():
     new_patterns = []
     new_patterns += generate_paths_from_view_set(EventViewSet)
     new_patterns += generate_paths_from_view_set(LinkViewSet)
-    new_patterns.append(path("admin/order/link/", LinkViewSet().get_edit_order_view(), name="link_order"))
     new_patterns += generate_paths_from_view_set(GalleryPhotoViewSet)
     new_patterns += generate_paths_from_view_set(OfficerViewSet)
     new_patterns += generate_paths_from_view_set(SocialViewSet)

@@ -59,6 +59,9 @@ class GalleryPhoto(models.Model):
 
         return self.caption
 
+    class Meta:
+        ordering = ['date_posted']
+
 
 class ExternalLink(models.Model):
     """ This is a class meant to represent a table for external links on the database
@@ -80,9 +83,6 @@ class ExternalLink(models.Model):
     display_name = models.CharField(max_length=100)
     sort_order = models.PositiveSmallIntegerField(default=0)
 
-    class Meta:
-        ordering = ['sort_order']
-
     def __str__(self):
         """ Define how this object will be casted to a string
 
@@ -91,6 +91,9 @@ class ExternalLink(models.Model):
         """
 
         return f"Link To {self.display_name}"
+
+    class Meta:
+        ordering = ['sort_order']
 
 
 class Event(models.Model):
@@ -128,6 +131,9 @@ class Event(models.Model):
 
         return self.name
 
+    class Meta:
+        ordering = ['dateOf', 'startTime']
+
 
 class Officer(models.Model):
     """ This is a class meant to represent a table for gallery photos on the database
@@ -151,9 +157,10 @@ class Officer(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     name = models.CharField(max_length=100)
     picture = models.ImageField(upload_to="officer-photos")
-    biography = models.CharField(max_length=2000)
+    biography = models.TextField(max_length=2000)
     phone = models.CharField(max_length=50, blank=True, null=True)
-    email = models.CharField(max_length=50, blank=True, null=True)
+    email = models.EmailField(max_length=50, blank=True, null=True)
+    sort_order = models.PositiveSmallIntegerField(default=0)
 
     def get_extension(self):
         """ Used to get the file extension of the uploaded image
@@ -182,6 +189,9 @@ class Officer(models.Model):
 
         return self.name
 
+    class Meta:
+        ordering = ['sort_order']
+
 
 class Social(models.Model):
     """ This is a class meant to represent a table for social media pages on the database
@@ -194,7 +204,7 @@ class Social(models.Model):
     :attr link: The link to the social media page
     :type link: class:`django.models.URLField`
 
-    """  
+    """
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
 
     class Services(models.TextChoices):
@@ -212,6 +222,7 @@ class Social(models.Model):
 
     service = models.CharField(max_length=2, choices=Services.choices, default=Services.TWITTER)
     link = models.URLField(max_length=350)
+    sort_order = models.PositiveSmallIntegerField(default=0)
 
     def service_label(self):
         """ This function is used to get the label for the social media service this links to

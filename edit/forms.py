@@ -5,7 +5,6 @@
 
 from django.forms import ModelForm, ValidationError
 from django.forms.widgets import DateInput, TimeInput
-from django.template.defaultfilters import time
 
 from edit import models
 
@@ -42,12 +41,13 @@ class LinkForm(ModelForm):
 class SocialForm(ModelForm):
     """ This is a django Form object, which is used to edit the Link object in the database
     It only displays the name, icon, and url properties of the Link
-    as the id fiels isn't meant to be edited manually
-    """   
+    as the id fields isn't meant to be edited manually
+    """
 
     class Meta:
         model = models.Social
-        exclude = ['id']
+        exclude = ['id', 'sort_order']
+
 
 class PhotoForm(ModelForm):
     """ This is a django Form object, which is used to edit the GalleryPhoto object in the database
@@ -62,12 +62,12 @@ class PhotoForm(ModelForm):
 
 class OfficerForm(ModelForm):
     """ This is a django Form object, which is used to edit the Officer object in the database
-    It displays all properties except id, as id isn't meant to be edited manually
+    It displays all properties except id and sort_order, as both aren't meant to be edited manually
     """
 
     class Meta:
         model = models.Officer
-        exclude = ['id']
+        exclude = ['id', 'sort_order']
 
 
 class EventForm(ModelForm):
@@ -100,6 +100,6 @@ class EventForm(ModelForm):
 
         if startTime and endTime:
             if startTime > endTime:
-                raise ValidationError("%(start)s is after %(end)s!",  params={'start' : startTime.strftime("%I:%M %p"), 'end' : endTime.strftime("%I:%M %p")}, code="invalidTimes")
-
-
+                raise ValidationError("%(start)s is after %(end)s!", params={'start': startTime.strftime("%I:%M %p"),
+                                                                             'end': endTime.strftime("%I:%M %p")},
+                                      code="invalidTimes")

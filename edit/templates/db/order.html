@@ -62,22 +62,17 @@
     {% endif %}
 
     <ul id="sort_list">
-        {% for link in links %}
-
-            <li id="{{ link.id }}" class="sortTarget">{{ link.display_name }}</li>
-
+        {% for object in objects %}
+            <li id="{{ object.id }}" class="sortTarget">{{ object }}</li>
         {% endfor %}
     </ul>
 
-    <p>Click on a link and drag it to re-order</p>
+    <p>Click on an item and drag it to re-order</p>
 
     <form method="post" id="order_form">
-
         {% csrf_token %}
         <input type="hidden" name="new_order" id="new_order"/>
-
         <button type="submit" id="submit">Save</button>
-
     </form>
 
 {% endblock %}
