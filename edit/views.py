@@ -1,25 +1,25 @@
 """
-    This is a collection of functions or "views" that will inevitably return HttpResponse objects
+    This is a collection of functions or "views" that will inevitably return :class:`django.http.HttpResponse` objects
     We use the "render" shortcut to render an html file using template tags and return it as an HttpResponse object
     Sometimes, we raise Http404 to display a page not found screen (ex: if an id is incorrect)
     We register what url patterns go to what views in urls.py
     The templates (html files) we render should be contained in the templates/ folder
 """
 
-
 import os
+from collections import Counter
+from uuid import UUID
 
 from django.conf import settings
 from django.contrib.auth.decorators import login_required
 from django.forms import ValidationError
 from django.http import Http404
 from django.shortcuts import render, redirect, get_object_or_404
+from django.template.defaultfilters import slugify
 from django.urls import path
 from django.views.decorators.http import require_safe, require_http_methods
-from django.template.defaultfilters import slugify
 
 from edit import forms, models
-
 
 
 @require_safe
@@ -97,15 +97,15 @@ class EditViewSet:
         pass
 
     def get_safe_name(self):
-        """ This function is run to get the name of this view set as a url/tempalte syntax safe string
+        """ This function is run to get the name of this view set as a url/template syntax safe string
         it gets rid of spaces in favor of underscores, and makes the name lowercase
 
-        :returns: A safe name to be sued in tempalte syntax and url patterns
+        :returns: A safe name to be sued in template syntax and url patterns
         :rtype: str
         """
-        currentName = self.displayName.lower()
-        currentName = slugify(currentName.replace(" ", "_"))
-        return currentName
+        current_name = self.displayName.lower()
+        current_name = slugify(current_name.replace(" ", "_"))
+        return current_name
 
     def get_overview_link(self):
         """ A function used to get the link that can be used to redirect to the overview page for this model
@@ -258,7 +258,6 @@ class EditViewSet:
 
 
 class EventViewSet(EditViewSet):
-
     displayName = "Event"
     model = models.Event
     modelForm = forms.EventForm
@@ -277,24 +276,56 @@ class LinkViewSet(EditViewSet):
 
     def post_save(self, newObj, new):
         """ This function is run after an object is saved to the db
-        If this objet is new, we assign it a sort_order attribute
-
+        If this object is new, we assign it a sort_order attribute
         """
 
         if new:
-            newObj.sort_order = len(list(models.ExternalLink.objects.all())) - 1
+            newObj.sort_order = len(list(self.model.objects.all())) - 1
             newObj.save()
 
     def post_del(self, objDeleted):
         """ This function is run after the link is deleted from the db
         It will make sure the sort_order properties on all links are set correctly after deletion
-
         """
 
-        links_to_fix = list(models.ExternalLink.objects.filter(sort_order__gt=objDeleted.sort_order))
+        links_to_fix = list(self.model.objects.filter(sort_order__gt=objDeleted.sort_order))
         for link_object in links_to_fix:
             link_object.sort_order -= 1
             link_object.save()
+
+    def edit_order(self, request):
+        """ This function allows the user toe dit the order external links will appear
+
+        :param request: A request object sent by django
+        :type request: class:`django.http.HttpRequest`
+        :returns: Either a page where the user can edit the order of links, or a redirect back to the overview page
+        :rtype: :class:`django.http.HttpResponse`
+        """
+
+        if request.method == "POST":
+            new_order_raw = request.POST.get("new_order", "").split(",")
+            new_order = [UUID(raw_id) for raw_id in new_order_raw]
+            current_order = list(self.model.objects.values_list("id", flat=True).order_by("sort_order"))
+            if Counter(new_order) == Counter(current_order):
+                for target_id in current_order:
+                    object_to_be_sorted = self.model.objects.get(id=target_id)
+                    object_to_be_sorted.sort_order = new_order.index(target_id)
+                    object_to_be_sorted.save()
+                return redirect(self.get_overview_link())
+            else:
+                return render(request, 'db/link_order.html',
+                              {'error': 'Invalid List!', 'links': self.model.objects.all, 'viewSet': self})
+        else:
+            return render(request, "db/link_order.html", {'links': self.model.objects.all(), 'viewSet': self})
+
+    def get_edit_order_view(self):
+
+        @require_http_methods(["GET", "POST"])
+        @login_required()
+        def edit_order_view(request):
+            return self.edit_order(request)
+
+        return edit_order_view
 
 
 class GalleryPhotoViewSet(EditViewSet):
@@ -378,6 +409,7 @@ def setup_viewsets():
     new_patterns = []
     new_patterns += generate_paths_from_view_set(EventViewSet)
     new_patterns += generate_paths_from_view_set(LinkViewSet)
+    new_patterns.append(path("admin/order/link/", LinkViewSet().get_edit_order_view(), name="link_order"))
     new_patterns += generate_paths_from_view_set(GalleryPhotoViewSet)
     new_patterns += generate_paths_from_view_set(OfficerViewSet)
     new_patterns += generate_paths_from_view_set(SocialViewSet)

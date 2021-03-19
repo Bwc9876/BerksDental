@@ -1,0 +1,83 @@
+{% extends 'base.html' %}
+
+{% block links %}
+    <script crossorigin="anonymous" src="https://cdn.jsdelivr.net/npm/sortablejs@latest/Sortable.min.js"></script>
+    <script crossorigin="anonymous"
+            src="https://cdn.jsdelivr.net/npm/jquery-sortablejs@latest/jquery-sortable.js"></script>
+    <script defer type="text/javascript">
+
+        $(document).ready(() => {
+
+            $("#sort_list").sortable({'animation': 150, 'ghostClass': "ghostSortTarget"});
+
+            $("#order_form").submit(() => {
+
+                let new_order = [];
+                $(".sortTarget").each((index, list_item) => {
+
+                    new_order.push($(list_item).attr("id"));
+
+                });
+
+                let new_order_input = $("#new_order");
+
+                new_order_input.val(new_order.join(","));
+
+            });
+
+        });
+
+    </script>
+
+    <style>
+
+        #sort_list {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+        }
+
+        .sortTarget {
+            border: grey 2px solid;
+            margin: 10px 5px;
+            padding: 0;
+        }
+
+        .ghostSortTarget {
+            background-color: skyblue;
+        }
+
+        .sortTarget:hover {
+            cursor: grab;
+        }
+
+    </style>
+
+{% endblock %}
+
+{% block content %}
+
+    {% if error %}
+        <h3 style="color:red;">{{ error }}</h3>
+    {% endif %}
+
+    <ul id="sort_list">
+        {% for link in links %}
+
+            <li id="{{ link.id }}" class="sortTarget">{{ link.display_name }}</li>
+
+        {% endfor %}
+    </ul>
+
+    <p>Click on a link and drag it to re-order</p>
+
+    <form method="post" id="order_form">
+
+        {% csrf_token %}
+        <input type="hidden" name="new_order" id="new_order"/>
+
+        <button type="submit" id="submit">Save</button>
+
+    </form>
+
+{% endblock %}

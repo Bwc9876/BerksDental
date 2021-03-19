@@ -5,7 +5,7 @@
 
 
 {% block content %}
-    <h1>View/Edit {{ modelName|title }}s</h1>
+    <h1>View/Edit {{ viewSet.displayName|title }}s</h1>
     <div id="objects">
         {% block objectTable %}
             <h1>This html file is meant to be inherited! Please don't render the base version!</h1>

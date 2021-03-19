@@ -11,8 +11,8 @@
     <tr>
       <td>{{ social.service_label }}</td>
       <td><a href="{{ social.link }}">{{ social.link }}</a></td>
-        <td><a href="{% url 'social_media_page_edit' %}?id={{ social.id }}">Edit</a></td>
-        <td><a href="{% url 'social_media_page_delete' %}?id={{ social.id }}">Delete</a></td>
+      <td><a href="{% url 'social_media_page_edit' %}?id={{ social.id }}">Edit</a></td>
+      <td><a href="{% url 'social_media_page_delete' %}?id={{ social.id }}">Delete</a></td>
     </tr>
   {% endfor %}
 </table>

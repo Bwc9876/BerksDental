@@ -60,7 +60,7 @@ TEMPLATES = [
 WSGI_APPLICATION = 'BerksDentalAssistants.wsgi.application'
 
 
-# Will be changed to mysql for PythonAnywhere
+# Will be changed to MySQL for PythonAnywhere
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
