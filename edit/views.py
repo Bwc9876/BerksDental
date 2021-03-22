@@ -110,6 +110,14 @@ class EditViewSet:
         return current_name
 
     def get_link(self, linkType):
+        """ This function is used to get and reverse a url name with a given type.
+         So passing "add" when the model is "ExternalLink" will resolve to the url "/admin/edit/link/"
+
+        :param linkType: The type of url we want to reverse
+        :type linkType: str
+        :returns: The link to hte requested url
+        :rtype: str
+        """
         return reverse(f"{self.get_safe_name()}_{linkType}")
 
     def overview_link(self):
