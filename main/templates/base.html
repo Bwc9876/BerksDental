@@ -29,8 +29,9 @@
   {% comment %}
     CSS
   {% endcomment %}
-  <link href="{% static "/shared/shared.css" %}" type="text/css" rel="stylesheet">
   <link href="{% static "/shared/text-sizing.css" %}" type="text/css" rel="stylesheet">
+  <link href="{% static "/shared/shared-mobile.css" %}" type="text/css" rel="stylesheet">
+  <link href="{% static "/shared/shared-desktop.css" %}" type="text/css" rel="stylesheet">
   {% comment %}
     Javascript
   {% endcomment %}
@@ -42,23 +43,17 @@
   {% include 'ie-card.html' %}
   <header>
       <nav class="nav-main">
-          <img alt="Berks Dental Assistants Logo" class="nav-img" src="https://placeholder.com/wp-content/uploads/2018/10/placeholder.com-logo1.png"/>
+          <a href="{% url "home" %}"><img alt="Berks Dental Assistants Logo" class="nav-img" src="{% static "/shared/logo.png" %}"/></a>
           <div class="nav-link-container">
-              <a class="nav-link">Funny</a>
-              <a class="nav-link">Funny</a>
-              <a class="nav-link">Funny</a>
-              <a class="nav-link">Funny</a>
-              <a class="nav-link">Funny</a>
-              <a class="nav-link">Funny</a>
-              <a class="nav-link">Funny</a>
-              <a class="nav-link">Funny</a>
-              <a class="nav-link">Funny</a>
-              <a class="nav-link">Funny</a>
-              <a class="nav-link">Funny</a>
-              <a class="nav-link">Funny</a>
+              <a href="{% url "home" %}" class="nav-link">Home</a>
+              <a class="nav-link">Gallery</a>
+              <a class="nav-link">Events</a>
+              <a class="nav-link">Officers</a>
+              <a class="nav-link">About</a>
           </div>
           <button class="nav-button">Menu</button>
       </nav>
+      <div class="nav-placeholder"></div>
       {% block header %}{% endblock %}
   </header>
   {% block content %}
