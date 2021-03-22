@@ -8,22 +8,29 @@
 
         $(document).ready(() => {
 
-            $("#sort_list").sortable({'animation': 150, 'ghostClass': "ghostSortTarget"});
+            $("#sort_list").sortable({'animation': 150, 'ghostClass': "ghostSortTarget", 'filter': ".emptyNotification"});
 
-            $("#order_form").submit(() => {
+            if ($(".emptyNotification").length === 0) {
 
-                let new_order = [];
-                $(".sortTarget").each((index, list_item) => {
+                $("#order_form").submit(() => {
 
-                    new_order.push($(list_item).attr("id"));
+                    let new_order = [];
+                    $(".sortTarget").each((index, list_item) => {
+
+                        new_order.push($(list_item).attr("id"));
+
+                    });
+
+                    let new_order_input = $("#new_order");
+
+                    new_order_input.val(new_order.join(","));
 
                 });
+            } else {
 
-                let new_order_input = $("#new_order");
+                $("#submit").prop("disabled", true);
 
-                new_order_input.val(new_order.join(","));
-
-            });
+            }
 
         });
 
@@ -64,6 +71,8 @@
     <ul id="sort_list">
         {% for object in objects %}
             <li id="{{ object.id }}" class="sortTarget">{{ object }}</li>
+        {% empty %}
+            <li class="emptyNotification">No {{ viewSet.displayName|title }}s in the database</li>
         {% endfor %}
     </ul>
 

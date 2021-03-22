@@ -16,7 +16,7 @@ from django.forms import ValidationError
 from django.http import Http404
 from django.shortcuts import render, redirect, get_object_or_404
 from django.template.defaultfilters import slugify
-from django.urls import path
+from django.urls import path, reverse
 from django.views.decorators.http import require_safe, require_http_methods
 
 from edit import forms, models
@@ -101,21 +101,55 @@ class EditViewSet:
         """ This function is run to get the name of this view set as a url/template syntax safe string
         it gets rid of spaces in favor of underscores, and makes the name lowercase
 
-        :returns: A safe name to be sued in template syntax and url patterns
+        :returns: A safe name to be used in template syntax and url patterns
         :rtype: str
         """
+
         current_name = self.displayName.lower()
         current_name = slugify(current_name.replace(" ", "_"))
         return current_name
 
-    def get_overview_link(self):
+    def get_link(self, linkType):
+        return reverse(f"{self.get_safe_name()}_{linkType}")
+
+    def overview_link(self):
         """ A function used to get the link that can be used to redirect to the overview page for this model
 
         :returns: The link to be used in the redirect
         :rtype: str
         """
 
-        return "/admin/overview/" + self.get_safe_name()
+        return self.get_link("view")
+
+    def edit_link(self):
+        """ A function used to get the link that can be used to redirect to the edit page for this model
+
+        :returns: The link to be used in the redirect
+        :rtype: str
+        """
+
+        return self.get_link("edit")
+
+    def order_link(self):
+        """ A function used to get the link that can be used to redirect to the re-order page for this model
+
+        :returns: The link to be used in the redirect
+        :rtype: str
+        """
+
+        if self.ordered:
+            return self.get_link("order")
+        else:
+            return "#"
+
+    def delete_link(self):
+        """ A function used to get the link that can be used to redirect to the delete page for this model
+
+        :returns: The link to be used in the redirect
+        :rtype: str
+        """
+
+        return self.get_link("delete")
 
     def obj_add(self, request):
         """ A django view function, this will add the model to the database given form data
@@ -137,7 +171,7 @@ class EditViewSet:
                 new_obj.sort_order = len(list(self.model.objects.all())) - 1
                 new_obj.save()
                 self.post_save(new_obj, True)
-            return redirect(self.get_overview_link())
+            return redirect(self.overview_link())
         else:
             return render(request, "db/edit.html", {'form': form, 'viewSet': self})
 
@@ -159,7 +193,7 @@ class EditViewSet:
             self.pre_save(target_obj, False)
             edited_obj = form.save()
             self.post_save(edited_obj, False)
-            return redirect(self.get_overview_link())
+            return redirect(self.overview_link())
         else:
             return render(request, "db/edit.html", {'form': form, 'viewSet': self})
 
@@ -184,7 +218,7 @@ class EditViewSet:
                     object_to_fix.sort_order -= 1
                     object_to_fix.save()
             self.post_del(target_obj)
-            return redirect(self.get_overview_link())
+            return redirect(self.overview_link())
         else:
             target_obj = get_object_or_404(self.model, id=request.GET.get('id', ''))
             return render(request, "db/delete.html", {'viewSet': self, 'objectName': target_obj})
@@ -235,14 +269,17 @@ class EditViewSet:
 
         if request.method == "POST":
             new_order_raw = request.POST.get("new_order", "").split(",")
-            new_order = [UUID(raw_id) for raw_id in new_order_raw]
+            try:
+                new_order = [UUID(raw_id) for raw_id in new_order_raw]
+            except ValueError:
+                new_order = []
             current_order = list(self.model.objects.values_list("id", flat=True).order_by("sort_order"))
             if Counter(new_order) == Counter(current_order):
                 for target_id in current_order:
                     object_to_be_sorted = self.model.objects.get(id=target_id)
                     object_to_be_sorted.sort_order = new_order.index(target_id)
                     object_to_be_sorted.save()
-                return redirect(self.get_overview_link())
+                return redirect(self.overview_link())
             else:
                 return render(request, 'db/order.html',
                               {'error': 'Invalid List!', 'objects': self.model.objects.all, 'viewSet': self})
@@ -395,11 +432,11 @@ def generate_paths_from_view_set(viewSet):
 
         return patterns_to_return
     else:
-        raise ValueError("Please pass the *class* of the viewset you want to add!")
+        raise ValueError("Please pass a class that inherits EditViewSet!")
 
 
 def setup_viewsets():
-    """ This function adds gives the url patterns for all the models we want
+    """ This function gives the url patterns for all the models we want
 
     :returns: The list of wanted patterns for the models
     :rtype: list(:class:`django.urls.path`)

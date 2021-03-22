@@ -54,8 +54,6 @@
 
   {% endif %}
 
-    {% with viewSet.get_safe_name|add:"_view" as view_link %}
-        <a href="{% url view_link %}">Back</a>
-    {% endwith %}
+  <a href="{{ viewSet.overview_link }}">Back</a>
 
 {% endblock %}

@@ -6,13 +6,11 @@
 
 
 {% block content %}
-    <form method="POST" enctype="multipart/form-data">
+    <form method="POST">
       {% csrf_token %}
       <h1> Delete {{ viewSet.displayName|title }} </h1>
       <h2> Are you sure you want to delete {{ objectName|title }}?</h2>
-        {% with viewSet.get_safe_name|add:"_view" as view_link %}
-            <a role="button" href="{% url view_link %}">Cancel</a>
-        {% endwith %}
+      <a role="button" href="{{ viewSet.overview_link }}">Cancel</a>
       <button type="submit">Confirm</button>
     </form>
 {% endblock %}

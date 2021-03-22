@@ -92,6 +92,8 @@ class EventForm(ModelForm):
     def __init__(self, *args, **kargs):
         super().__init__(*args, **kargs)
         self.fields['dateOf'].label = "Date"
+        self.fields['startTime'].label = "Start Time"
+        self.fields['endTime'].label = "End Time"
 
     def clean(self):
         cleaned_data = super().clean()
