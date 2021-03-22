@@ -29,7 +29,7 @@ class GalleryPhoto(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     picture = models.ImageField(upload_to="gallery-photos")
     caption = models.CharField(max_length=1000)
-    date_posted = models.DateField(auto_now_add=True)
+    date_posted = models.DateTimeField(auto_now_add=True)
     featured = models.BooleanField(default=False)
 
     def get_extension(self):
@@ -60,7 +60,7 @@ class GalleryPhoto(models.Model):
         return self.caption
 
     class Meta:
-        ordering = ['date_posted']
+        ordering = ['-date_posted']
 
 
 class ExternalLink(models.Model):

@@ -11,8 +11,8 @@
     <tr>
       <td><img src="{{ photo.photo_link }}" alt="{{ photo.caption }}"/></td>
       <td>{{ photo.caption }}</td>
-        <td><a href="{% url 'photo_edit' %}?id={{ photo.id }}">Edit</a></td>
-        <td><a href="{% url 'photo_delete' %}?id={{ photo.id }}">Delete</a></td>
+      <td><a href="{% url 'photo_edit' %}?id={{ photo.id }}">Edit</a></td>
+      <td><a href="{% url 'photo_delete' %}?id={{ photo.id }}">Delete</a></td>
     </tr>
   {% endfor %}
 </table>

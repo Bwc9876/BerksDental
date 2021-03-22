@@ -118,6 +118,7 @@ class EditViewSet:
         :returns: The link to hte requested url
         :rtype: str
         """
+
         return reverse(f"{self.get_safe_name()}_{linkType}")
 
     def overview_link(self):
@@ -178,7 +179,7 @@ class EditViewSet:
             if self.ordered:
                 new_obj.sort_order = len(list(self.model.objects.all())) - 1
                 new_obj.save()
-                self.post_save(new_obj, True)
+            self.post_save(new_obj, True)
             return redirect(self.overview_link())
         else:
             return render(request, "db/edit.html", {'form': form, 'viewSet': self})
@@ -389,7 +390,7 @@ class GalleryPhotoViewSet(EditViewSet):
 
     def post_save(self, newObj, new):
         """ This function is run after a GalleryPhoto object is added/edited
-        It renames the pictures file to prevent naming conflict if we just added a picture or a new picture was uploaded
+        It renames the pictures file to prevent naming conflicts if we just added a picture or a new picture was uploaded
 
         """
 
