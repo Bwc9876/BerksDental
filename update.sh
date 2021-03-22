@@ -20,7 +20,6 @@ pip3 install -r requirements.txt
 echo Updating Static Files
 python manage.py collectstatic --noinput
 echo Updating Database
-python manage.py makemigrations
 python manage.py migrate
 echo Reloading Webapp
 touch WSGI_FILE
