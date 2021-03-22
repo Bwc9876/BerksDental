@@ -16,6 +16,8 @@ from django.conf.urls.static import static
 # Main URL config, this is the list read by django that determines what links go to what view
 urlpatterns = [
     path('', main_views.home, name="home"),
+    path('gallery', main_views.gallery, name="gallery"),
+    path('officers', main_views.officers, name="officers"),
     path('admin/', edit_views.admin_home, name="admin_home"),
     path('admin/login/', LoginView.as_view(template_name="login.html", redirect_authenticated_user=True), name="login"),
     path('admin/logout/', LogoutView.as_view(), name="logout")
