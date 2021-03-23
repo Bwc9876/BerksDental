@@ -1,24 +1,24 @@
 {% extends 'db/base_object_view.html' %}
-  
+
 {% block objectTable %}
 
-<table style="border: 1px black solid;">
-  <tr>
-    <th>Name</th>
-    <th>Location</th>
-    <th>Date</th>
-    <th>Start Time - End Time</th>
-  </tr>
-  {% for event in events %}
-  <tr>
-    <td>{{ event.name }}</td>
-    <td>{{ event.location }}</td>
-    <td>{{ event.dateOf }}</td>
-    <td>{{ event.startTime }} - {{ event.endTime }}</td>
-    <td><a href="{% url 'event_edit' %}?id={{ event.id }}">Edit</a></td>
-    <td><a href="{% url 'event_delete' %}?id={{ event.id }}">Delete</a></td>
-  </tr>
-  {% endfor %}
-</table>
+    <table style="border: 1px black solid;">
+        <tr>
+            <th>Name</th>
+            <th>Location</th>
+            <th>Date</th>
+            <th>Start Time - End Time</th>
+        </tr>
+        {% for event in events %}
+            <tr>
+                <td>{{ event.name }}</td>
+                <td>{{ event.location }}</td>
+                <td>{{ event.dateOf }}</td>
+                <td>{{ event.startTime }} - {{ event.endTime }}</td>
+                <td><a href="{% url 'event_edit' %}?id={{ event.id }}">Edit</a></td>
+                <td><a href="{% url 'event_delete' %}?id={{ event.id }}">Delete</a></td>
+            </tr>
+        {% endfor %}
+    </table>
 
 {% endblock %}

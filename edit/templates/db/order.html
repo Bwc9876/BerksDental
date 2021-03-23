@@ -8,7 +8,11 @@
 
         $(document).ready(() => {
 
-            $("#sort_list").sortable({'animation': 150, 'ghostClass': "ghostSortTarget", 'filter': ".emptyNotification"});
+            $("#sort_list").sortable({
+                'animation': 150,
+                'ghostClass': "ghostSortTarget",
+                'filter': ".emptyNotification"
+            });
 
             if ($(".emptyNotification").length === 0) {
 

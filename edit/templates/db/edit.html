@@ -9,51 +9,51 @@
 
 {% block links %}
 
-  <style>
-    .error {
-      color: #ff0000;
-    }
-  </style>
+    <style>
+        .error {
+            color: #ff0000;
+        }
+    </style>
 
 {% endblock %}
 
 {% block content %}
 
-  {% if form %}
+    {% if form %}
 
-    {% if form.non_field_errors %}
+        {% if form.non_field_errors %}
 
-      <ul class="errors">
-        {% for error in form.non_field_errors %}
-          <li class="error">{{ error }}</li>
-        {% endfor %}
-      </ul>
+            <ul class="errors">
+                {% for error in form.non_field_errors %}
+                    <li class="error">{{ error }}</li>
+                {% endfor %}
+            </ul>
+
+        {% endif %}
+
+        <form method="POST" enctype="multipart/form-data">
+
+            {% csrf_token %}
+            {% for field in form %}
+                <fieldset id="{{ field.label }}_fieldset">
+                    {% if field.errors %}
+                        <ul>
+                            {% for error in field.errors %}
+                                <li class="error">{{ error }}</li>
+                            {% endfor %}
+                        </ul>
+                    {% endif %}
+                    <label class="fieldLabel">{{ field.label|title }}</label>
+                    {{ field }}
+                </fieldset>
+            {% endfor %}
+
+            <button type="submit">Submit</button>
+
+        </form>
 
     {% endif %}
 
-    <form method="POST" enctype="multipart/form-data">
-
-      {% csrf_token %}
-      {% for field in form %}
-        <fieldset id="{{ field.label }}_fieldset">
-          {% if field.errors %}
-            <ul>
-              {% for error in field.errors %}
-                <li class="error">{{ error }}</li>
-              {% endfor %}
-            </ul>
-          {% endif %}
-          <label class="fieldLabel">{{ field.label|title }}</label>
-          {{ field }}
-        </fieldset>
-      {% endfor %}
-
-      <button type="submit">Submit</button>
-
-    </form> 
-
-  {% endif %}
-
-  <a href="{{ viewSet.overview_link }}">Back</a>
+    <a href="{{ viewSet.overview_link }}">Back</a>
 
 {% endblock %}
