@@ -23,7 +23,6 @@ ALLOWED_HOSTS = ['ProductionHost']
 INSTALLED_APPS = [
     'django.contrib.auth',
     'django.contrib.contenttypes',
-    'django.contrib.humanize',
     'django.contrib.sessions',
     'django.contrib.messages',
     'main',

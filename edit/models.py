@@ -133,7 +133,7 @@ class Event(models.Model):
         return self.name
 
     class Meta:
-        ordering = ['dateOf', 'startTime']
+        ordering = ['-dateOf', '-startTime']
 
 
 class Officer(models.Model):
@@ -268,3 +268,6 @@ class Social(models.Model):
         """
 
         return f"Link To {self.service_label()}"
+
+    class Meta:
+        ordering = ["sort_order"]
