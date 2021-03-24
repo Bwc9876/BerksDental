@@ -12,6 +12,7 @@ from uuid import UUID
 
 from django.conf import settings
 from django.contrib.auth.decorators import login_required
+from django.db import models as model_fields
 from django.forms import ValidationError
 from django.http import Http404
 from django.shortcuts import render, redirect, get_object_or_404
@@ -52,6 +53,29 @@ class EditViewSet:
     model = None
     modelForm = None
     ordered = False
+    displayFields = []
+    labels = {}
+
+    formatters = {
+        model_fields.URLField: lambda inputVal: f'<a href="{str(inputVal)}">{str(inputVal)}</a>',
+        model_fields.ImageField: lambda inputVal: f'<a href="{settings.MEDIA_URL}{inputVal}">Click To View Image</a>'
+    }
+
+    def __init__(self):
+        self.format_list = []
+        for field in self.displayFields:
+            field_object = self.model._meta.get_field(field)
+            self.format_list.append(self.formatters.get(type(field_object), lambda inputVal: str(inputVal)))
+
+    def format_value_list(self, valueList):
+        new_value_list = [list(obj) for obj in valueList]
+
+        for obj_counter in range(0, len(new_value_list)):
+            for value_counter in range(0, len(new_value_list[obj_counter]) - 1):
+                new_value_list[obj_counter][value_counter] = self.format_list[value_counter](
+                    new_value_list[obj_counter][value_counter])
+
+        return new_value_list
 
     def pre_save(self, newObj, new):
         """ The function to be run before an object is saved to the database
@@ -265,7 +289,7 @@ class EditViewSet:
 
             return render(request, 'db/edit.html', {'form': form, 'viewSet': self})
 
-    def object_order(self, request):
+    def object_order_view(self, request):
         """ This function allows the user to edit the order external links will appear with drag-and-drop
         On the backend, we expect a list of ids, we then get the links these ids are associates with
         and set the sort_order property of it to where the id is located from the incoming list
@@ -305,9 +329,14 @@ class EditViewSet:
         :rtype: class:`django.http.HttpResponse`
         """
 
-        objects = self.model.objects.all()
-        return render(request, f'db/view_{self.get_safe_name()}s.html',
-                      {f'{self.get_safe_name()}s': objects, 'viewSet': self})
+        headers = self.displayFields.copy()
+        objects = self.model.objects.all().values_list(*self.displayFields, 'id')
+        for target in self.labels.keys():
+            if target in headers:
+                headers[headers.index(target)] = self.labels[target]
+
+        return render(request, 'db/view.html',
+                      {'headers': headers, 'objects': self.format_value_list(objects), 'viewSet': self})
 
     def get_view_functions(self):
         """ This function sets up proxy functions
@@ -318,7 +347,7 @@ class EditViewSet:
         :rtype: function(3)
         """
 
-        @require_http_methods(["GET", "POST"])
+        @require_safe
         @login_required
         def viewset_overview(request):
             return self.obj_overview_view(request)
@@ -339,7 +368,7 @@ class EditViewSet:
         @require_http_methods(["GET", "POST"])
         @login_required()
         def edit_order_view(request):
-            return self.object_order(request)
+            return self.object_order_view(request)
 
         return edit_order_view
 
@@ -351,6 +380,8 @@ class EventViewSet(EditViewSet):
     displayName = "Event"
     model = models.Event
     modelForm = forms.EventForm
+    displayFields = ['name', 'location', 'dateOf', 'startTime', "endTime"]
+    labels = {'dateOf': "Date", 'startTime': "Start Time", 'endTime': "End Time"}
 
 
 class SocialViewSet(EditViewSet):
@@ -358,6 +389,17 @@ class SocialViewSet(EditViewSet):
     model = models.Social
     modelForm = forms.SocialForm
     ordered = True
+    displayFields = ['service', 'link']
+
+    def format_value_list(self, valueList):
+        new_value_list = super().format_value_list(valueList)
+
+        if "service" in self.displayFields:
+            service_location = self.displayFields.index("service")
+            for obj in new_value_list:
+                obj[service_location] = self.model.service_label_from_string(obj[service_location])
+
+        return new_value_list
 
 
 class LinkViewSet(EditViewSet):
@@ -365,6 +407,8 @@ class LinkViewSet(EditViewSet):
     model = models.ExternalLink
     modelForm = forms.LinkForm
     ordered = True
+    displayFields = ['display_name', 'url']
+    labels = {'display_name': "Name"}
 
 
 class GalleryPhotoViewSet(EditViewSet):
@@ -372,6 +416,7 @@ class GalleryPhotoViewSet(EditViewSet):
     model = models.GalleryPhoto
     modelForm = forms.PhotoForm
     photoFolder = "gallery-photos"
+    displayFields = ["picture", "caption", "featured"]
 
     def rename_photo_file(self, photoObject):
         """ This function is used to rename the picture uploaded by the user to the photo's id
@@ -390,7 +435,7 @@ class GalleryPhotoViewSet(EditViewSet):
 
     def post_save(self, newObj, new):
         """ This function is run after a GalleryPhoto object is added/edited
-        It renames the pictures file to prevent naming conflicts if we just added a picture or a new picture was uploaded
+        It renames the pictures file to prevent naming conflicts
 
         """
 
@@ -413,6 +458,7 @@ class OfficerViewSet(GalleryPhotoViewSet):
     modelForm = forms.OfficerForm
     photoFolder = "officer-photos"
     ordered = True
+    displayFields = ["name", 'picture']
 
 
 def generate_paths_from_view_set(viewSet):

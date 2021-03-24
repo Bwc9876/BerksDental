@@ -3,6 +3,7 @@
     These classes' attributes are set to Field objects which determine how the data will be stored in the database
 """
 
+import os
 import uuid
 
 from django.conf import settings
@@ -48,7 +49,7 @@ class GalleryPhoto(models.Model):
         :rtype: str
         """
 
-        return f"{settings.MEDIA_URL}gallery-photos/{self.id}.{self.get_extension()}"
+        return f"{settings.MEDIA_URL}gallery-photos/{self.picture.name}"
 
     def __str__(self):
         """ Defines how this object will be casted to a string
@@ -232,6 +233,24 @@ class Social(models.Model):
         """
 
         return self.Services.labels[self.Services.values.index(self.service)]
+
+    @classmethod
+    def service_label_from_string(cls, service):
+        return cls.Services.labels[cls.Services.values.index(service)]
+
+    def icon_url(self):
+        """ This function is used to get the url to the icon for this social media service
+
+        :returns: The url to the icon for this social media type
+        :rtype: str
+        """
+
+        target_icon = f"{settings.BASE_DIR}/static/social-icons/{self.service}.png"
+
+        if os.path.exists(target_icon):
+            return f"{settings.STATIC_URL}social-icons/{self.service}.png"
+        else:
+            return f"{settings.STATIC_URL}social-icons/DEFAULT.png"
 
     def __str__(self):
         """ Defines how this object will be casted to a string

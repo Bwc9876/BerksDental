@@ -10,3 +10,4 @@ if settings.DEBUG:
     admin.site.register(models.GalleryPhoto)
     admin.site.register(models.Officer)
     admin.site.register(models.Event)
+    admin.site.register(models.Social)

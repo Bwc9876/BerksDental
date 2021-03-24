@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+{% comment %}
+    This html file defines what the user will see in case the server encounters an error
+    The file will only be displayed if DEBUG = False in settings, otherwise a stack trace will be shown
+{% endcomment %}
+
+{% block content %}
+
+    <h1> Internal Server Error </h1>
+    <h2> The server had an internal issue when processing your request </h2>
+
+{% endblock %}

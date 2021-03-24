@@ -46,10 +46,10 @@
           <a href="{% url "home" %}"><img alt="Berks Dental Assistants Logo" class="nav-img" src="{% static "/shared/logo.png" %}"/></a>
           <div class="nav-link-container">
               <a href="{% url "home" %}" class="nav-link">Home</a>
-              <a class="nav-link">Gallery</a>
-              <a class="nav-link">Events</a>
-              <a class="nav-link">Officers</a>
-              <a class="nav-link">About</a>
+              <a href="{% url "gallery" %}" class="nav-link">Gallery</a>
+              <a href="{% url "events" %}" class="nav-link">Events</a>
+              <a href="{% url "officers" %}" class="nav-link">Officers</a>
+              <a href="{% url "about" %}" class="nav-link">About</a>
           </div>
           <button class="nav-button">Menu</button>
       </nav>
@@ -59,6 +59,14 @@
   {% block content %}
       <h1>This html file is meant to be inherited! Please don't render the base version!</h1>
   {% endblock %}
+  {% comment %} 
+  {# For when we integrate the footer, un-comment this block to get all SocialMedia Objects in the "socials" variable #}
+
+  {% load socialTags %}
+  {% getSocials as socials %}
+
+  {% endcomment %}
+  
 </body>
 </html>
 

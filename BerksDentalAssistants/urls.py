@@ -14,8 +14,10 @@ from main import views as main_views
 # Main URL config, this is the list read by django that determines what links go to what view
 urlpatterns = [
     path('', main_views.home, name="home"),
-    path('gallery', main_views.gallery, name="gallery"),
-    path('officers', main_views.officers, name="officers"),
+    path('gallery/', main_views.gallery, name="gallery"),
+    path('officers/', main_views.officers, name="officers"),
+    path('events/', main_views.events, name="events"),
+    path('about/', main_views.safe_render("about.html"), name="about"),
     path('admin/', edit_views.admin_home, name="admin_home"),
     path('admin/login/', LoginView.as_view(template_name="login.html", redirect_authenticated_user=True), name="login"),
     path('admin/logout/', LogoutView.as_view(), name="logout")
@@ -34,3 +36,4 @@ if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL,
                           document_root=settings.MEDIA_ROOT)
     urlpatterns.append(path('debug_admin/', admin.site.urls))
+    urlpatterns.append(path('error/', main_views.test_error))

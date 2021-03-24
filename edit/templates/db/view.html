@@ -1,0 +1,46 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+    {% load humanize %}
+
+    <h1>View/Edit {{ viewSet.displayName|title }}s</h1>
+    <table>
+
+        <tr>
+            {% if objects|length > 0 %}
+                {% for header in headers %}
+                    <th>{{ header|title }}</th>
+                {% endfor %}
+            {% endif %}
+        </tr>
+
+        {% for object in objects %}
+            <tr>
+                {% for value in object %}
+                    {% if forloop.first %}
+                        <td><b>{{ value|safe }}</b></td>
+                    {% elif forloop.last %}
+                        <td><a href="{{ viewSet.edit_link }}?id={{ value }}">Edit</a></td>
+                        <td><a href="{{ viewSet.delete_link }}?id={{ value }}">Delete</a></td>
+                    {% else %}
+                        <td>{{ value|safe }}</td>
+                    {% endif %}
+                {% endfor %}
+            </tr>
+        {% empty %}
+            <tr>
+                <td>No {{ viewSet.displayName|title }}s In The Database</td>
+            </tr>
+        {% endfor %}
+
+    </table>
+    <ul id="universalActions">
+        <li><a href="{{ viewSet.edit_link }}">Add</a></li>
+        {% if viewSet.ordered %}
+            <li><a href="{{ viewSet.order_link }}">Re-Order</a></li>
+        {% endif %}
+        <li><a href="{% url 'admin_home' %}">Back</a></li>
+    </ul>
+
+{% endblock content %}

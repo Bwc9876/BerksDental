@@ -122,11 +122,11 @@ class EventForm(ModelForm):
         """
 
         cleaned_data = super().clean()
-        startTime = cleaned_data.get("startTime")
-        endTime = cleaned_data.get("endTime")
+        start_time = cleaned_data.get("startTime")
+        end_time = cleaned_data.get("endTime")
 
-        if startTime and endTime:
-            if startTime > endTime:
-                raise ValidationError("%(start)s is after %(end)s!", params={'start': startTime.strftime("%I:%M %p"),
-                                                                             'end': endTime.strftime("%I:%M %p")},
+        if start_time and end_time:
+            if start_time > end_time:
+                raise ValidationError("%(start)s is after %(end)s!", params={'start': start_time.strftime("%I:%M %p"),
+                                                                             'end': end_time.strftime("%I:%M %p")},
                                       code="invalidTimes")
