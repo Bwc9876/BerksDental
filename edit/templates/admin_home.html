@@ -3,6 +3,8 @@
 
 {% block content %}
 
+    <h1>Welcome, {{ user.username }}</h1>
+
     <ul>
         <li><a href="{% url 'home' %}">View Site</a></li>
         <li><a href="{% url 'logout' %}">Logout</a></li>

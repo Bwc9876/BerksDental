@@ -236,6 +236,14 @@ class Social(models.Model):
 
     @classmethod
     def service_label_from_string(cls, service):
+        """ This function nsi used as a way to get the label for a social media service given its code
+
+        :param service: The code for a service (FB, IG, YT, etc.)
+        :type service: str
+        :returns: The Service's label (FaceBook, Instagram, Youtube, etc.)
+        :rtype: str
+        """
+
         return cls.Services.labels[cls.Services.values.index(service)]
 
     def icon_url(self):

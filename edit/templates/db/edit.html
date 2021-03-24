@@ -19,6 +19,12 @@
 
 {% block content %}
 
+    {% if new %}
+        <h1>Add {{ viewSet.displayName|title }}</h1>
+    {% else %}
+        <h1>Edit {{ viewSet.displayName|title }}</h1>
+    {% endif %}
+
     {% if form %}
 
         {% if form.non_field_errors %}

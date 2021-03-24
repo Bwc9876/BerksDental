@@ -1,3 +1,7 @@
+"""
+    This file contains tags and filters we cna use in templates specific to SocialMedia objects
+"""
+
 from django import template
 
 from edit.models import Social

@@ -7,6 +7,12 @@
     <script defer type="text/javascript">
 
         $(document).ready(() => {
+            /**
+             * This event handles three things
+             * 1. Setup the sortable (drag & drop) on the sort_list element
+             * 2. setup the form to read the order of the lis in the sort_list element and send it ot the backend
+             * 3. If there's no items in the database, we disable the save button
+             */
 
             $("#sort_list").sortable({
                 'animation': 150,
@@ -25,9 +31,7 @@
 
                     });
 
-                    let new_order_input = $("#new_order");
-
-                    new_order_input.val(new_order.join(","));
+                    $("#new_order").val(new_order.join(","));
 
                 });
             } else {

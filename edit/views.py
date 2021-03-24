@@ -47,9 +47,15 @@ class EditViewSet:
     :type model: class:`django.db.models.Model`
     :attr modelForm: The form to render in the view functions
     :type modelForm: class:`django.forms.ModelForm`
+    :attr ordered: A boolean, telling us if the order these objects appear in is editable
+    :type ordered: bool
+    :attr displayFields: A list of fields we want to be shown in the overview view
+    :type displayFields: list(str)
+    :attr labels: If theres any fields we want to be displayed differently,
+    we put the field name as the key and the desired label as the value
     """
 
-    displayName = "base"
+    displayName: str = "base"
     model = None
     modelForm = None
     ordered = False
@@ -57,17 +63,31 @@ class EditViewSet:
     labels = {}
 
     formatters = {
-        model_fields.URLField: lambda inputVal: f'<a href="{str(inputVal)}">{str(inputVal)}</a>',
-        model_fields.ImageField: lambda inputVal: f'<a href="{settings.MEDIA_URL}{inputVal}">Click To View Image</a>'
+        model_fields.URLField: lambda inputVal: f'<a target="_blank" href="{str(inputVal)}">{str(inputVal)}</a>',
+        model_fields.ImageField: lambda inputVal: f'<a target="_blank" href="{settings.MEDIA_URL}{inputVal}">Click To '
+                                                  f'View Image</a> ',
+        model_fields.BooleanField: lambda inputVal: "Yes" if inputVal is True else "No"
     }
 
     def __init__(self):
+        """ This function is run when the ViewSet is instantiated
+        It sets up a format list, which essentially tells us how each field of the object should be formatted
+        """
+
         self.format_list = []
         for field in self.displayFields:
             field_object = self.model._meta.get_field(field)
             self.format_list.append(self.formatters.get(type(field_object), lambda inputVal: str(inputVal)))
 
     def format_value_list(self, valueList):
+        """ This function is used as a way to format any values we read from the database, like dates and links
+        It reads from the format_list and if the field name matches it, it'll fun teh lambda function specified
+
+        :param valueList: A list of lists, each nested list containing the values for objects
+        :returns: A new, formatted valueList
+        :rtype: list(list(*))
+        """
+
         new_value_list = [list(obj) for obj in valueList]
 
         for obj_counter in range(0, len(new_value_list)):
@@ -206,7 +226,7 @@ class EditViewSet:
             self.post_save(new_obj, True)
             return redirect(self.overview_link())
         else:
-            return render(request, "db/edit.html", {'form': form, 'viewSet': self})
+            return render(request, "db/edit.html", {'form': form, 'viewSet': self, 'new': True})
 
     def obj_edit(self, request):
         """ A django view function, this will edit the model on the database given form data
@@ -228,7 +248,7 @@ class EditViewSet:
             self.post_save(edited_obj, False)
             return redirect(self.overview_link())
         else:
-            return render(request, "db/edit.html", {'form': form, 'viewSet': self})
+            return render(request, "db/edit.html", {'form': form, 'viewSet': self, 'new': False})
 
     def obj_delete_view(self, request):
         """ A django view function, this will delete the model from the database given form data
@@ -279,15 +299,17 @@ class EditViewSet:
                     raise Http404()
         else:
             target_id = request.GET.get('id', '')
+            new = False
             if target_id == '':
                 form = self.modelForm()
+                new = True
             else:
                 try:
                     form = self.modelForm(instance=get_object_or_404(self.model, id=target_id))
                 except ValidationError:
                     raise Http404()
 
-            return render(request, 'db/edit.html', {'form': form, 'viewSet': self})
+            return render(request, 'db/edit.html', {'form': form, 'viewSet': self, 'new': new})
 
     def object_order_view(self, request):
         """ This function allows the user to edit the order external links will appear with drag-and-drop
@@ -392,6 +414,15 @@ class SocialViewSet(EditViewSet):
     displayFields = ['service', 'link']
 
     def format_value_list(self, valueList):
+        """ This function overrides the format_value_list function the EditViewSet class
+        it does this in order to provide additional formatting
+        The formatting we provide is making sure the label for the social media we chose is shown and not the code
+        ("YT" -> "Youtube", "IG" -> "Instagram")
+
+        :param valueList:
+        :return:
+        """
+
         new_value_list = super().format_value_list(valueList)
 
         if "service" in self.displayFields:
@@ -415,6 +446,7 @@ class GalleryPhotoViewSet(EditViewSet):
     displayName = "Photo"
     model = models.GalleryPhoto
     modelForm = forms.PhotoForm
+    # The photo-folder attribute tells the model where to store pictures
     photoFolder = "gallery-photos"
     displayFields = ["picture", "caption", "featured"]
 
@@ -487,7 +519,7 @@ def generate_paths_from_view_set(viewSet):
 
         return patterns_to_return
     else:
-        raise ValueError("Please pass a class that inherits EditViewSet!")
+        raise ValueError(f"{viewSet.__name__} Won't Work! Please pass a class that *inherits* EditViewSet!")
 
 
 def setup_viewsets():

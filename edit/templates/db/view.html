@@ -1,12 +1,16 @@
 {% extends 'base.html' %}
+{% comment %}
+    This fiel is used to view a table that shows all objects in the database
+    This template expects a list of headers in the headers variable
+    and a nested list of each objects values in the objects variable
+    The last value of each nested list is the objects id, so that way we can create teh Edit and Delete links
+    We also set the first property to be bold to help with the visuals of the table
+{% endcomment %}
 
 {% block content %}
 
-    {% load humanize %}
-
     <h1>View/Edit {{ viewSet.displayName|title }}s</h1>
     <table>
-
         <tr>
             {% if objects|length > 0 %}
                 {% for header in headers %}
@@ -33,8 +37,8 @@
                 <td>No {{ viewSet.displayName|title }}s In The Database</td>
             </tr>
         {% endfor %}
-
     </table>
+
     <ul id="universalActions">
         <li><a href="{{ viewSet.edit_link }}">Add</a></li>
         {% if viewSet.ordered %}

@@ -12,7 +12,6 @@ from edit import models
 class TimeSelectorField(TimeInput):
     """ This class overrides the django :class:`django.forms.widgets.TimeInput`
     class and sets the html input type to "time"
-
     """
 
     input_type = 'time'
@@ -21,7 +20,6 @@ class TimeSelectorField(TimeInput):
 class DateSelectorField(DateInput):
     """ This class overrides the django :class:`django.forms.widgets.DateInput`
     class and sets the html input type to "date"
-
     """
 
     input_type = 'date'
@@ -107,7 +105,6 @@ class EventForm(ModelForm):
     def __init__(self, *args, **kargs):
         """ This function is run when the class is instantiated
         It changes some of the labels for the field to more suitable names
-
         """
 
         super().__init__(*args, **kargs)
@@ -118,7 +115,6 @@ class EventForm(ModelForm):
     def clean(self):
         """ This function is run to make sure that all fields are valid outside of formatting
         It ensures that the start and end times for the event make logical sense (startTime shouldn't be after endTime)
-
         """
 
         cleaned_data = super().clean()

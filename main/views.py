@@ -31,8 +31,8 @@ def gallery(request):
     :returns: An HttpResponse containing the rendered html file
     :rtype: class:`django.http.HttpResponse` 
     """
-    photos = models.GalleryPhoto.objects.all()
-    return render(request, "gallery.html", {"photos": photos})
+    photo_objects = models.GalleryPhoto.objects.all()
+    return render(request, "gallery.html", {"photos": photo_objects})
 
 
 @require_safe
@@ -45,8 +45,8 @@ def officers(request):
     :returns: An HttpResponse containing the rendered html file
     :rtype: class:`django.http.HttpResponse` 
     """
-    officers = models.Officer.objects.all()
-    return render(request, "officers.html", {"officers": officers})
+    officer_objects = models.Officer.objects.all()
+    return render(request, "officers.html", {"officers": officer_objects})
 
 
 @require_safe
@@ -59,8 +59,8 @@ def events(request):
     :returns: An HttpResponse containing the rendered html file
     :rtype: class:`django.http.HttpResponse` 
     """
-    events = models.Event.objects.all()
-    return render(request, "events.html", {"events": events})
+    event_objects = models.Event.objects.all()
+    return render(request, "events.html", {"events": event_objects})
 
 
 def safe_render(templateName):
@@ -90,8 +90,8 @@ def test_error(request):
     """
 
     try:
-        errorType = int(request.GET.get("type", "404"))
-        return render(request, f"{errorType}.html")
+        error_type = int(request.GET.get("type", "404"))
+        return render(request, f"{error_type}.html")
     except ValueError:
         raise Http404()
     except TemplateDoesNotExist:
