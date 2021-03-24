@@ -6,6 +6,40 @@
     The last value of each nested list is the objects id, so that way we can create teh Edit and Delete links
     We also set the first property to be bold to help with the visuals of the table
 {% endcomment %}
+{% load static %}
+
+{% block links %}
+
+    <style>
+
+        table {
+            border-collapse: collapse;
+            text-align: center;
+            margin-left: 5vw;
+        }
+
+        a {
+            font-size: var(--h6);
+        }
+
+        table tr {
+            border: black 1px solid;
+        }
+
+        table tr td, table tr th {
+            border: black 1px solid;
+            padding: 1vh 2vw;
+        }
+
+        ul {
+            list-style: none;
+            margin-left: 50px;
+        }
+
+
+    </style>
+
+{% endblock %}
 
 {% block content %}
 
@@ -16,6 +50,7 @@
                 {% for header in headers %}
                     <th>{{ header|title }}</th>
                 {% endfor %}
+                <th colspan="2">Actions</th>
             {% endif %}
         </tr>
 
@@ -25,8 +60,8 @@
                     {% if forloop.first %}
                         <td><b>{{ value|safe }}</b></td>
                     {% elif forloop.last %}
-                        <td><a href="{{ viewSet.edit_link }}?id={{ value }}">Edit</a></td>
-                        <td><a href="{{ viewSet.delete_link }}?id={{ value }}">Delete</a></td>
+                        <td><a href="{{ viewSet.edit_link }}?id={{ value }}"><img width="40px" height="40px" alt="edit" src="{% static 'admin-icons/Edit-Icon.svg' %}"/></a></td>
+                        <td><a href="{{ viewSet.delete_link }}?id={{ value }}"><img width="40px" height="40px" alt="delete" src="{% static 'admin-icons/Delete-Icon.svg' %}"/></a></td>
                     {% else %}
                         <td>{{ value|safe }}</td>
                     {% endif %}
@@ -42,9 +77,9 @@
     <ul id="universalActions">
         <li><a href="{{ viewSet.edit_link }}">Add</a></li>
         {% if viewSet.ordered %}
-            <li><a href="{{ viewSet.order_link }}">Re-Order</a></li>
+            <li><a href="{{ viewSet.order_link }}">Change Order</a></li>
         {% endif %}
-        <li><a href="{% url 'admin_home' %}">Back</a></li>
+        <li><a href="{% url 'edit:admin_home' %}">Back</a></li>
     </ul>
 
 {% endblock content %}

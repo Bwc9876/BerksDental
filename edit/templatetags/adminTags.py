@@ -1,5 +1,5 @@
 """
-    This file contains tags and filters we cna use in templates specific to SocialMedia objects
+    This file contains tags and filters we can use in templates
 """
 
 from django import template

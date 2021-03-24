@@ -163,7 +163,7 @@ class EditViewSet:
         :rtype: str
         """
 
-        return reverse(f"{self.get_safe_name()}_{linkType}")
+        return reverse(f"edit:{self.get_safe_name()}_{linkType}")
 
     def overview_link(self):
         """ A function used to get the link that can be used to redirect to the overview page for this model
@@ -508,13 +508,13 @@ def generate_paths_from_view_set(viewSet):
         overview, add_or_edit, delete = view_set_instance.get_view_functions()
 
         patterns_to_return = [
-            path(f'admin/overview/{url_name}/', overview, name=f"{url_name}_view"),
-            path(f'admin/edit/{url_name}/', add_or_edit, name=f"{url_name}_edit"),
-            path(f'admin/delete/{url_name}/', delete, name=f"{url_name}_delete")
+            path(f'overview/{url_name}/', overview, name=f"{url_name}_view"),
+            path(f'edit/{url_name}/', add_or_edit, name=f"{url_name}_edit"),
+            path(f'delete/{url_name}/', delete, name=f"{url_name}_delete")
         ]
 
         if view_set_instance.ordered:
-            patterns_to_return.append(path(f"admin/order/{url_name}/",
+            patterns_to_return.append(path(f"order/{url_name}/",
                                            view_set_instance.get_edit_order_view(), name=f"{url_name}_order"))
 
         return patterns_to_return

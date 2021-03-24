@@ -43,13 +43,23 @@
   {% include 'ie-card.html' %}
   <header>
       <nav class="nav-main">
-          <a href="{% url "home" %}"><img alt="Berks Dental Assistants Logo" class="nav-img" src="{% static "/shared/logo.png" %}"/></a>
+          {% if app_name == "main" %}
+          <a href="{% url "main:home" %}"><img alt="Berks Dental Assistants Logo" class="nav-img" src="{% static "/shared/logo.png" %}"/></a>
+          {% else %}
+          <a href="{% url "edit:admin_home" %}"><img alt="Berks Dental Assistants Administrator Logo" class="nav-img" src="{% static "/shared/logo_admin.png" %}"/></a>
+          {% endif %}
           <div class="nav-link-container">
-              <a href="{% url "home" %}" class="nav-link">Home</a>
-              <a href="{% url "gallery" %}" class="nav-link">Gallery</a>
-              <a href="{% url "events" %}" class="nav-link">Events</a>
-              <a href="{% url "officers" %}" class="nav-link">Officers</a>
-              <a href="{% url "about" %}" class="nav-link">About</a>
+              {% if app_name == "main" %}
+              <a href="{% url "main:home" %}" class="nav-link">Home</a>
+              <a href="{% url "main:gallery" %}" class="nav-link">Gallery</a>
+              <a href="{% url "main:events" %}" class="nav-link">Events</a>
+              <a href="{% url "main:officers" %}" class="nav-link">Officers</a>
+              <a href="{% url "main:about" %}" class="nav-link">About</a>
+              {% else %}
+              <a href="{% url "edit:admin_home" %}" class="nav-link">Home</a>
+              <a href="{% url "main:home" %}" class="nav-link">View Site</a>
+              <a href="{% url "edit:logout" %}" class="nav-link">Logout</a>
+              {% endif %}
           </div>
           <button class="nav-button">Menu</button>
       </nav>
@@ -62,7 +72,7 @@
   {% comment %} 
   {# For when we integrate the footer, un-comment this block to get all SocialMedia Objects in the "socials" variable #}
 
-  {% load socialTags %}
+  {% load adminTags %}
   {% getSocials as socials %}
 
   {% endcomment %}

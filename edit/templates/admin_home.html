@@ -6,16 +6,16 @@
     <h1>Welcome, {{ user.username }}</h1>
 
     <ul>
-        <li><a href="{% url 'home' %}">View Site</a></li>
-        <li><a href="{% url 'logout' %}">Logout</a></li>
+        <li><a href="{% url 'main:home' %}">View Site</a></li>
+        <li><a href="{% url 'edit:logout' %}">Logout</a></li>
     </ul>
 
     <ul>
-        <li><a href="{% url 'photo_view' %}">Add/Edit Photos</a></li>
-        <li><a href="{% url 'officer_view' %}">Add/Edit Officers</a></li>
-        <li><a href="{% url 'event_view' %}">Add/Edit Events</a></li>
-        <li><a href="{% url 'link_view' %}">Add/Edit External Links</a></li>
-        <li><a href="{% url 'social_media_page_view' %}">Add/Edit Social Media Pages</a></li>
+        <li><a href="{% url 'edit:photo_view' %}">Add/Edit Photos</a></li>
+        <li><a href="{% url 'edit:officer_view' %}">Add/Edit Officers</a></li>
+        <li><a href="{% url 'edit:event_view' %}">Add/Edit Events</a></li>
+        <li><a href="{% url 'edit:link_view' %}">Add/Edit External Links</a></li>
+        <li><a href="{% url 'edit:social_media_page_view' %}">Add/Edit Social Media Pages</a></li>
     </ul>
 
 {% endblock %}
