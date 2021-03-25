@@ -66,7 +66,8 @@ class EditViewSet:
         model_fields.URLField: lambda inputVal: f'<a target="_blank" href="{str(inputVal)}">{str(inputVal)}</a>',
         model_fields.ImageField: lambda inputVal: f'<a target="_blank" href="{settings.MEDIA_URL}{inputVal}">Click To '
                                                   f'View Image</a> ',
-        model_fields.BooleanField: lambda inputVal: "Yes" if inputVal is True else "No"
+        model_fields.BooleanField: lambda inputVal: "Yes" if inputVal is True else "No",
+        model_fields.TimeField: lambda inputVal: inputVal.strftime("%I:%M %p")
     }
 
     def __init__(self):
@@ -84,6 +85,7 @@ class EditViewSet:
         It reads from the format_list and if the field name matches it, it'll fun teh lambda function specified
 
         :param valueList: A list of lists, each nested list containing the values for objects
+        :type valueList: list(list(*))
         :returns: A new, formatted valueList
         :rtype: list(list(*))
         """

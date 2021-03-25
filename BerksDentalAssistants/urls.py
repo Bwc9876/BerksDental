@@ -12,8 +12,6 @@ urlpatterns = [
     path('admin/', include("edit.urls"))
 ]
 
-print("Home App Name:" + resolve("/admin/").app_name)
-
 # Media files (files uploaded by users) will be served as if they're static files (files like CSS and JS)
 # This can result in security issues, so we only do this if DEBUG = True
 # In production, we'll use pythonanywhere's system to serve the media files
