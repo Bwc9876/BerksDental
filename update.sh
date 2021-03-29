@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+#!/usr/bin/env/bash
 
 # This script performs actions that update the website
 # This ONLY needs to be run if the github repository changes
