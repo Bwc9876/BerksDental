@@ -1,12 +1,24 @@
 .upcoming-events {
-    padding: 0px 22px;
+    padding: 0 22px;
     background-color: var(--ac-light);
     overflow: auto;
+
+    /*ijrengwnijgnijtnguinrjignrnguin3tn
+    wt
+    gg
+    3t
+    g
+    356
+    h35
+    h
+
+     */
+    display: none;
 }
 
 .event-card-container {
     display: flex;
-    padding: 0px 22px 45px;
+    padding: 0 22px 45px;
 }
 
 .event-card {
@@ -20,10 +32,27 @@
     align-items: center;
     background-color: var(--ac);
     text-align: center;
+    box-shadow: lightslategrey -5px 5px 4px 0;
+    transition: box-shadow 350ms linear;
+}
+
+.event-card:hover {
+    box-shadow: lightslategrey 5px 5px 4px 0;
 }
 
 .date-block {
     width: calc(var(--h4) * 5);
     height: calc(var(--h4) * 5);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
     border: black 1px solid;
+}
+
+.date-block p {
+    margin: 5px 0;
+}
+
+.date-block p:last-child {
+    font-size: var(--h3);
 }

@@ -49,11 +49,10 @@
           <a href="{% url "main:home" %}"><img alt="Berks Dental Assistants Logo" class="nav-img" src="{% static "/base/logo.png" %}"/></a>
           <nav class="nav-link-container">
               <a href="{% url "main:home" %}" class="nav-link">Home</a>
-              <a class="nav-link">Second</a>
-              <a class="nav-link">Third</a>
-              <a class="nav-link">Fourth</a>
-              <a class="nav-link">Fifth</a>
-              <a class="nav-link">Sixth</a>
+              <a href="{% url "main:gallery" %}" class="nav-link">Gallery</a>
+              <a href="{% url "main:officers" %}" class="nav-link">Officers</a>
+              <a href="{% url "main:events" %}" class="nav-link">Events</a>
+              <a href="{% url "main:about" %}" class="nav-link">About</a>
           </nav>
           <button class="nav-button">Menu</button>
       </div>
@@ -66,13 +65,13 @@
   {% endblock %}
   </div>
   <footer class="footer-main">
+      <a class="footer-link">Site Map IUQRWNGUIJT4NIUGNUIR3TNGIUTNHJITN</a>
+      <a href="{% url "main:about" %}" class="footer-link">About</a>
       {% load adminTags %}
       {% getSocials as socials %}
-      <div style="float:right;" class="socialPages">
-        {% for social in socials %}
-            <a style="color:black;" class="socialLink" href="{{ social.link }}"><i class="fab {{ social.fa_icon_class }} fa-lg"></i></a>
-        {% endfor %}
-      </div>
+      {% for social in socials %}
+          <a class="footer-link social-link" href="{{ social.link }}"><i class="fab {{ social.fa_icon_class }} fa-lg"></i></a>
+      {% endfor %}
   </footer>
 </body>
 </html>

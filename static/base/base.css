@@ -5,6 +5,7 @@
     --ac-grey: #9ba7ac;
     --ac-light: #C4E5F2;
     --ac: #23B7D9;
+    --ac-dark: #0d7385;
 
     --clr-text: #75B232;
     --clr-header: #197F00;
@@ -13,7 +14,7 @@
 body {
     width: 100vw;
     min-height: 100vh;
-    margin: 0px;
+    margin: 0;
     display: flex;
     flex-direction: column;
     overflow-x: hidden;
@@ -33,17 +34,17 @@ header {
 
 .nav-bar {
     position: fixed;
-    top: 0px;
-    left: 0px;
-    right: 0px;
+    top: 0;
+    left: 0;
+    right: 0;
     z-index: 10;
     height: var(--nav-height);
-    padding: 0px 15px;
+    padding: 0 15px;
     display: flex;
     justify-content: space-between;
     align-items: center;
     background-color: white;
-    box-shadow: black 0px -3px 15px 0px;
+    box-shadow: black 0 -3px 15px 0;
 }
 
 .nav-placeholder {
@@ -57,8 +58,8 @@ header {
 .nav-link-container {
     position: fixed;
     top: var(--nav-height);
-    left: 0px;
-    right: 0px;
+    left: 0;
+    right: 0;
     height: calc(100vh - var(--nav-height));
     display: flex;
     flex-direction: column;
@@ -74,8 +75,9 @@ header {
     position: relative;
     left: 150vw;
     width: 100%;
-    padding: 7.5vh 0px;
-    background-color: var(--clr-light);
+    padding: 7.5vh 0;
+    color: var(--clr-text);
+    background-color: var(--ac-light);
     border-bottom: black 2px solid;
     text-align: center;
     font-size: var(--h2);
@@ -83,16 +85,16 @@ header {
     transition: left 550ms linear;
 }
 
-.nav-link:hover {
+.nav-link:hover, .footer-link:hover {
     filter: brightness(0.8);
 }
 
 .nav-link.menu-shown {
-    left: 0px;
+    left: 0;
 }
 
 .current-nav-link {
-    color: var(--ac);
+    color: var(--clr-header);
 }
 
 .main-content {
@@ -101,7 +103,22 @@ header {
 
 .footer-main {
     padding: 18px 20px;
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+    flex-wrap: wrap;
     background-color: var(--ac-grey);
+}
+
+.footer-link {
+    font-size: 30px;
+    margin: 20px 90px;
+    color: var(--ac-dark);
+    text-decoration: none;
+}
+
+.footer-link.social-link {
+    margin: 20px 50px;
 }
 
 /* Utility Classes */
