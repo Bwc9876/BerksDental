@@ -1,0 +1,29 @@
+.upcoming-events {
+    padding: 0px 22px;
+    background-color: var(--ac-light);
+    overflow: auto;
+}
+
+.event-card-container {
+    display: flex;
+    padding: 0px 22px 45px;
+}
+
+.event-card {
+    width: calc(var(--h4) * 15);
+    height: calc(var(--h4) * 20);
+    max-width: 330px;
+    max-height: 440px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    align-items: center;
+    background-color: var(--ac);
+    text-align: center;
+}
+
+.date-block {
+    width: calc(var(--h4) * 5);
+    height: calc(var(--h4) * 5);
+    border: black 1px solid;
+}

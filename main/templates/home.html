@@ -1,9 +1,30 @@
 {% extends 'base.html' %}
+{% block meta %}
+  <title>Berks Dental Assistants: Home</title>
+  <meta name="description" content="Berks Dental Assistants' Home Page.">
+  {% endblock %}
+{% block links %}
+    {% load static %}
+    <link href="{% static "/home/home.css" %}" type="text/css" rel="stylesheet">
+{% endblock %}
 {% block header %}
-
+    <div class="header-main header-dimensions-special">
+        HEADER HERE
+    </div>
 {% endblock %}
 {% block content %}
-
-    <h1>Home</h1>
-
+    <section class="upcoming-events">
+        <h1>Upcoming Events</h1>
+        <div class="event-card-container">
+            <div class="event-card">
+                <h3>Event Name</h3>
+                <div class="date-block">
+                    <p>MONTH</p>
+                    <p>DAY</p>
+                </div>
+                <p>Start Time - End Time</p>
+                <p>Address/Links</p>
+            </div>
+        </div>
+    </section>
 {% endblock %}

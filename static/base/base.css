@@ -2,12 +2,12 @@
     --clr-light: #C3D9A3;
     --clr: #8CBF3F;
 
+    --ac-grey: #9ba7ac;
     --ac-light: #C4E5F2;
     --ac: #23B7D9;
 
     --clr-text: #75B232;
     --clr-header: #197F00;
-    --clr-bg: #fafafa;
 }
 
 body {
@@ -19,6 +19,14 @@ body {
     overflow-x: hidden;
 }
 
+body.menu-shown {
+    overflow-y: hidden;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    color: var(--clr-header);
+}
+
 header {
     --nav-height: 80px;
 }
@@ -28,11 +36,13 @@ header {
     top: 0px;
     left: 0px;
     right: 0px;
+    z-index: 10;
     height: var(--nav-height);
     padding: 0px 15px;
     display: flex;
     justify-content: space-between;
     align-items: center;
+    background-color: white;
     box-shadow: black 0px -3px 15px 0px;
 }
 
@@ -55,7 +65,7 @@ header {
     pointer-events: none;
 }
 
-.nav-link-container.show {
+.nav-link-container.menu-shown {
     pointer-events: all;
     overflow: hidden scroll;
 }
@@ -65,6 +75,7 @@ header {
     left: 150vw;
     width: 100%;
     padding: 7.5vh 0px;
+    background-color: var(--clr-light);
     border-bottom: black 2px solid;
     text-align: center;
     font-size: var(--h2);
@@ -72,14 +83,34 @@ header {
     transition: left 550ms linear;
 }
 
-.nav-link.show {
+.nav-link:hover {
+    filter: brightness(0.8);
+}
+
+.nav-link.menu-shown {
     left: 0px;
 }
 
-.section-main {
+.current-nav-link {
+    color: var(--ac);
+}
+
+.main-content {
     flex-grow: 1;
 }
 
 .footer-main {
     padding: 18px 20px;
+    background-color: var(--ac-grey);
+}
+
+/* Utility Classes */
+
+.header-dimensions, .header-dimensions-special {
+    height: calc(50vh + 20.5vw);
+    max-height: 100vh;
+}
+
+.header-dimensions-special {
+    max-height: calc(100vh - var(--nav-height));
 }

@@ -14,8 +14,8 @@
   {% load static %}
   <meta charset="UTF-8">
   {% block meta %}
-  <title>Berks Dental Assistants: Home</title>
-  <meta name="description" content="Berks Dental Assistants' landing page.">
+  <title>Berks Dental Assistants: Base</title>
+  <meta name="description" content="Berks Dental Assistants' Base Page.">
   {% endblock %}
   {% include "favicon-data.html" %}
   <meta name="keywords" content="Berks Dental Assistants, Dental Health, Dental"/>
@@ -47,7 +47,7 @@
       <div class="nav-bar">
           <a href="{% url "main:home" %}"><img alt="Berks Dental Assistants Logo" class="nav-img" src="{% static "/base/logo.png" %}"/></a>
           <nav class="nav-link-container">
-              <a class="nav-link">First</a>
+              <a href="{% url "main:home" %}" class="nav-link">Home</a>
               <a class="nav-link">Second</a>
               <a class="nav-link">Third</a>
               <a class="nav-link">Fourth</a>
@@ -59,11 +59,11 @@
       <div class="nav-placeholder"></div>
       {% block header %}{% endblock %}
   </header>
-  <section class="section-main">
+  <div class="main-content">
   {% block content %}
       <h1>This html file is meant to be inherited! Please don't render the base version!</h1>
   {% endblock %}
-  </section>
+  </div>
   <footer class="footer-main">
       <a class="footer-link">First</a>
       <a class="footer-link">Second</a>
