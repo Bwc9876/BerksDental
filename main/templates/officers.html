@@ -1,7 +1,73 @@
 {% extends "base.html" %}
 
+{% block links %}
+
+    <style>
+
+        .cardContainer {
+            display: flex;
+        }
+
+        .officerCard {
+            border-radius: 5px;
+            width: 340px;
+            margin: 30px 50px;
+            background-color: white;
+            box-shadow: 0 5px 5px grey;
+        }
+
+        .officerCard * {
+            padding: 10px 20px;
+            border-bottom: solid 2px lightgrey;
+            display: block;
+            margin: 2px 0;
+        }
+
+        .officerCard *:last-child {
+            border: none;
+            margin-bottom: 5px;
+        }
+
+        .contactMethods a {
+            border: none;
+            padding: 0;
+            margin-right: 20px;
+            float: left;
+            text-decoration: none;
+            color: blue;
+        }
+
+    </style>
+
+{% endblock links %}
 
 {% block content %}
+
+    <h1> Our Officers </h1>
+
+    <div class="cardContainer">
+
+        {% for officer in officers %}
+        
+            <div class="officerCard">
+                <img draggable="false" width="300px" height="300px" src="{{ officer.photo_link }}" alt="{{ officer.name }}'s Picture"/>
+                <h4>{{ officer.name }}</h4>
+                <p style="color: black;">{{ officer.biography }}</p>
+                {% if officer.email or officer.phone %}
+                <div class="contactMethods">
+                    {% if officer.email %}
+                    <a href="{{ officer.masked_email_link }}">Email</a>
+                    {% endif %}
+                    {% if officer.phone %}
+                    <a href="{{ officer.masked_phone_link }}">Phone</a>
+                    {% endif %}
+                </div>
+                {% endif %}
+            </div>
+        
+        {% endfor %}
+
+    </div>
 
 
 {% endblock %}

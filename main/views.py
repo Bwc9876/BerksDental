@@ -1,3 +1,4 @@
+from datetime import date
 from django.http import Http404
 from django.shortcuts import render
 from django.template.exceptions import TemplateDoesNotExist
@@ -31,6 +32,7 @@ def gallery(request):
     :returns: An HttpResponse containing the rendered html file
     :rtype: class:`django.http.HttpResponse` 
     """
+
     photo_objects = models.GalleryPhoto.objects.all()
     return render(request, "gallery.html", {"photos": photo_objects})
 
@@ -45,6 +47,7 @@ def officers(request):
     :returns: An HttpResponse containing the rendered html file
     :rtype: class:`django.http.HttpResponse` 
     """
+
     officer_objects = models.Officer.objects.all()
     return render(request, "officers.html", {"officers": officer_objects})
 
@@ -59,8 +62,10 @@ def events(request):
     :returns: An HttpResponse containing the rendered html file
     :rtype: class:`django.http.HttpResponse` 
     """
-    event_objects = models.Event.objects.all()
-    return render(request, "events.html", {"events": event_objects})
+
+    upcoming_events = models.Event.objects.filter(dateOf__gte=date.today())
+    past_events = models.Event.objects.filter(dateOf__lt=date.today())
+    return render(request, "events.html", {"upcoming": upcoming_events, "past": past_events})
 
 
 def safe_render(templateName):

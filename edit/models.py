@@ -49,7 +49,7 @@ class GalleryPhoto(models.Model):
         :rtype: str
         """
 
-        return f"{settings.MEDIA_URL}gallery-photos/{self.picture.name}"
+        return f"{settings.MEDIA_URL}{self.picture.name}"
 
     def __str__(self):
         """ Defines how this object will be casted to a string
@@ -133,7 +133,7 @@ class Event(models.Model):
         return self.name
 
     class Meta:
-        ordering = ['-dateOf', '-startTime']
+        ordering = ['-dateOf', 'startTime', 'endTime']
 
 
 class Officer(models.Model):
@@ -180,6 +180,32 @@ class Officer(models.Model):
         """
 
         return f"{settings.MEDIA_URL}officer-photos/{self.id}.{self.get_extension()}"
+
+    def masked_email_link(self):
+        """ This function is used to mask the officer's email from web scrapers
+
+        :returns: A link that is much harder to get through scrapers
+        :rtype: str
+        """
+
+        if self.email:
+            char_codes = [str(ord(character)) for character in list(self.email)]
+            return f'javascript:void(location.href="mailto:"+String.fromCharCode({",".join(char_codes)}))'
+        else:
+            return "#"
+
+    def masked_phone_link(self):
+        """ This function is used to mask the officer's phone from web scrapers
+
+        :returns: A link that is much harder to get through scrapers
+        :rtype: str
+        """
+
+        if self.phone:
+            char_codes = [str(ord(character)) for character in list(self.phone)]
+            return f'javascript:void(location.href="tel:"+String.fromCharCode({",".join(char_codes)}))'
+        else:
+            return "#"
 
     def __str__(self):
         """ Defines how this object will be casted to a string
@@ -267,7 +293,7 @@ class Social(models.Model):
         :rtype: str
         """
 
-        return f"Link To {self.service_label()}"
+        return f"Link To Berks Dental Assistants' {self.service_label()} Page"
 
     class Meta:
         ordering = ["sort_order"]

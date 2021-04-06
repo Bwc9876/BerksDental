@@ -1,7 +1,80 @@
 {% extends 'base.html' %}
 
 
+{% block links %}
+
+    <style>
+
+        .events {
+            margin-left: 10px;
+        }
+
+        .eventContainer {
+            border: 1px solid black;
+            width: 35vw;
+            margin-bottom: 10px;
+            border-radius: 5px;
+        }
+
+        .eventContainer * {
+            color: black;   
+        }
+
+        .eventName {
+            margin-top: 10px;
+            margin-bottom: 15px;
+        }
+
+        .eventTime {
+            margin: 10px 0; 
+        }
+
+        .eventLocation {
+            margin: 0;
+        }
+
+    </style>
+
+{% endblock links %}
+
+
 {% block content %}
+
+<h1>Upcoming</h1>
+
+<div class="events">
+
+    {% for event in upcoming %}
+
+        <div class="eventContainer">
+
+            <h3 class="eventName">{{ event.name }}</h3>
+            <h6 class="eventTime">{{ event.dateOf }} From {{ event.startTime }} To {{ event.endTime }}</h6>
+            <h6 class="eventLocation">Location: {{ event.location }}</h6>
+
+        </div>
+
+    {% endfor %}
+
+</div>
+
+<h1>Previous</h1>
+
+<div class="events">
+
+    {% for event in past %}
+
+        <div class="eventContainer">
+
+            <h3 class="eventName">{{ event.name }}</h3>
+            <h6 class="eventTime">{{ event.dateOf }} From {{ event.startTime }} To {{ event.endTime }}</h6>
+            <h6 class="eventLocation">Location: {{ event.location }}</h6>
+
+        </div>
+
+    {% endfor %}
+
+</div>
 
 
 {% endblock content %}

@@ -1,5 +1,72 @@
 {% extends "base.html" %}
 
+{% block links %}
+
+    <style>
+
+        .imgContainer {
+            display: flex;
+            position: absolute;
+            margin-left: 10px;
+        }
+
+        .galleryPhoto {
+            position: relative;
+            width: 500px;
+            height: 500px;
+            margin-left: 10px;
+        }
+
+        .image {
+            position: absolute;
+            margin: 0;
+            top: 0;
+        }
+
+        .caption {
+            background-color: black;
+            position: relative;
+            bottom: 1px;
+            z-index: 1;
+            opacity: 0;
+            transition: opacity 0.3s 0s linear;
+        }
+
+        .image:hover ~ .caption {
+            opacity: 0.75;
+        }
+
+        .captionText {
+            color: white;
+            margin:0;
+        }
+
+    </style>
+
+{% endblock %}
+
 {% block content %}
+
+    <h1> Our Pictures </h1>
+
+    <div class="imgContainer">
+
+        {% for photo in photos %}
+
+            <div class="galleryPhoto">
+
+                <img class="image" height="500px" width="500px" src="{{ photo.photo_link }}" alt="{{ photo.caption }}"/>
+
+                <div class="caption">
+
+                    <p class="captionText">{{ photo.caption }}</p>
+
+                </div>
+        
+            </div>
+
+        {% endfor %}
+
+    </div>
 
 {% endblock %}

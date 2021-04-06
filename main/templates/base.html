@@ -40,7 +40,10 @@
   {% block links %}{% endblock %}
 </head>
 <body>
-  {% include 'ie-card.html' %}
+  {# If the user is using ie, most of the site won't work, so we display a message telling the user to use a different browser #}
+  {% if "Trident" in agent_type %}
+    {% include 'ie-card.html' %}
+  {% endif %}
   <header>
       <nav class="nav-main">
           {% if app_name == "edit" %}
@@ -69,13 +72,17 @@
   {% block content %}
       <h1>This html file is meant to be inherited! Please don't render the base version!</h1>
   {% endblock %}
-  {% comment %} 
-  {# For when we integrate the footer, un-comment this block to get all SocialMedia Objects in the "socials" variable #}
 
   {% load adminTags %}
   {% getSocials as socials %}
 
-  {% endcomment %}
+  <footer style="position:fixed;background-color:grey;bottom:0;width:100%;padding:10px 20px;">
+      <div style="float:right;margin-right:50px;" id="socials" class="socialContainer">
+        {% for social in socials %}
+            <a href="{{ social.link }}"><img width="75px" height="75px" src="{{ social.icon_url }}" alt="Link To Berks Dental Assistants' {{ social.service_label }} Page"/></a>
+        {% endfor %}
+      </div>
+  </footer>
   
 </body>
 </html>
