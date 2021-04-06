@@ -29,14 +29,13 @@
   {% comment %}
     CSS
   {% endcomment %}
-  <link href="{% static "/shared/text-sizing.css" %}" type="text/css" rel="stylesheet">
-  <link href="{% static "/shared/shared-mobile.css" %}" type="text/css" rel="stylesheet">
-  <link href="{% static "/shared/shared-desktop.css" %}" type="text/css" rel="stylesheet">
+  <link href="{% static "/base/text-sizing.css" %}" type="text/css" rel="stylesheet">
+  <link href="{% static "/base/base.css" %}" type="text/css" rel="stylesheet">
   {% comment %}
     Javascript
   {% endcomment %}
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-  <script src="{% static "/shared/shared.js" %}" type="text/javascript"></script>
+  <script src="{% static "/base/base.js" %}" type="text/javascript"></script>
   {% block links %}{% endblock %}
 </head>
 <body>
@@ -46,7 +45,7 @@
   {% endif %}
   <header>
       <div class="nav-bar">
-          <a href="{% url "main:home" %}"><img alt="Berks Dental Assistants Logo" class="nav-img" src="{% static "/shared/logo.png" %}"/></a>
+          <a href="{% url "main:home" %}"><img alt="Berks Dental Assistants Logo" class="nav-img" src="{% static "/base/logo.png" %}"/></a>
           <nav class="nav-link-container">
               <a class="nav-link">First</a>
               <a class="nav-link">Second</a>
@@ -60,21 +59,15 @@
       <div class="nav-placeholder"></div>
       {% block header %}{% endblock %}
   </header>
+  <section class="section-main">
   {% block content %}
       <h1>This html file is meant to be inherited! Please don't render the base version!</h1>
   {% endblock %}
-
-  {% load adminTags %}
-  {% getSocials as socials %}
-
-  <footer style="position:fixed;background-color:grey;bottom:0;width:100%;padding:10px 20px;">
-      <div style="float:right;margin-right:50px;" id="socials" class="socialContainer">
-        {% for social in socials %}
-            <a href="{{ social.link }}"><img width="75px" height="75px" src="{{ social.icon_url }}" alt="Link To Berks Dental Assistants' {{ social.service_label }} Page"/></a>
-        {% endfor %}
-      </div>
+  </section>
+  <footer class="footer-main">
+      <a class="footer-link">First</a>
+      <a class="footer-link">Second</a>
   </footer>
-  
 </body>
 </html>
 

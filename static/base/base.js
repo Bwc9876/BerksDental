@@ -7,15 +7,13 @@ $(document).ready(function() {
     });
     $(".nav-button").click(function() {
         let navLinkContainer = $(".nav-link-container");
-        let pos = "150vw";
         if (!navLinkContainer.hasClass("show")) {
             navLinkContainer.scrollTop(0);
-            pos = "0px";
         }
         navLinkContainer.toggleClass("show");
         $(".nav-link").each(function (index, value) {
             setTimeout(function() {
-                $(value).css("left", pos);
+                $(value).toggleClass("show");
             }, index*100);
         });
     });

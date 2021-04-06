@@ -12,7 +12,10 @@
 
 body {
     width: 100vw;
+    min-height: 100vh;
     margin: 0px;
+    display: flex;
+    flex-direction: column;
     overflow-x: hidden;
 }
 
@@ -49,9 +52,11 @@ header {
     height: calc(100vh - var(--nav-height));
     display: flex;
     flex-direction: column;
+    pointer-events: none;
 }
 
 .nav-link-container.show {
+    pointer-events: all;
     overflow: hidden scroll;
 }
 
@@ -64,6 +69,17 @@ header {
     text-align: center;
     font-size: var(--h2);
     text-decoration: none;
-    background-color: #bfbfbf;
     transition: left 550ms linear;
+}
+
+.nav-link.show {
+    left: 0px;
+}
+
+.section-main {
+    flex-grow: 1;
+}
+
+.footer-main {
+    padding: 18px 20px;
 }
