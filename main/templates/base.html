@@ -35,11 +35,12 @@
     Javascript
   {% endcomment %}
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="https://kit.fontawesome.com/b7739b9b58.js" crossorigin="anonymous"></script>
   <script src="{% static "/base/base.js" %}" type="text/javascript"></script>
   {% block links %}{% endblock %}
 </head>
 <body>
-  {# If the user is using ie, most of the site won't work, so we display a message telling the user to use a different browser #}
+  {# If the user is using ie (or any Trident based browser), most of the site won't work, so we display a message telling the user to use a different browser #}
   {% if "Trident" in agent_type %}
     {% include 'ie-card.html' %}
   {% endif %}
@@ -65,8 +66,13 @@
   {% endblock %}
   </div>
   <footer class="footer-main">
-      <a class="footer-link">First</a>
-      <a class="footer-link">Second</a>
+      {% load adminTags %}
+      {% getSocials as socials %}
+      <div style="float:right;" class="socialPages">
+        {% for social in socials %}
+            <a style="color:black;" class="socialLink" href="{{ social.link }}"><i class="fab {{ social.fa_icon_class }} fa-lg"></i></a>
+        {% endfor %}
+      </div>
   </footer>
 </body>
 </html>

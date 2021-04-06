@@ -16,7 +16,7 @@ from django.db import models as model_fields
 from django.forms import ValidationError
 from django.http import Http404
 from django.shortcuts import render, redirect, get_object_or_404
-from django.template.defaultfilters import slugify
+from django.template.defaultfilters import slugify, escape
 from django.urls import path, reverse
 from django.views.decorators.http import require_safe, require_http_methods
 
@@ -63,10 +63,10 @@ class EditViewSet:
     labels = {}
 
     formatters = {
-        model_fields.URLField: lambda inputVal: f'<a target="_blank" href="{str(inputVal)}">{str(inputVal)}</a>',
-        model_fields.ImageField: lambda inputVal: f'<a target="_blank" href="{settings.MEDIA_URL}{inputVal}">Click To '
+        model_fields.URLField: lambda inputVal: f'<a target="_blank" href="{escape(str(inputVal))}">{escape(str(inputVal))}</a>',
+        model_fields.ImageField: lambda inputVal: f'<a target="_blank" href="{settings.MEDIA_URL}{escape(inputVal)}">Click To '
                                                   f'View Image</a> ',
-        model_fields.BooleanField: lambda inputVal: "Yes" if inputVal is True else "No",
+        model_fields.BooleanField: lambda inputVal: f'<i class="fas {"fa-check-circle" if inputVal is True else "fa-times-circle"} fa-lg"></i>',
         model_fields.TimeField: lambda inputVal: inputVal.strftime("%I:%M %p")
     }
 
@@ -404,8 +404,22 @@ class EventViewSet(EditViewSet):
     displayName = "Event"
     model = models.Event
     modelForm = forms.EventForm
-    displayFields = ['name', 'location', 'dateOf', 'startTime', "endTime"]
-    labels = {'dateOf': "Date", 'startTime': "Start Time", 'endTime': "End Time"}
+    displayFields = ['name', 'virtual', 'location', 'startDate', 'endDate', 'startTime', "endTime"]
+    labels = {'location': "Location/Link", 'startDate': "Start Date", 'endDate': "End Date", 'startTime': "Start Time", 'endTime': "End Time"}
+
+    def format_value_list(self, valueList):
+        new_value_list = super().format_value_list(valueList)
+
+        for event in new_value_list:
+            virtual_location = self.displayFields.index("virtual")
+            location_index = self.displayFields.index("location")
+            if "check" in event[virtual_location]:
+                new_value = self.model.objects.get(id=event[-1]).link
+                event[location_index] = f'<a href="{new_value}">{new_value}</a>'
+
+        return new_value_list
+                
+
 
 
 class SocialViewSet(EditViewSet):

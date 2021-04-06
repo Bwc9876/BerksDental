@@ -6,6 +6,7 @@
 import os
 import uuid
 
+from django.forms import ValidationError
 from django.conf import settings
 from django.db import models
 
@@ -118,10 +119,26 @@ class Event(models.Model):
 
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     name = models.CharField(max_length=100)
-    location = models.CharField(max_length=200)
-    dateOf = models.DateField()
+    virtual = models.BooleanField(default=False)
+    location = models.CharField(max_length=200, blank=True, null=True)
+    link = models.URLField(blank=True, null=True)
+    description = models.TextField(max_length=500, default="No description provided")
+    startDate = models.DateField()
+    endDate = models.DateField()
     startTime = models.TimeField()
     endTime = models.TimeField()
+
+    def clean(self):
+        if self.virtual:
+            if self.link is None:
+                raise ValidationError({"link": "Please fill out this field"})
+            else:
+                self.location = None
+        else:
+            if self.location is None:
+                raise ValidationError({"location": "Please fill out this field"})
+            else:
+                self.link = None
 
     def __str__(self):
         """ Defines how this object will be casted to a string
@@ -133,7 +150,7 @@ class Event(models.Model):
         return self.name
 
     class Meta:
-        ordering = ['-dateOf', 'startTime', 'endTime']
+        ordering = ["-startDate", "-endDate", ]
 
 
 class Officer(models.Model):
@@ -235,7 +252,7 @@ class Social(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
 
     class Services(models.TextChoices):
-        """ This is an internal class used to specify what social media services you can chose from
+        """ This is an internal class used to specify what social media services you can choose from
         It extends :class:`django.db.models.TextChoices`
 
         """
@@ -272,19 +289,17 @@ class Social(models.Model):
 
         return cls.Services.labels[cls.Services.values.index(service)]
 
-    def icon_url(self):
+    def fa_icon_class(self):
         """ This function is used to get the url to the icon for this social media service
 
         :returns: The url to the icon for this social media type
         :rtype: str
         """
 
-        target_icon = f"{settings.BASE_DIR}/static/social-icons/{self.service}.png"
-
-        if os.path.exists(target_icon):
-            return f"{settings.STATIC_URL}social-icons/{self.service}.png"
+        if self.service == "LI":
+            return "fa-linkedin"
         else:
-            return f"{settings.STATIC_URL}social-icons/DEFAULT.png"
+            return f"fa-{self.service_label().lower()}-square"
 
     def __str__(self):
         """ Defines how this object will be casted to a string

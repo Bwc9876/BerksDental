@@ -49,8 +49,17 @@
         <div class="eventContainer">
 
             <h3 class="eventName">{{ event.name }}</h3>
-            <h6 class="eventTime">{{ event.dateOf }} From {{ event.startTime }} To {{ event.endTime }}</h6>
-            <h6 class="eventLocation">Location: {{ event.location }}</h6>
+            {% if event.startDate == event.endDate %}
+                <h6 class="eventTime">On {{ event.startDate }} From {{ event.startTime }} To {{ event.endTime }}</h6>
+            {% else %}
+                <h6 class="eventTime">Starts On {{ event.startDate }} At {{ event.startTime }}</h6>
+                <h6 class="eventTime">Ends On {{ event.endDate }} At {{ event.endTime }}</h6>
+            {% endif %}
+            {% if event.virtual %}
+                <h6 class="eventLocation"><a href="{{ event.link }}">Link</a></h6>
+            {% else %}
+                <h6 class="eventLocation">Location: {{ event.location }}</h6>
+            {% endif %}
 
         </div>
 
@@ -65,10 +74,18 @@
     {% for event in past %}
 
         <div class="eventContainer">
-
             <h3 class="eventName">{{ event.name }}</h3>
-            <h6 class="eventTime">{{ event.dateOf }} From {{ event.startTime }} To {{ event.endTime }}</h6>
-            <h6 class="eventLocation">Location: {{ event.location }}</h6>
+            {% if event.startDate == event.endDate %}
+                <h6 class="eventTime">On {{ event.startDate }} From {{ event.startTime }} To {{ event.endTime }}</h6>
+            {% else %}
+                <h6 class="eventTime">Starts On {{ event.startDate }} At {{ event.startTime }}</h6>
+                <h6 class="eventTime">Ends On {{ event.endDate }} At {{ event.endTime }}</h6>
+            {% endif %}
+            {% if event.virtual %}
+                <h6 class="eventLocation"><a href="{{ event.link }}">Link</a></h6>
+            {% else %}
+                <h6 class="eventLocation">Location: {{ event.location }}</h6>
+            {% endif %}
 
         </div>
 

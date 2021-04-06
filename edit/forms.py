@@ -99,8 +99,12 @@ class EventForm(ModelForm):
         widgets = {
             'startTime': TimeSelectorField,
             'endTime': TimeSelectorField,
-            'dateOf': DateSelectorField
+            'startDate': DateSelectorField,
+            'endDate': DateSelectorField
         }
+
+    class Media:
+        js = ("admin/eventForm.js",)
 
     def __init__(self, *args, **kargs):
         """ This function is run when the class is instantiated
@@ -108,7 +112,8 @@ class EventForm(ModelForm):
         """
 
         super().__init__(*args, **kargs)
-        self.fields['dateOf'].label = "Date"
+        self.fields['startDate'].label = "Start Date"
+        self.fields['endDate'].label = "End Date"
         self.fields['startTime'].label = "Start Time"
         self.fields['endTime'].label = "End Time"
 
@@ -120,9 +125,17 @@ class EventForm(ModelForm):
         cleaned_data = super().clean()
         start_time = cleaned_data.get("startTime")
         end_time = cleaned_data.get("endTime")
+        start_date = cleaned_data.get("startDate")
+        end_date = cleaned_data.get("endDate")
 
         if start_time and end_time:
             if start_time > end_time:
                 raise ValidationError("%(start)s is after %(end)s!", params={'start': start_time.strftime("%I:%M %p"),
                                                                              'end': end_time.strftime("%I:%M %p")},
                                       code="invalidTimes")
+
+        if start_date and end_date:
+            if start_date > end_date:
+                raise ValidationError("%(start)s is after %(end)s!", params={'start': start_date,
+                                                                             'end': end_date},
+                                      code="invalidDates")

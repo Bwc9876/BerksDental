@@ -13,6 +13,11 @@
         .error {
             color: #ff0000;
         }
+
+        .hiddenField {
+            display: none;
+        }
+
     </style>
 
 {% endblock %}
@@ -26,6 +31,8 @@
     {% endif %}
 
     {% if form %}
+
+        {{ form.media }}
 
         {% if form.non_field_errors %}
 

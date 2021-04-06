@@ -19,7 +19,8 @@ def home(request):
     """
 
     featured_photos = models.GalleryPhoto.objects.filter(featured=True)
-    return render(request, 'home.html', {'featuredPhotos': featured_photos})
+    upcoming_events = models.Event.objects.all()[:5]
+    return render(request, 'home.html', {'featuredPhotos': featured_photos, 'upcomingEvents': upcoming_events})
 
 
 @require_safe
@@ -63,8 +64,8 @@ def events(request):
     :rtype: class:`django.http.HttpResponse` 
     """
 
-    upcoming_events = models.Event.objects.filter(dateOf__gte=date.today())
-    past_events = models.Event.objects.filter(dateOf__lt=date.today())
+    upcoming_events = models.Event.objects.filter(startDate__gte=date.today())
+    past_events = models.Event.objects.filter(startDate__lt=date.today())
     return render(request, "events.html", {"upcoming": upcoming_events, "past": past_events})
 
 

@@ -36,6 +36,27 @@
             margin-left: 50px;
         }
 
+        a.action {
+            color: black;
+            transition: color 0.10s linear;
+        }
+
+        a.edit:hover {
+            color: #38abe0;
+        }
+
+        a.delete:hover {
+            color: #e3463d;
+        }
+
+        i.fa-check-circle {
+            color: #2eb72e;
+        }
+
+        i.fa-times-circle {
+            color: red;
+        }
+
 
     </style>
 
@@ -60,8 +81,8 @@
                     {% if forloop.first %}
                         <td><b>{{ value|safe }}</b></td>
                     {% elif forloop.last %}
-                        <td><a href="{{ viewSet.edit_link }}?id={{ value }}"><img width="40px" height="40px" alt="edit" src="{% static 'admin-icons/Edit-Icon.svg' %}"/></a></td>
-                        <td><a href="{{ viewSet.delete_link }}?id={{ value }}"><img width="40px" height="40px" alt="delete" src="{% static 'admin-icons/Delete-Icon.svg' %}"/></a></td>
+                        <td><a class="action edit" href="{{ viewSet.edit_link }}?id={{ value }}"><i class="fas fa-edit fa-lg"></i></a></td>
+                        <td><a class="action delete" href="{{ viewSet.delete_link }}?id={{ value }}"><i class="fas fa-trash fa-lg"></i></a></td>
                     {% else %}
                         <td>{{ value|safe }}</td>
                     {% endif %}
