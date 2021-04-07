@@ -1,8 +1,8 @@
-from django.contrib.sitemaps.views import sitemap
-
-from django.urls import path
-from main import views, sitemaps
 from django.conf import settings
+from django.contrib.sitemaps.views import sitemap
+from django.urls import path
+
+from main import views, sitemaps
 
 app_name = "main"
 

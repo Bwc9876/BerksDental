@@ -3,12 +3,11 @@
     These classes' attributes are set to Field objects which determine how the data will be stored in the database
 """
 
-import os
 import uuid
 
-from django.forms import ValidationError
 from django.conf import settings
 from django.db import models
+from django.forms import ValidationError
 
 
 class GalleryPhoto(models.Model):

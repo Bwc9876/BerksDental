@@ -1,4 +1,5 @@
 from datetime import date
+
 from django.http import Http404
 from django.shortcuts import render
 from django.template.exceptions import TemplateDoesNotExist

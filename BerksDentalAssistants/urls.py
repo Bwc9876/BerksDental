@@ -5,7 +5,7 @@
 """
 
 from django.conf import settings
-from django.urls import path, resolve, include
+from django.urls import path, include
 
 urlpatterns = [
     path('', include("main.urls")),

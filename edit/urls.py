@@ -1,6 +1,7 @@
-from django.urls import path
-from edit import views as views
 from django.contrib.auth.views import LoginView, LogoutView
+from django.urls import path
+
+from edit import views as views
 
 app_name = "edit"
 urlpatterns = [

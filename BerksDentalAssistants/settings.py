@@ -13,7 +13,7 @@ SECRET_KEY = "a^0$j#*i7x-0=zpg1=vmti*9zhh2i!oi$kx$#bq&7)1jvl%ne&3z"
 
 DEBUG = True
 
-ALLOWED_HOSTS = ['berksdental.benjamincrocker.repl.co', '127.0.0.1']
+ALLOWED_HOSTS = ['berksdental.benjamincrocker.repl.co', '127.0.0.1', '192.168.86.29', '71.225.44.187']
 
 INSTALLED_APPS = [
     'django.contrib.admin', 'django.contrib.auth',

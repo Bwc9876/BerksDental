@@ -63,10 +63,13 @@ class EditViewSet:
     labels = {}
 
     formatters = {
-        model_fields.URLField: lambda inputVal: f'<a target="_blank" href="{escape(str(inputVal))}">{escape(str(inputVal))}</a>',
-        model_fields.ImageField: lambda inputVal: f'<a target="_blank" href="{settings.MEDIA_URL}{escape(inputVal)}">Click To '
-                                                  f'View Image</a> ',
-        model_fields.BooleanField: lambda inputVal: f'<i class="fas {"fa-check-circle" if inputVal is True else "fa-times-circle"} fa-lg"></i>',
+        model_fields.URLField: lambda
+            inputVal: f'<a target="_blank" href="{escape(str(inputVal))}">{escape(str(inputVal))}</a>',
+        model_fields.ImageField: lambda
+            inputVal: f'<a target="_blank" href="{settings.MEDIA_URL}{escape(inputVal)}">Click To '
+                      f'View Image</a> ',
+        model_fields.BooleanField: lambda
+            inputVal: f'<i class="fas {"fa-check-circle" if inputVal is True else "fa-times-circle"} fa-lg"></i>',
         model_fields.TimeField: lambda inputVal: inputVal.strftime("%I:%M %p")
     }
 
@@ -405,7 +408,8 @@ class EventViewSet(EditViewSet):
     model = models.Event
     modelForm = forms.EventForm
     displayFields = ['name', 'virtual', 'location', 'startDate', 'endDate', 'startTime', "endTime"]
-    labels = {'location': "Location/Link", 'startDate': "Start Date", 'endDate': "End Date", 'startTime': "Start Time", 'endTime': "End Time"}
+    labels = {'location': "Location/Link", 'startDate': "Start Date", 'endDate': "End Date", 'startTime': "Start Time",
+              'endTime': "End Time"}
 
     def format_value_list(self, valueList):
         new_value_list = super().format_value_list(valueList)

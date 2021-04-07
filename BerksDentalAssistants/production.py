@@ -64,8 +64,12 @@ WSGI_APPLICATION = 'BerksDentalAssistants.wsgi.application'
 # Will be changed to MySQL for PythonAnywhere
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'berks$berks_dental',
+        'USER': 'berks',
+        'PASSWORD': os.getenv('DB_PASSWORD'),
+        'HOST': 'berks_dental.mysql.pythonanywhere-services.com',
+        'OPTIONS': {'init_command': "SET sql_mode='STRICT_TRANS_TABLES'"}
     }
 }
 
@@ -111,6 +115,9 @@ USE_TZ = True
 # SECURE_HSTS_PRELOAD = True
 #
 # SECURE_SSL_REDIRECT = True
+
+CSRF_COOKIE_SECURE = True
+SESSION_COOKIE_SECURE = True
 
 STATIC_ROOT = '/var/www/BerksDental/static'
 STATIC_URL = '/static/'
