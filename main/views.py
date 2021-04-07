@@ -19,7 +19,7 @@ def home(request):
     """
 
     featured_photos = models.GalleryPhoto.objects.filter(featured=True)
-    upcoming_events = models.Event.objects.all()[:5]
+    upcoming_events = models.Event.objects.filter(startDate__gte=date.today())[:5]
     return render(request, 'home.html', {'featuredPhotos': featured_photos, 'upcomingEvents': upcoming_events})
 
 
