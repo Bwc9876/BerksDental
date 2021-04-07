@@ -129,6 +129,11 @@ class Event(models.Model):
     endTime = models.TimeField()
 
     def clean(self):
+        if self.startDate == self.endDate:
+            if self.startTime > self.endTime:
+                raise ValidationError("Start time is after end time!")
+        elif self.startDate > self.endDate:
+            raise ValidationError("Start date is after end date!")
         if self.virtual:
             if self.link is None:
                 raise ValidationError({"link": "Please fill out this field"})
@@ -247,8 +252,8 @@ class Social(models.Model):
     :type service: class:`django.db.models.CharField`
     :attr link: The link to the social media page
     :type link: class:`django.models.URLField`
-
     """
+
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
 
     class Services(models.TextChoices):

@@ -418,8 +418,6 @@ class EventViewSet(EditViewSet):
                 event[location_index] = f'<a href="{new_value}">{new_value}</a>'
 
         return new_value_list
-                
-
 
 
 class SocialViewSet(EditViewSet):

@@ -117,25 +117,25 @@ class EventForm(ModelForm):
         self.fields['startTime'].label = "Start Time"
         self.fields['endTime'].label = "End Time"
 
-    def clean(self):
-        """ This function is run to make sure that all fields are valid outside of formatting
-        It ensures that the start and end times for the event make logical sense (startTime shouldn't be after endTime)
-        """
-
-        cleaned_data = super().clean()
-        start_time = cleaned_data.get("startTime")
-        end_time = cleaned_data.get("endTime")
-        start_date = cleaned_data.get("startDate")
-        end_date = cleaned_data.get("endDate")
-
-        if start_time and end_time:
-            if start_time > end_time:
-                raise ValidationError("%(start)s is after %(end)s!", params={'start': start_time.strftime("%I:%M %p"),
-                                                                             'end': end_time.strftime("%I:%M %p")},
-                                      code="invalidTimes")
-
-        if start_date and end_date:
-            if start_date > end_date:
-                raise ValidationError("%(start)s is after %(end)s!", params={'start': start_date,
-                                                                             'end': end_date},
-                                      code="invalidDates")
+    # def clean(self):
+    #     """ This function is run to make sure that all fields are valid outside of formatting
+    #     It ensures that the start and end times for the event make logical sense (startTime shouldn't be after endTime)
+    #     """
+    #
+    #     cleaned_data = super().clean()
+    #     start_time = cleaned_data.get("startTime")
+    #     end_time = cleaned_data.get("endTime")
+    #     start_date = cleaned_data.get("startDate")
+    #     end_date = cleaned_data.get("endDate")
+    #
+    #     if start_time and end_time:
+    #         if start_time > end_time:
+    #             raise ValidationError("%(start)s is after %(end)s!", params={'start': start_time.strftime("%I:%M %p"),
+    #                                                                          'end': end_time.strftime("%I:%M %p")},
+    #                                   code="invalidTimes")
+    #
+    #     if start_date and end_date:
+    #         if start_date > end_date:
+    #             raise ValidationError("%(start)s is after %(end)s!", params={'start': start_date,
+    #                                                                          'end': end_date},
+    #                                   code="invalidDates")

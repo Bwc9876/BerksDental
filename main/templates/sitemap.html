@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+
+{% block links %}
+
+    <style>
+
+        ul {
+            list-style: none;
+        }
+
+    </style>
+
+{% endblock %}
+
+{% block content %}
+
+    <h1>Sitemap</h1>
+    <ul>
+        <li><a href="{% url "main:home" %}">Home</a></li>
+        <li><a href="{% url "main:officers" %}">Officers</a></li>
+        <li><a href="{% url "main:gallery" %}">Gallery</a></li>
+        <li><a href="{% url "main:events" %}">Events</a></li>
+        <li><a href="{% url "main:about" %}">About</a></li>
+    </ul>
+    {% if user.is_authenticated %}
+        <h4>Administrative Pages</h4>
+        <ul>
+            <li><a href="{% url "edit:admin_home" %}">Admin Home</a></li>
+            <li><a href="{% url "edit:photo_view" %}">Gallery Photos</a></li>
+            <li><a href="{% url "edit:officer_view" %}">Officers</a></li>
+            <li><a href="{% url "edit:officer_view" %}">External Links</a></li>
+            <li><a href="{% url "edit:officer_view" %}">Events</a></li>
+            <li><a href="{% url "edit:officer_view" %}">Social Media Pages</a></li>
+        </ul>
+    {% endif %}
+
+    <a href="{% url "main:django.contrib.sitemaps.views.sitemap" %}">View As XML</a>
+
+{% endblock %}

@@ -65,7 +65,7 @@
   {% endblock %}
   </div>
   <footer class="footer-main">
-      <a class="footer-link">Site Map IUQRWNGUIJT4NIUGNUIR3TNGIUTNHJITN</a>
+      <a href="{% url "main:sitemap" %}" class="footer-link">Site Map</a>
       <a href="{% url "main:about" %}" class="footer-link">About</a>
       {% load adminTags %}
       {% getSocials as socials %}
