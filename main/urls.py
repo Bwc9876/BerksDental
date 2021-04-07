@@ -1,14 +1,22 @@
+from django.contrib.sitemaps.views import sitemap
+
 from django.urls import path
-from main import views
+from main import views, sitemaps
 from django.conf import settings
 
 app_name = "main"
+
+sitemaps = {
+    'main': sitemaps.MainSiteMap
+}
+
 urlpatterns = [
     path('', views.home, name="home"),
     path('gallery/', views.gallery, name="gallery"),
     path('officers/', views.officers, name="officers"),
     path('events/', views.events, name="events"),
-    path('about/', views.safe_render("about.html"), name="about")
+    path('about/', views.safe_render("about.html"), name="about"),
+    path('sitemap.xml/', sitemap, {'sitemaps': sitemaps}, name='django.contrib.sitemaps.views.sitemap')
 ]
 
 if settings.DEBUG:
