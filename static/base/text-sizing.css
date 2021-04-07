@@ -7,26 +7,26 @@
     --h6: calc(0.5rem + 1vw);
 }
 
-h1 {
+h1, .h1 {
     font-size: var(--h1);
 }
 
-h2 {
+h2, .h2 {
     font-size: var(--h2);
 }
 
-h3 {
+h3, .h3 {
     font-size: var(--h3);
 }
 
-h4, p, a {
+h4, p, a, .h4 {
     font-size: var(--h4);
 }
 
-h5, button {
+h5, button, .h5 {
     font-size: var(--h5);
 }
 
-h6 {
+h6, .h6 {
     font-size: var(--h6);
 }

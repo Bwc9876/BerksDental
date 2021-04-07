@@ -1,14 +1,15 @@
 :root {
     --clr-light: #C3D9A3;
     --clr: #8CBF3F;
+    --clr-dark: #197F00;
 
     --ac-grey: #9ba7ac;
     --ac-light: #C4E5F2;
     --ac: #23B7D9;
     --ac-dark: #0d7385;
 
-    --clr-text: #75B232;
-    --clr-header: #197F00;
+    --clr-text: #495348;
+    --clr-header: #353b31;
 }
 
 body {
@@ -76,7 +77,7 @@ header {
     left: 150vw;
     width: 100%;
     padding: 7.5vh 0;
-    color: var(--clr-text);
+    color: var(--clr);
     background-color: var(--ac-light);
     border-bottom: black 2px solid;
     text-align: center;
@@ -94,7 +95,7 @@ header {
 }
 
 .current-nav-link {
-    color: var(--clr-header);
+    color: var(--clr-dark);
 }
 
 .main-content {
@@ -130,4 +131,13 @@ header {
 
 .header-dimensions-special {
     max-height: calc(100vh - var(--nav-height));
+}
+
+.captioned-header {
+    margin-bottom: 0;
+}
+
+.captioned-header-caption {
+    margin-top: 5px;
+    margin-bottom: var(--h3);
 }
