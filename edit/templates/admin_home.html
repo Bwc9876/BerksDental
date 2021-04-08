@@ -13,6 +13,51 @@
             text-decoration: none;
         }
 
+        .actions {
+            display: flex;
+            flex-wrap: wrap;
+            margin: 24px 24px 0 24px;
+        }
+
+        .action {
+            {#border: black 1px solid;#}
+            width: 450px;
+            box-shadow: 4px 4px 18px -2px rgba(0,0,0,0.5);
+            margin-right: 30px;
+            margin-bottom: 30px;
+            border-bottom-left-radius: 15px;
+            border-bottom-right-radius: 15px;
+            transition: background-color 0.10s linear;
+        }
+
+        .action:hover {
+            background-color: #f2f2f2;
+        }
+
+        .action:hover .action_thumbnail {
+            background-color: #ccc;
+        }
+
+        .action_thumbnail {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: #f2f2f2;
+            height: 300px;
+            border-bottom: 1px solid #c8c8c8;
+            transition: background-color 0.10s linear;
+        }
+
+        .action_thumbnail i {
+            color: #5b5b5b;
+            font-size: 150px;
+        }
+
+        .action_name {
+            margin: 10px 2px;
+            text-align: center;
+        }
+
     </style>
 
 {% endblock %}
@@ -21,12 +66,55 @@
 
     <h1>Welcome, {{ user.username }}</h1>
 
-    <ul>
-        <li><a href="{% url 'edit:photo_view' %}">Edit Photos</a></li>
-        <li><a href="{% url 'edit:officer_view' %}">Edit Officers</a></li>
-        <li><a href="{% url 'edit:event_view' %}">Edit Events</a></li>
-        <li><a href="{% url 'edit:link_view' %}">Edit External Links</a></li>
-        <li><a href="{% url 'edit:social_media_page_view' %}">Edit Social Media Pages</a></li>
-    </ul>
+    <section class="actions">
+        <a href="{% url "main:home" %}" class="action">
+            <div class="action_thumbnail">
+                <i class="fas fa-eye"></i>
+            </div>
+            <h2 class="action_name">View Site</h2>
+        </a>
+        <a href="{% url "edit:photo_view" %}" class="action">
+            <div class="action_thumbnail">
+                <i class="fas fa-images"></i>
+            </div>
+            <h2 class="action_name">Edit Pictures</h2>
+        </a>
+        <a href="{% url "edit:event_view" %}" class="action">
+            <div class="action_thumbnail">
+                <i class="fas fa-calendar-alt"></i>
+            </div>
+            <h2 class="action_name">Edit Events</h2>
+        </a>
+        <a href="{% url "edit:link_view" %}" class="action">
+            <div class="action_thumbnail">
+                <i class="fas fa-link"></i>
+            </div>
+            <h2 class="action_name">Edit Links</h2>
+        </a>
+        <a href="{% url "edit:social_media_page_view" %}" class="action">
+            <div class="action_thumbnail">
+                <i class="fas fa-share-alt"></i>
+            </div>
+            <h2 class="action_name">Edit Social Media</h2>
+        </a>
+        <a href="{% url "edit:officer_view" %}" class="action">
+            <div class="action_thumbnail">
+                <i class="fas fa-users"></i>
+            </div>
+            <h2 class="action_name">Edit Officers</h2>
+        </a>
+        <a href="#" class="action">
+            <div class="action_thumbnail">
+                <i class="fas fa-cog"></i>
+            </div>
+            <h2 class="action_name">Settings</h2>
+        </a>
+        <a href="{% url "edit:logout" %}" class="action">
+            <div class="action_thumbnail">
+                <i class="fas fa-sign-out-alt"></i>
+            </div>
+            <h2 class="action_name">Logout</h2>
+        </a>
+    </section>
 
 {% endblock %}

@@ -79,7 +79,7 @@ header {
     padding: 7.5vh 0;
     color: var(--clr);
     background-color: var(--ac-light);
-    border-bottom: black 2px solid;
+    border-bottom: #9fbbc5 2px solid;
     text-align: center;
     font-size: var(--h2);
     text-decoration: none;

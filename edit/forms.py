@@ -4,7 +4,7 @@
 """
 
 from django.forms import ModelForm
-from django.forms.widgets import DateInput, TimeInput
+from django.forms.widgets import DateInput, TimeInput, ClearableFileInput
 
 from edit import models
 
@@ -23,6 +23,10 @@ class DateSelectorField(DateInput):
     """
 
     input_type = 'date'
+
+
+class PhotoField(ClearableFileInput):
+    template_name = "PhotoInput.html"
 
 
 class LinkForm(ModelForm):
@@ -53,9 +57,17 @@ class PhotoForm(ModelForm):
     as the other fields aren't meant to be edited manually
     """
 
+    def __init__(self, *args, **kargs):
+
+        super().__init__(*args, **kargs)
+        self.fields['picture'].widget.attrs.update(target="_blank", rel="nofollow")
+
     class Meta:
         model = models.GalleryPhoto
         fields = ['picture', 'caption', 'featured']
+        widgets = {
+            'picture': PhotoField
+        }
 
     def clean(self):
         """ This function is run to make sure that all fields are valid outside of formatting

@@ -14,23 +14,26 @@
             width: 35vw;
             margin-bottom: 10px;
             border-radius: 5px;
+            padding: 10px;
         }
 
-        .eventContainer * {
+        .eventContainer *:not(a) {
             color: black;   
         }
 
         .eventName {
             margin-top: 10px;
             margin-bottom: 15px;
+            border-bottom: solid 1px black;
         }
 
         .eventTime {
-            margin: 10px 0; 
+            margin: 10px 0;
         }
 
         .eventLocation {
             margin: 0;
+            border-bottom: solid 1px black;
         }
 
     </style>
@@ -60,6 +63,7 @@
             {% else %}
                 <h6 class="eventLocation">Location: {{ event.location }}</h6>
             {% endif %}
+                <p class="eventDescription">{{ event.description }}</p>
 
         </div>
 
@@ -86,12 +90,15 @@
             {% else %}
                 <h6 class="eventLocation">Location: {{ event.location }}</h6>
             {% endif %}
+                <p class="eventDescription">{{ event.description }}</p>
 
         </div>
 
     {% endfor %}
 
 </div>
+
+<a href="{% url "main:events" %}?view=calendar">View As Calendar</a>
 
 
 {% endblock content %}

@@ -312,7 +312,7 @@ class Social(models.Model):
         :rtype: str
         """
 
-        return f"Link To Berks Dental Assistants' {self.service_label()} Page"
+        return f"Berks Dental Assistants' {self.service_label()} Page"
 
     class Meta:
         ordering = ["sort_order"]

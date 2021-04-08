@@ -17,7 +17,8 @@
             $("#sort_list").sortable({
                 'animation': 150,
                 'ghostClass': "ghostSortTarget",
-                'filter': ".emptyNotification"
+                'filter': ".emptyNotification",
+                'handle': ".handle"
             });
 
             if ($(".emptyNotification").length === 0) {
@@ -56,13 +57,21 @@
             border: grey 2px solid;
             margin: 10px 5px;
             padding: 0;
+            font-size: var(--h5);
+            user-select: none;
+            width: 35vw;
         }
 
         .ghostSortTarget {
             background-color: skyblue;
         }
 
-        .sortTarget:hover {
+        .handle {
+            margin: 0 10px;
+            color: grey;
+        }
+
+        .handle:hover {
             cursor: grab;
         }
 
@@ -72,7 +81,8 @@
 
 {% block content %}
 
-    <h1>Re-Order {{ viewSet.displayName|title }}s</h1>
+    <h1 style="margin-bottom:3px;">Re-Order {{ viewSet.displayName|title }}s</h1>
+    <p style="margin-top:5px;">Click on an item and drag it to re-order</p>
 
     {% if error %}
         <h3 style="color:red;">{{ error }}</h3>
@@ -80,13 +90,11 @@
 
     <ul id="sort_list">
         {% for object in objects %}
-            <li id="{{ object.id }}" class="sortTarget">{{ object }}</li>
+            <li id="{{ object.id }}" class="sortTarget"><i class="handle fas fa-grip-lines"></i>{{ object }}</li>
         {% empty %}
             <li class="emptyNotification">No {{ viewSet.displayName|title }}s in the database</li>
         {% endfor %}
     </ul>
-
-    <p>Click on an item and drag it to re-order</p>
 
     <form method="post" id="order_form">
         {% csrf_token %}

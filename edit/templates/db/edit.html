@@ -10,12 +10,30 @@
 {% block links %}
 
     <style>
+
+        .errorList {
+            list-style: none;
+            padding-left:0;
+        }
+
         .error {
             color: #ff0000;
         }
 
         .hiddenField {
             display: none;
+        }
+
+        .fieldLabel {
+            margin-bottom: 20px;
+        }
+
+        .changeText {
+            font-size: var(--h4);
+        }
+
+        input {
+            font-size: var(--h4);
         }
 
     </style>
@@ -36,7 +54,7 @@
 
         {% if form.non_field_errors %}
 
-            <ul class="errors">
+            <ul id="nonfield_errors" class="errorList">
                 {% for error in form.non_field_errors %}
                     <li class="error">{{ error }}</li>
                 {% endfor %}
@@ -50,13 +68,13 @@
             {% for field in form %}
                 <fieldset id="{{ field.label }}_fieldset">
                     {% if field.errors %}
-                        <ul>
+                        <ul class="errorList" id="{{ field.label }}_errors">
                             {% for error in field.errors %}
                                 <li class="error">{{ error }}</li>
                             {% endfor %}
                         </ul>
                     {% endif %}
-                    <label class="fieldLabel">{{ field.label|title }}</label>
+                    <label for="{{ field.id_for_label }}" class="fieldLabel h4">{{ field.label|title }}</label>
                     {{ field }}
                 </fieldset>
             {% endfor %}

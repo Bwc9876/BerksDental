@@ -70,7 +70,7 @@
       {% load adminTags %}
       {% getSocials as socials %}
       {% for social in socials %}
-          <a class="footer-link social-link" href="{{ social.link }}"><i class="fab {{ social.fa_icon_class }} fa-lg"></i></a>
+          <a target="_blank" rel="nofollow" class="footer-link social-link" href="{{ social.link }}"><i class="fab {{ social.fa_icon_class }} fa-lg"></i></a>
       {% endfor %}
   </footer>
 </body>

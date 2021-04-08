@@ -28,13 +28,18 @@
             margin-bottom: 5px;
         }
 
-        .contactMethods a {
+        .contactLink {
             border: none;
             padding: 0;
             margin-right: 20px;
             float: left;
             text-decoration: none;
-            color: blue;
+            color: black;
+            transition: color 0.10s linear;
+        }
+
+        .contactLink:hover {
+            color: #9ba7ac;
         }
 
     </style>
@@ -56,10 +61,10 @@
                 {% if officer.email or officer.phone %}
                 <div class="contactMethods">
                     {% if officer.email %}
-                    <a href="{{ officer.masked_email_link }}">Email</a>
+                    <a class="contactLink" href="{{ officer.masked_email_link }}"><i class="fas fa-envelope fa-lg"></i></a>
                     {% endif %}
                     {% if officer.phone %}
-                    <a href="{{ officer.masked_phone_link }}">Phone</a>
+                    <a class="contactLink" href="{{ officer.masked_phone_link }}"><i class="fas fa-phone-alt fa-lg"></i></a>
                     {% endif %}
                 </div>
                 {% endif %}

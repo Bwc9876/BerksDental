@@ -56,7 +56,7 @@ def officers(request):
 
 @require_safe
 def events(request):
-    """ This view function gets events from the database and uses them to render events.html
+    """ This view function gets events from the database and uses them to render events-list.html
     We use @require_safe to make sure only GET requests are allowed
 
     :param request: A request object sent by django
@@ -64,10 +64,19 @@ def events(request):
     :returns: An HttpResponse containing the rendered html file
     :rtype: class:`django.http.HttpResponse` 
     """
+    view_type = request.GET.get("view", "calendar")
 
-    upcoming_events = models.Event.objects.filter(startDate__gte=date.today())
-    past_events = models.Event.objects.filter(startDate__lt=date.today())
-    return render(request, "events.html", {"upcoming": upcoming_events, "past": past_events})
+    if view_type == "calendar":
+        month = request.GET.get("month", date.today().month)
+        year = request.GET.get("year", date.today().year)
+        matching_events = models.Event.objects.filter(startDate__month=month, startDate__year=year).order_by("startDate")
+        return render(request, "events-calendar.html", {"events": matching_events})
+    elif view_type == "list":
+        upcoming_events = models.Event.objects.filter(startDate__gte=date.today()).order_by("startDate")
+        past_events = models.Event.objects.filter(startDate__lt=date.today()).order_by("-startDate")
+        return render(request, "events-list.html", {"upcoming": upcoming_events, "past": past_events})
+    else:
+        raise Http404("Invalid view type")
 
 
 def safe_render(templateName):
