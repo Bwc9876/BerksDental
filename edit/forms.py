@@ -2,9 +2,8 @@
     This file contains forms, which perform validation and render to html automatically
     We can also call .save() on an instance of this class to save it to the database
 """
-
-from django.forms import ModelForm
-from django.forms.widgets import DateInput, TimeInput, ClearableFileInput
+from django.forms import Form, ModelForm, fields
+from django.forms.widgets import DateInput, TimeInput, ClearableFileInput, TextInput
 
 from edit import models
 
@@ -23,6 +22,10 @@ class DateSelectorField(DateInput):
     """
 
     input_type = 'date'
+
+
+class PasswordInput(TextInput):
+    input_type = "password"
 
 
 class PhotoField(ClearableFileInput):
@@ -128,3 +131,16 @@ class EventForm(ModelForm):
         self.fields['endDate'].label = "End Date"
         self.fields['startTime'].label = "Start Time"
         self.fields['endTime'].label = "End Time"
+
+
+class EditorForm(Form):
+    name = fields.CharField(max_length=20)
+    password = PasswordInput()
+    perms = fields.JSONField()
+
+    class Media:
+        js = ("admin/editorEdit.js",)
+
+    def __init__(self, *args, **kargs):
+        super().__init__(*args, **kargs)
+        self.fields['perms'].widget.attrs.update(type="hidden")

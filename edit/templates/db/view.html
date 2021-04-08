@@ -85,7 +85,7 @@
                 {% for value in object %}
                     {% if forloop.first %}
                         <td><b>{{ value|safe }}</b></td>
-                    {% elif forloop.last %}
+                    {% elif forloop.last and canEdit %}
                         <td><a class="action edit" href="{{ viewSet.edit_link }}?id={{ value }}"><i class="fas fa-edit fa-lg"></i></a></td>
                         <td><a class="action delete" href="{{ viewSet.delete_link }}?id={{ value }}"><i class="fas fa-trash fa-lg"></i></a></td>
                     {% else %}
@@ -101,9 +101,11 @@
     </table>
 
     <ul id="universalActions">
-        <li><a href="{{ viewSet.edit_link }}">Add</a></li>
-        {% if viewSet.ordered %}
-            <li><a href="{{ viewSet.order_link }}">Change Order</a></li>
+        {% if canEdit %}
+            <li><a href="{{ viewSet.edit_link }}">Add</a></li>
+            {% if viewSet.ordered %}
+                <li><a href="{{ viewSet.order_link }}">Change Order</a></li>
+            {% endif %}
         {% endif %}
         <li><a href="{% url 'edit:admin_home' %}">Back</a></li>
     </ul>

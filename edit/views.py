@@ -170,6 +170,19 @@ class EditViewSet:
 
         return reverse(f"edit:{self.get_safe_name()}_{linkType}")
 
+    def gen_perms(self, actions):
+        perms = []
+        for action in actions:
+            perms.append(f"edit.{action}_{self.get_safe_name()}")
+        return perms
+
+    def get_permissions_as_dict(self):
+        return {
+            "Edit": self.gen_perms(["edit", "add", "delete"]),
+            "View": self.gen_perms(["view"]),
+            "*": self.gen_perms(["edit", "add", "delete", "view"])
+        }
+
     def overview_link(self):
         """ A function used to get the link that can be used to redirect to the overview page for this model
 
@@ -363,7 +376,8 @@ class EditViewSet:
                 headers[headers.index(target)] = self.labels[target]
 
         return render(request, 'db/view.html',
-                      {'headers': headers, 'objects': self.format_value_list(objects), 'viewSet': self})
+                      {'headers': headers, 'objects': self.format_value_list(objects), 'viewSet': self,
+                       'canEdit': request.user.has_perms(self.get_permissions_as_dict()["Edit"])})
 
     def get_view_functions(self):
         """ This function sets up proxy functions
@@ -377,17 +391,26 @@ class EditViewSet:
         @require_safe
         @login_required
         def viewset_overview(request):
-            return self.obj_overview_view(request)
+            if request.user.has_perms(self.get_permissions_as_dict()["View"]):
+                return self.obj_overview_view(request)
+            else:
+                return redirect(reverse("edit:admin_home"))
 
         @require_http_methods(["GET", "POST"])
         @login_required
         def viewset_edit_or_add(request):
-            return self.obj_edit_or_add_view(request)
+            if request.user.has_perms(self.gen_perms(["edit", "add"])):
+                return self.obj_edit_or_add_view(request)
+            else:
+                return redirect(reverse("edit:admin_home"))
 
         @require_http_methods(["GET", "POST"])
         @login_required
         def viewset_delete(request):
-            return self.obj_delete_view(request)
+            if request.user.has_perms(self.gen_perms(["delete", "edit"])):
+                return self.obj_delete_view(request)
+            else:
+                return redirect(reverse("edit:admin_home"))
 
         return viewset_overview, viewset_edit_or_add, viewset_delete
 
@@ -395,7 +418,10 @@ class EditViewSet:
         @require_http_methods(["GET", "POST"])
         @login_required()
         def edit_order_view(request):
-            return self.object_order_view(request)
+            if request.user.has_perms(self.gen_perms(["edit"])):
+                return self.object_order_view(request)
+            else:
+                return redirect(reverse("edit:admin_home"))
 
         return edit_order_view
 
@@ -540,6 +566,9 @@ def generate_paths_from_view_set(viewSet):
         raise ValueError(f"{viewSet.__name__} Won't Work! Please pass a class that *inherits* EditViewSet!")
 
 
+REGISTERED_VIEWSETS = [EventViewSet, LinkViewSet, GalleryPhotoViewSet, OfficerViewSet, SocialViewSet]
+
+
 def setup_viewsets():
     """ This function gives the url patterns for all the models we want
 
@@ -548,9 +577,7 @@ def setup_viewsets():
     """
 
     new_patterns = []
-    new_patterns += generate_paths_from_view_set(EventViewSet)
-    new_patterns += generate_paths_from_view_set(LinkViewSet)
-    new_patterns += generate_paths_from_view_set(GalleryPhotoViewSet)
-    new_patterns += generate_paths_from_view_set(OfficerViewSet)
-    new_patterns += generate_paths_from_view_set(SocialViewSet)
+    for viewset in REGISTERED_VIEWSETS:
+        new_patterns += generate_paths_from_view_set(viewset)
+
     return new_patterns

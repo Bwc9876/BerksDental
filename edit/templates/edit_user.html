@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+    <form method="post">
+
+        {% for field in form %}
+            <fieldset id="{{ field.label }}_fieldset">
+                {% if field.errors %}
+                    <ul class="errorList" id="{{ field.label }}_errors">
+                        {% for error in field.errors %}
+                            <li class="error">{{ error }}</li>
+                        {% endfor %}
+                    </ul>
+                {% endif %}
+                <label for="{{ field.id_for_label }}" class="fieldLabel h4">{{ field.label|title }}</label>
+                {{ field }}
+            </fieldset>
+        {% endfor %}
+
+        <fieldset id="perms_fieldset">
+            <table>
+                <tr>
+                    <th>Object Name</th>
+                    <th>Can Edit</th>
+                    <th>Can View</th>
+                </tr>
+                {% for viewset in viewsets %}
+                    <tr>
+                        <th>{{ viewset.displayName|title }}</th>
+                        <td><input class="perm permEdit" id="{{ viewset.get_safe_name }}_edit"
+                                   name="{{ viewset.get_safe_name }}_edit"/></td>
+                        <td><input class="perm permView" id="{{ viewset.get_safe_name }}_view"
+                                   name="{{ viewset.get_safe_name }}_view"/></td>
+                    </tr>
+                {% endfor %}
+            </table>
+        </fieldset>
+
+    </form>
+
+{% endblock %}
