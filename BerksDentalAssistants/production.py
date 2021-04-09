@@ -73,6 +73,8 @@ DATABASES = {
     }
 }
 
+AUTH_USER_MODEL = "edit.User"
+
 AUTH_PASSWORD_VALIDATORS = [
     {
         'NAME':

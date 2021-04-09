@@ -25,8 +25,7 @@
             box-shadow: 4px 4px 18px -2px rgba(0,0,0,0.5);
             margin-right: 30px;
             margin-bottom: 30px;
-            border-bottom-left-radius: 15px;
-            border-bottom-right-radius: 15px;
+            border-radius: 15px;
             transition: background-color 0.10s linear;
         }
 
@@ -44,8 +43,9 @@
             justify-content: center;
             background-color: #f2f2f2;
             height: 300px;
-            border-bottom: 1px solid #c8c8c8;
             transition: background-color 0.10s linear;
+            border-top-left-radius: 15px;
+            border-top-right-radius: 15px;
         }
 
         .action_thumbnail i {
@@ -71,49 +71,21 @@
             <div class="action_thumbnail">
                 <i class="fas fa-eye"></i>
             </div>
-            <h2 class="action_name">View Site</h2>
+            <h3 class="action_name">View Site</h3>
         </a>
-        <a href="{% url "edit:photo_view" %}" class="action">
+        {% for vs in viewsets %}
+        <a href="{{ vs.overview_link }}" class="action">
             <div class="action_thumbnail">
-                <i class="fas fa-images"></i>
+                <i class="fas {{ vs.pictureClass }}"></i>
             </div>
-            <h2 class="action_name">Edit Pictures</h2>
+            <h3 class="action_name">Edit {{ vs.displayName }}s</h3>
         </a>
-        <a href="{% url "edit:event_view" %}" class="action">
-            <div class="action_thumbnail">
-                <i class="fas fa-calendar-alt"></i>
-            </div>
-            <h2 class="action_name">Edit Events</h2>
-        </a>
-        <a href="{% url "edit:link_view" %}" class="action">
-            <div class="action_thumbnail">
-                <i class="fas fa-link"></i>
-            </div>
-            <h2 class="action_name">Edit Links</h2>
-        </a>
-        <a href="{% url "edit:social_media_page_view" %}" class="action">
-            <div class="action_thumbnail">
-                <i class="fas fa-share-alt"></i>
-            </div>
-            <h2 class="action_name">Edit Social Media</h2>
-        </a>
-        <a href="{% url "edit:officer_view" %}" class="action">
-            <div class="action_thumbnail">
-                <i class="fas fa-users"></i>
-            </div>
-            <h2 class="action_name">Edit Officers</h2>
-        </a>
-        <a href="#" class="action">
-            <div class="action_thumbnail">
-                <i class="fas fa-cog"></i>
-            </div>
-            <h2 class="action_name">Settings</h2>
-        </a>
+        {% endfor %}
         <a href="{% url "edit:logout" %}" class="action">
             <div class="action_thumbnail">
                 <i class="fas fa-sign-out-alt"></i>
             </div>
-            <h2 class="action_name">Logout</h2>
+            <h3 class="action_name">Logout</h3>
         </a>
     </section>
 

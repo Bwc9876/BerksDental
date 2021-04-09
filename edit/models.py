@@ -5,9 +5,14 @@
 
 import uuid
 
+from django.contrib.auth.models import AbstractUser
 from django.conf import settings
 from django.db import models
 from django.forms import ValidationError
+
+
+class User(AbstractUser):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
 
 
 class GalleryPhoto(models.Model):

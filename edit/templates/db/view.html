@@ -76,7 +76,9 @@
                 {% for header in headers %}
                     <th>{{ header|title }}</th>
                 {% endfor %}
-                <th colspan="2">Actions</th>
+                {% if canEdit %}
+                <th colspan="{{ viewSet.additionalActions|length|add:2 }}">Actions</th>
+                {% endif %}
             {% endif %}
         </tr>
 
@@ -85,9 +87,14 @@
                 {% for value in object %}
                     {% if forloop.first %}
                         <td><b>{{ value|safe }}</b></td>
-                    {% elif forloop.last and canEdit %}
-                        <td><a class="action edit" href="{{ viewSet.edit_link }}?id={{ value }}"><i class="fas fa-edit fa-lg"></i></a></td>
-                        <td><a class="action delete" href="{{ viewSet.delete_link }}?id={{ value }}"><i class="fas fa-trash fa-lg"></i></a></td>
+                    {% elif forloop.last %}
+                        {% if canEdit %}
+                            <td><a class="action edit" href="{{ viewSet.edit_link }}?id={{ value }}"><i class="fas fa-edit fa-lg"></i></a></td>
+                            {% for action in viewSet.additionalActions %}
+                            <td><a class="action edit" href="{{ action.link }}?id={{ value }}"><i class="fas {{ action.icon }} fa-lg"></i></a></td>
+                            {% endfor %}
+                            <td><a class="action delete" href="{{ viewSet.delete_link }}?id={{ value }}"><i class="fas fa-trash fa-lg"></i></a></td>
+                        {% endif %}
                     {% else %}
                         <td>{{ value|safe }}</td>
                     {% endif %}

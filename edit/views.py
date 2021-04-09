@@ -8,10 +8,12 @@
 
 import os
 from collections import Counter
+from json import dumps, loads
 from uuid import UUID
 
 from django.conf import settings
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.models import Permission
 from django.db import models as model_fields
 from django.forms import ValidationError
 from django.http import Http404
@@ -23,19 +25,12 @@ from django.views.decorators.http import require_safe, require_http_methods
 from edit import forms, models
 
 
-@require_safe
-@login_required
-def admin_home(request):
-    """ A django view function, this will render and send the admin_home.html file
-
-    :param request: A request object sent by django
-    :type request: class:`django.http.HttpRequest`
-    :returns: An HttpResponse containing the rendered html file
-    :rtype: class:`django.http.HttpResponse`
-
-    """
-
-    return render(request, 'admin_home.html')
+class Action:
+    def __init__(self, name, icon, link, color):
+        self.name = name
+        self.icon = icon
+        self.link = link
+        self.color = color
 
 
 class EditViewSet:
@@ -56,6 +51,8 @@ class EditViewSet:
     """
 
     displayName: str = "base"
+    pictureClass = "fa-edit"
+    additionalActions = []
     model = None
     modelForm = None
     ordered = False
@@ -102,7 +99,7 @@ class EditViewSet:
 
         return new_value_list
 
-    def pre_save(self, newObj, new):
+    def pre_save(self, newObj, form_data, new):
         """ The function to be run before an object is saved to the database
         For now, it just passes, but classes that inherit this can override this function
 
@@ -114,7 +111,7 @@ class EditViewSet:
 
         pass
 
-    def post_save(self, newObj, new):
+    def post_save(self, newObj, form_data, new):
         """ The function to be run after an object is saved to the database
         For now, it just passes, but classes that inherit this can override this function
 
@@ -135,6 +132,13 @@ class EditViewSet:
         """
 
         pass
+
+    def get_form_object(self, dataSources, instance=None):
+        # dataSources.append(self.additional_form_data(instance))
+        return self.modelForm(*dataSources, initial=self.additional_form_data(instance), instance=instance)
+
+    def additional_form_data(self, obj):
+        return {}
 
     def post_del(self, objDeleted):
         """ The function to be run after an object is deleted from the database
@@ -170,17 +174,21 @@ class EditViewSet:
 
         return reverse(f"edit:{self.get_safe_name()}_{linkType}")
 
-    def gen_perms(self, actions):
+    def gen_perms(self, actions, include_app_name=True):
         perms = []
         for action in actions:
-            perms.append(f"edit.{action}_{self.get_safe_name()}")
+            if include_app_name:
+                perms.append(f"edit.{action}_{self.model.__name__.lower()}")
+            else:
+                perms.append(f"{action}_{self.model.__name__.lower()}")
         return perms
 
-    def get_permissions_as_dict(self):
+    def get_permissions_as_dict(self, include_app_name=True):
         return {
-            "Edit": self.gen_perms(["edit", "add", "delete"]),
-            "View": self.gen_perms(["view"]),
-            "*": self.gen_perms(["edit", "add", "delete", "view"])
+            "Edit": self.gen_perms(["change", "add", "delete"], include_app_name=include_app_name),
+            "View": self.gen_perms(["view"], include_app_name=include_app_name),
+            "*": self.gen_perms(["change", "add", "delete", "view"], include_app_name=include_app_name),
+            "None": []
         }
 
     def overview_link(self):
@@ -233,15 +241,15 @@ class EditViewSet:
         :rtype: class:`django.http.HttpResponse`
         """
 
-        form = self.modelForm(request.POST, request.FILES)
+        form = self.get_form_object([request.POST, request.FILES])
 
         if form.is_valid():
-            self.pre_save(None, True)
+            self.pre_save(None, form.cleaned_data, True)
             new_obj = form.save()
             if self.ordered:
                 new_obj.sort_order = len(list(self.model.objects.all())) - 1
                 new_obj.save()
-            self.post_save(new_obj, True)
+            self.post_save(new_obj, form.cleaned_data, True)
             return redirect(self.overview_link())
         else:
             return render(request, "db/edit.html", {'form': form, 'viewSet': self, 'new': True})
@@ -258,12 +266,12 @@ class EditViewSet:
         """
 
         target_obj = get_object_or_404(self.model, id=request.GET.get('id', ''))
-        form = self.modelForm(request.POST, request.FILES, instance=target_obj)
+        form = self.get_form_object([request.POST, request.FILES], instance=target_obj)
 
         if form.is_valid():
-            self.pre_save(target_obj, False)
+            self.pre_save(target_obj, form.cleaned_data, False)
             edited_obj = form.save()
-            self.post_save(edited_obj, False)
+            self.post_save(edited_obj, form.cleaned_data, False)
             return redirect(self.overview_link())
         else:
             return render(request, "db/edit.html", {'form': form, 'viewSet': self, 'new': False})
@@ -319,11 +327,11 @@ class EditViewSet:
             target_id = request.GET.get('id', '')
             new = False
             if target_id == '':
-                form = self.modelForm()
+                form = self.get_form_object([])
                 new = True
             else:
                 try:
-                    form = self.modelForm(instance=get_object_or_404(self.model, id=target_id))
+                    form = self.get_form_object([], instance=get_object_or_404(self.model, id=target_id))
                 except ValidationError:
                     raise Http404()
 
@@ -399,7 +407,7 @@ class EditViewSet:
         @require_http_methods(["GET", "POST"])
         @login_required
         def viewset_edit_or_add(request):
-            if request.user.has_perms(self.gen_perms(["edit", "add"])):
+            if request.user.has_perms(self.gen_perms(["change", "add"])):
                 return self.obj_edit_or_add_view(request)
             else:
                 return redirect(reverse("edit:admin_home"))
@@ -418,7 +426,7 @@ class EditViewSet:
         @require_http_methods(["GET", "POST"])
         @login_required()
         def edit_order_view(request):
-            if request.user.has_perms(self.gen_perms(["edit"])):
+            if request.user.has_perms(self.gen_perms(["change"])):
                 return self.object_order_view(request)
             else:
                 return redirect(reverse("edit:admin_home"))
@@ -431,6 +439,7 @@ class EditViewSet:
 
 class EventViewSet(EditViewSet):
     displayName = "Event"
+    pictureClass = "fa-calendar-alt"
     model = models.Event
     modelForm = forms.EventForm
     displayFields = ['name', 'virtual', 'location', 'startDate', 'endDate', 'startTime', "endTime"]
@@ -452,6 +461,7 @@ class EventViewSet(EditViewSet):
 
 class SocialViewSet(EditViewSet):
     displayName = "Social Media Page"
+    pictureClass = "fa-share-alt"
     model = models.Social
     modelForm = forms.SocialForm
     ordered = True
@@ -479,6 +489,7 @@ class SocialViewSet(EditViewSet):
 
 class LinkViewSet(EditViewSet):
     displayName = "Link"
+    pictureClass = "fa-link"
     model = models.ExternalLink
     modelForm = forms.LinkForm
     ordered = True
@@ -488,6 +499,7 @@ class LinkViewSet(EditViewSet):
 
 class GalleryPhotoViewSet(EditViewSet):
     displayName = "Photo"
+    pictureClass = "fa-images"
     model = models.GalleryPhoto
     modelForm = forms.PhotoForm
     # The photo-folder attribute tells the model where to store pictures
@@ -509,7 +521,7 @@ class GalleryPhotoViewSet(EditViewSet):
         os.rename(initial_path, new_path)
         photoObject.save()
 
-    def post_save(self, newObj, new):
+    def post_save(self, newObj, formData, new):
         """ This function is run after a GalleryPhoto object is added/edited
         It renames the pictures file to prevent naming conflicts
 
@@ -530,11 +542,95 @@ class GalleryPhotoViewSet(EditViewSet):
 
 class OfficerViewSet(GalleryPhotoViewSet):
     displayName = "Officer"
+    pictureClass = "fa-users"
     model = models.Officer
     modelForm = forms.OfficerForm
     photoFolder = "officer-photos"
     ordered = True
     displayFields = ["name", 'picture']
+
+
+REGISTERED_VIEWSETS = [EventViewSet, LinkViewSet, GalleryPhotoViewSet, OfficerViewSet, SocialViewSet]
+
+
+def gen_name_dict():
+    names = {}
+    for vs in REGISTERED_VIEWSETS:
+        names[vs().get_safe_name()] = vs
+    return names
+
+
+VIEWSET_NAMES = gen_name_dict()
+
+
+def get_viewset_by_safename(name):
+    return VIEWSET_NAMES.get(name, None)
+
+
+def view_set_to_permission_pair(user, viewset):
+    vs = viewset()
+    viewset_name = vs.get_safe_name()
+    permission_level = "none"
+    if user.has_perms(vs.get_permissions_as_dict()["*"]):
+        permission_level = "edit"
+    elif user.has_perms(vs.get_permissions_as_dict()["View"]):
+        permission_level = "view"
+
+    return viewset_name, permission_level
+
+
+class UserViewSet(EditViewSet):
+    displayName = "User"
+    pictureClass = "fa-users-cog"
+    additionalActions = [Action("Change Password", "fa-key", "#", "#949739")]
+    model = models.User
+    modelForm = forms.UserEditForm
+    displayFields = ["username", "is_staff"]
+    labels = {
+        "is_staff": "Manager"
+    }
+
+    PERMISSION_JSON_TO_VIEWSET = {
+        "edit": "*",
+        "view": "View",
+        "none": "None"
+    }
+
+    @staticmethod
+    def gen_json_from_viewsets(user, viewsets):
+        output_dictionary = {}
+        for vs in viewsets:
+            name, level = view_set_to_permission_pair(user, vs)
+            output_dictionary[name] = level
+        return dumps(output_dictionary)
+
+    def additional_form_data(self, obj):
+        if obj is None:
+            return {"permissions": "{}"}
+        else:
+            return {"permissions": self.gen_json_from_viewsets(obj, REGISTERED_VIEWSETS)}
+
+    def post_save(self, user, formData, new):
+        raw_dict = loads(formData.get("permissions", "{}"))
+        target_perms = []
+        for vs_name in raw_dict.keys():
+            vs = get_viewset_by_safename(vs_name)
+            if vs is not None:
+                perms_to_add = vs().get_permissions_as_dict(include_app_name=False)[
+                    self.PERMISSION_JSON_TO_VIEWSET.get(raw_dict[vs_name], "None")]
+                target_perms += [Permission.objects.get(codename=perm) for perm in perms_to_add]
+        user.user_permissions.set(target_perms)
+        user.save()
+
+    def get_form_object(self, dataSources, instance=None):
+        if instance is None:
+            user_form = forms.UserCreateForm(*dataSources, initial=self.additional_form_data(instance))
+            user_form.fields["permissions"].set_viewsets(REGISTERED_VIEWSETS)
+            return user_form
+        else:
+            user_form = super().get_form_object(dataSources, instance=instance)
+            user_form.fields["permissions"].set_viewsets(REGISTERED_VIEWSETS)
+            return user_form
 
 
 def generate_paths_from_view_set(viewSet):
@@ -566,9 +662,6 @@ def generate_paths_from_view_set(viewSet):
         raise ValueError(f"{viewSet.__name__} Won't Work! Please pass a class that *inherits* EditViewSet!")
 
 
-REGISTERED_VIEWSETS = [EventViewSet, LinkViewSet, GalleryPhotoViewSet, OfficerViewSet, SocialViewSet]
-
-
 def setup_viewsets():
     """ This function gives the url patterns for all the models we want
 
@@ -580,4 +673,30 @@ def setup_viewsets():
     for viewset in REGISTERED_VIEWSETS:
         new_patterns += generate_paths_from_view_set(viewset)
 
+    new_patterns += generate_paths_from_view_set(UserViewSet)
+
     return new_patterns
+
+
+@require_safe
+@login_required
+def admin_home(request):
+    """ A django view function, this will render and send the admin_home.html file
+
+    :param request: A request object sent by django
+    :type request: class:`django.http.HttpRequest`
+    :returns: An HttpResponse containing the rendered html file
+    :rtype: class:`django.http.HttpResponse`
+
+    """
+
+    accessible_viewsets = []
+
+    for vs in REGISTERED_VIEWSETS:
+        if request.user.has_perms(vs().get_permissions_as_dict()["View"]):
+            accessible_viewsets.append(vs())
+
+    if request.user.has_perms(UserViewSet().get_permissions_as_dict()["View"]):
+        accessible_viewsets.append(UserViewSet())
+
+    return render(request, 'admin_home.html', {"viewsets": accessible_viewsets})

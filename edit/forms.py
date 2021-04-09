@@ -2,7 +2,8 @@
     This file contains forms, which perform validation and render to html automatically
     We can also call .save() on an instance of this class to save it to the database
 """
-from django.forms import Form, ModelForm, fields
+from django.contrib.auth.forms import UserCreationForm
+from django.forms import ModelForm, fields
 from django.forms.widgets import DateInput, TimeInput, ClearableFileInput, TextInput
 
 from edit import models
@@ -24,12 +25,31 @@ class DateSelectorField(DateInput):
     input_type = 'date'
 
 
+class PermInput(TextInput):
+    input_type = "hidden"
+    template_name = "custom_widgets/PermissionWidget.html"
+
+    viewsets = []
+
+    def get_context(self, name, value, attrs):
+        context = super().get_context(name, value, attrs)
+        context['widget']['viewsets'] = self.viewsets
+        return context
+
+
+class PermField(fields.CharField):
+    widget = PermInput
+
+    def set_viewsets(self, viewsets):
+        self.widget.viewsets = viewsets
+
+
 class PasswordInput(TextInput):
     input_type = "password"
 
 
 class PhotoField(ClearableFileInput):
-    template_name = "PhotoInput.html"
+    template_name = "custom_widgets/PhotoInput.html"
 
 
 class LinkForm(ModelForm):
@@ -133,14 +153,25 @@ class EventForm(ModelForm):
         self.fields['endTime'].label = "End Time"
 
 
-class EditorForm(Form):
-    name = fields.CharField(max_length=20)
-    password = PasswordInput()
-    perms = fields.JSONField()
+class UserCreateForm(UserCreationForm):
+    permissions = PermField()
+
+    class Meta:
+        model = models.User
+        fields = ["username", "password1", "password2"]
 
     class Media:
-        js = ("admin/editorEdit.js",)
+        # css = {'all': ("admin/permissionStyle.css",)}
+        js = ("admin/permissionLogic.js",)
 
-    def __init__(self, *args, **kargs):
-        super().__init__(*args, **kargs)
-        self.fields['perms'].widget.attrs.update(type="hidden")
+
+class UserEditForm(ModelForm):
+    permissions = PermField()
+
+    class Meta:
+        model = models.User
+        fields = ["username"]
+
+    class Media:
+        # css = {'all': ("admin/permissionStyle.css",)}
+        js = ("admin/permissionLogic.js",)
