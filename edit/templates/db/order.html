@@ -75,13 +75,23 @@
             cursor: grab;
         }
 
+        .back {
+            font-size: var(--h2);
+            color: var(--clr-header);
+            transition: color 100ms linear;
+        }
+
+        .back:hover {
+            color: #38abe0;
+        }
+
     </style>
 
 {% endblock %}
 
 {% block content %}
 
-    <h1 style="margin-bottom:3px;">Re-Order {{ viewSet.displayName|title }}s</h1>
+    <h1 style="margin-bottom:3px;"><a href="{{ viewSet.overview_link }}"><i class="fas back fa-arrow-left"></i></a>  Re-Order {{ viewSet.displayName|title }}s</h1>
     <p style="margin-top:5px;">Click on an item and drag it to re-order</p>
 
     {% if error %}
@@ -101,7 +111,5 @@
         <input type="hidden" name="new_order" id="new_order"/>
         <button type="submit" id="submit">Save</button>
     </form>
-
-    <a href="{{ viewSet.overview_link }}">Back</a>
 
 {% endblock %}

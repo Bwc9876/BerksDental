@@ -3,7 +3,8 @@
     We can also call .save() on an instance of this class to save it to the database
 """
 from django.contrib.auth.forms import UserCreationForm
-from django.forms import ModelForm, fields
+from django.contrib.auth.password_validation import validate_password, ValidationError
+from django.forms import Form, ModelForm, fields
 from django.forms.widgets import DateInput, TimeInput, ClearableFileInput, TextInput
 
 from edit import models
@@ -46,6 +47,10 @@ class PermField(fields.CharField):
 
 class PasswordInput(TextInput):
     input_type = "password"
+
+
+class PasswordField(fields.CharField):
+    widget = PasswordInput
 
 
 class PhotoField(ClearableFileInput):
@@ -158,11 +163,16 @@ class UserCreateForm(UserCreationForm):
 
     class Meta:
         model = models.User
-        fields = ["username", "password1", "password2"]
+        fields = ["username", "email", "password1", "password2", "first_name", "last_name"]
 
     class Media:
-        # css = {'all': ("admin/permissionStyle.css",)}
         js = ("admin/permissionLogic.js",)
+
+    def __init__(self, *args, **kargs):
+        super().__init__(*args, **kargs)
+        self.fields['first_name'].widget.attrs.update(required=True)
+        self.fields['last_name'].widget.attrs.update(required=True)
+        self.fields['email'].widget.attrs.update(required=True)
 
 
 class UserEditForm(ModelForm):
@@ -170,8 +180,39 @@ class UserEditForm(ModelForm):
 
     class Meta:
         model = models.User
-        fields = ["username"]
+        fields = ["username", "email", "first_name", "last_name"]
 
     class Media:
-        # css = {'all': ("admin/permissionStyle.css",)}
         js = ("admin/permissionLogic.js",)
+
+    def __init__(self, *args, **kargs):
+        super().__init__(*args, **kargs)
+        self.fields['first_name'].widget.attrs.update(required=True)
+        self.fields['last_name'].widget.attrs.update(required=True)
+        self.fields['email'].widget.attrs.update(required=True)
+
+
+class SetUserPasswordForm(Form):
+    new_password = PasswordField()
+    confirm_new_password = PasswordField()
+    user = None
+
+    def __init__(self, *args, **kargs):
+        super().__init__(*args, **kargs)
+        self.fields["new_password"].label = "New Password"
+        self.fields["confirm_new_password"].label = "Confirm New Password"
+
+    def set_user(self, user):
+        self.user = user
+
+    def clean(self):
+        cleaned_data = super().clean()
+        new_password = cleaned_data.get("new_password", "")
+        confirm_password = cleaned_data.get("confirm_new_password", "")
+        if new_password != confirm_password:
+            self.add_error("confirm_new_password", "Passwords don't match")
+        try:
+            validate_password(new_password, user=self.user)
+        except ValidationError as ve:
+            [self.add_error("new_password", error) for error in list(ve)]
+

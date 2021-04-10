@@ -19,7 +19,7 @@
         table {
             border-collapse: collapse;
             text-align: center;
-            margin-left: 5vw;
+            margin-left: 2vw;
         }
 
         a {
@@ -37,7 +37,7 @@
 
         ul {
             list-style: none;
-            margin-left: 5vw;
+            margin-left: 2vw;
             padding-left: 0;
         }
 
@@ -62,6 +62,16 @@
             color: red;
         }
 
+        .back {
+            font-size: var(--h2);
+            color: var(--clr-header);
+            transition: color 100ms linear;
+        }
+
+        .back:hover {
+            color: #38abe0;
+        }
+
 
     </style>
 
@@ -69,7 +79,7 @@
 
 {% block content %}
 
-    <h1>View/Edit {{ viewSet.displayName|title }}s</h1>
+    <h1><a href="{% url "edit:admin_home" %}"><i class="fas back fa-arrow-left"></i></a> View/Edit {{ viewSet.displayName|title }}s</h1>
     <table>
         <tr>
             {% if objects|length > 0 %}
@@ -86,7 +96,7 @@
             <tr>
                 {% for value in object %}
                     {% if forloop.first %}
-                        <td><b>{{ value|safe }}</b></td>
+                        <td><b>{{ value|safe|default:"Not Entered" }}</b></td>
                     {% elif forloop.last %}
                         {% if canEdit %}
                             <td><a class="action edit" href="{{ viewSet.edit_link }}?id={{ value }}"><i class="fas fa-edit fa-lg"></i></a></td>
@@ -96,7 +106,7 @@
                             <td><a class="action delete" href="{{ viewSet.delete_link }}?id={{ value }}"><i class="fas fa-trash fa-lg"></i></a></td>
                         {% endif %}
                     {% else %}
-                        <td>{{ value|safe }}</td>
+                        <td>{{ value|safe|default:"Not Entered" }}</td>
                     {% endif %}
                 {% endfor %}
             </tr>
@@ -114,7 +124,7 @@
                 <li><a href="{{ viewSet.order_link }}">Change Order</a></li>
             {% endif %}
         {% endif %}
-        <li><a href="{% url 'edit:admin_home' %}">Back</a></li>
+{#        <li><a href="{% url 'edit:admin_home' %}">Back</a></li>#}
     </ul>
 
 {% endblock content %}

@@ -78,7 +78,7 @@
             <div class="action_thumbnail">
                 <i class="fas {{ vs.pictureClass }}"></i>
             </div>
-            <h3 class="action_name">Edit {{ vs.displayName }}s</h3>
+            <h3 class="action_name">{{ vs.displayName }}s</h3>
         </a>
         {% endfor %}
         <a href="{% url "edit:logout" %}" class="action">
@@ -87,6 +87,20 @@
             </div>
             <h3 class="action_name">Logout</h3>
         </a>
+        <a href="#" class="action">
+            <div class="action_thumbnail">
+                <i class="fas fa-question-circle"></i>
+            </div>
+            <h3 class="action_name">Help</h3>
+        </a>
+        {% if debug %}
+        <a target="_blank" href="/debug_admin/" class="action">
+            <div class="action_thumbnail">
+                <i class="fas fa-code"></i>
+            </div>
+            <h3 class="action_name">Debug</h3>
+        </a>
+        {% endif %}
     </section>
 
 {% endblock %}

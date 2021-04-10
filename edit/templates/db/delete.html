@@ -4,13 +4,30 @@
     We also use the {% csrf_token %} to ensure the deletion was invoked by the user, and not a malicous third-party
 {% endcomment %}
 
+{% block links %}
+
+    <style>
+
+        .back {
+            font-size: var(--h2);
+            color: var(--clr-header);
+            transition: color 100ms linear;
+        }
+
+        .back:hover {
+            color: #38abe0;
+        }
+
+    </style>
+
+{% endblock %}
+
 
 {% block content %}
     <form method="POST">
         {% csrf_token %}
-        <h1> Delete {{ viewSet.displayName|title }} </h1>
+        <h1><a href="{{ viewSet.overview_link }}"><i class="fas back fa-arrow-left"></i></a>  Delete {{ viewSet.displayName|title }} </h1>
         <h2> Are you sure you want to delete {{ objectName|title }}?</h2>
-        <a href="{{ viewSet.overview_link }}">Cancel</a>
         <button type="submit">Confirm</button>
     </form>
 {% endblock %}

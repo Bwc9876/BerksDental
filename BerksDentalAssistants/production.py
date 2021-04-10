@@ -26,6 +26,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.sitemaps',
+    'django_password_validators',
+    'django_password_validators.password_history',
     'main',
     'edit'
 ]
@@ -75,24 +77,16 @@ DATABASES = {
 
 AUTH_USER_MODEL = "edit.User"
 
-AUTH_PASSWORD_VALIDATORS = [
-    {
-        'NAME':
-            'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
-    },
-    {
-        'NAME':
-            'django.contrib.auth.password_validation.MinimumLengthValidator',
-    },
-    {
-        'NAME':
-            'django.contrib.auth.password_validation.CommonPasswordValidator',
-    },
-    {
-        'NAME':
-            'django.contrib.auth.password_validation.NumericPasswordValidator',
-    },
-]
+AUTH_PASSWORD_VALIDATORS = [{
+    'NAME':
+        'django.contrib.auth.password_validation.MinimumLengthValidator',
+}, {
+    'NAME':
+        'django_password_validators.password_history.password_validation.UniquePasswordsValidator',
+}, {
+    'NAME':
+        'edit.validators.RequiredCharactersValidator'
+}]
 
 LANGUAGE_CODE = 'en-us'
 
