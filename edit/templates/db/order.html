@@ -1,6 +1,6 @@
-{% extends 'base.html' %}
+{% extends 'db/db_base.html' %}
 
-{% block links %}
+{% block adminLinks %}
     <script crossorigin="anonymous" src="https://cdn.jsdelivr.net/npm/sortablejs@latest/Sortable.min.js"></script>
     <script crossorigin="anonymous"
             src="https://cdn.jsdelivr.net/npm/jquery-sortablejs@latest/jquery-sortable.js"></script>
@@ -10,7 +10,7 @@
             /**
              * This event handles three things
              * 1. Setup the sortable (drag & drop) on the sort_list element
-             * 2. setup the form to read the order of the lis in the sort_list element and send it ot the backend
+             * 2. Setup the form to read the order of the items in the sort_list element and send it ot the backend
              * 3. If there's no items in the database, we disable the save button
              */
 
@@ -75,23 +75,12 @@
             cursor: grab;
         }
 
-        .back {
-            font-size: var(--h2);
-            color: var(--clr-header);
-            transition: color 100ms linear;
-        }
-
-        .back:hover {
-            color: #38abe0;
-        }
-
     </style>
 
 {% endblock %}
 
-{% block content %}
+{% block adminContent %}
 
-    <h1 style="margin-bottom:3px;"><a href="{{ viewSet.overview_link }}"><i class="fas back fa-arrow-left"></i></a>  Re-Order {{ viewSet.displayName|title }}s</h1>
     <p style="margin-top:5px;">Click on an item and drag it to re-order</p>
 
     {% if error %}

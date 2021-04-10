@@ -3,7 +3,8 @@
 """
 
 from django import template
-
+from django.urls import reverse
+from django.template.defaultfilters import safe
 from edit.models import Social
 
 register = template.Library()
@@ -18,3 +19,8 @@ def get_socials():
     """
 
     return Social.objects.all()
+
+
+@register.simple_tag(name="action")
+def action(name, url, icon, size="fa-lg"):
+    return safe(f'<a class="{name} navigationAction" href="{url}"><i class="fas {name}-icon {icon} {size}"></i></a>')

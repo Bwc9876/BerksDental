@@ -14,6 +14,9 @@ from django.forms import ValidationError
 class User(AbstractUser):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
 
+    def __str__(self):
+        return f"{self.first_name} {self.last_name}"
+
 
 class GalleryPhoto(models.Model):
     """ This is a class meant to represent a table for gallery photos on the database

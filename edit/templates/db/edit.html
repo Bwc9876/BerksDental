@@ -1,4 +1,4 @@
-{% extends 'base.html' %}
+{% extends 'db/db_base.html' %}
 {% comment %}
     This file is used to edit an object in the database
     This file will keep being rendered with the required errors until the forms is filled out correctly
@@ -7,24 +7,24 @@
     We set the enctype to "multipart/form-data" so files can be uploaded
 {% endcomment %}
 
-{% block links %}
+{% block adminLinks %}
 
     <style>
 
-        .errorList {
+        ul.errorList {
             list-style: none;
             padding-left:0;
         }
 
-        .error {
+        li.error {
             color: #ff0000;
         }
 
-        .hiddenField {
+        input.hiddenField {
             display: none;
         }
 
-        .fieldLabel {
+        label.fieldLabel {
             margin-bottom: 20px;
         }
 
@@ -36,23 +36,11 @@
             font-size: var(--h4);
         }
 
-        .back {
-            font-size: var(--h2);
-            color: var(--clr-header);
-            transition: color 100ms linear;
-        }
-
-        .back:hover {
-            color: #38abe0;
-        }
-
     </style>
 
 {% endblock %}
 
-{% block content %}
-
-    <h1><a href="{{ viewSet.overview_link }}"><i class="fas back fa-arrow-left"></i></a>  {% if new %}Add{% else %}Edit{% endif %} {{ viewSet.displayName|title }}</h1>
+{% block adminContent %}
 
     {% if form %}
 

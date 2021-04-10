@@ -1,3 +1,6 @@
+from collections import Counter
+from uuid import UUID
+
 from django.conf import settings
 from django.contrib.auth.decorators import login_required
 from django.db import models as model_fields
@@ -5,10 +8,9 @@ from django.forms import ValidationError
 from django.http import Http404
 from django.shortcuts import render, redirect, get_object_or_404
 from django.template.defaultfilters import slugify, escape
+from django.template.loader import render_to_string
 from django.urls import reverse
 from django.views.decorators.http import require_safe, require_http_methods
-from uuid import UUID
-from collections import Counter
 
 
 class EditViewSet:
@@ -235,7 +237,8 @@ class EditViewSet:
             self.post_save(new_obj, form.cleaned_data, True)
             return redirect(self.overview_link())
         else:
-            return render(request, "db/edit.html", {'form': form, 'viewSet': self, 'new': True})
+            return render(request, "db/edit.html", {'form': form, 'viewSet': self, 'new': True, "verb": "Add",
+                                                    "back_link": self.overview_link()})
 
     def obj_edit(self, request):
         """ A django view function, this will edit the model on the database given form data
@@ -257,7 +260,9 @@ class EditViewSet:
             self.post_save(edited_obj, form.cleaned_data, False)
             return redirect(self.overview_link())
         else:
-            return render(request, "db/edit.html", {'form': form, 'viewSet': self, 'new': False})
+            return render(request, "db/edit.html",
+                          {'form': form, 'viewSet': self, 'new': False, "verb": "Edit",
+                           "back_link": self.overview_link()})
 
     def obj_delete_view(self, request):
         """ A django view function, this will delete the model from the database given form data
@@ -283,7 +288,9 @@ class EditViewSet:
             return redirect(self.overview_link())
         else:
             target_obj = get_object_or_404(self.model, id=request.GET.get('id', ''))
-            return render(request, "db/delete.html", {'viewSet': self, 'objectName': target_obj})
+            return render(request, "db/delete.html",
+                          {'viewSet': self, 'objectName': target_obj, "verb": "Delete",
+                           "back_link": self.overview_link()})
 
     def obj_edit_or_add_view(self, request):
         """ A django view function, this will add the model to the database given form data
@@ -318,7 +325,9 @@ class EditViewSet:
                 except ValidationError:
                     raise Http404()
 
-            return render(request, 'db/edit.html', {'form': form, 'viewSet': self, 'new': new})
+            return render(request, 'db/edit.html',
+                          {'form': form, 'viewSet': self, 'new': new, "verb": "Add" if new else "Edit",
+                           "back_link": self.overview_link()})
 
     def object_order_view(self, request):
         """ This function allows the user to edit the order external links will appear with drag-and-drop
@@ -348,7 +357,9 @@ class EditViewSet:
                 return render(request, 'db/order.html',
                               {'error': 'Invalid List!', 'objects': self.model.objects.all, 'viewSet': self})
         else:
-            return render(request, "db/order.html", {'objects': self.model.objects.all(), 'viewSet': self})
+            return render(request, "db/order.html",
+                          {'objects': self.model.objects.all(), 'viewSet': self, 'back_link': self.overview_link(),
+                           'verb': "Re-Order", 'plural': True})
 
     def obj_overview_view(self, request):
         """ A django view function, this will add the model to the database given form data
@@ -365,10 +376,12 @@ class EditViewSet:
         for target in self.labels.keys():
             if target in headers:
                 headers[headers.index(target)] = self.labels[target]
-
         return render(request, 'db/view.html',
                       {'headers': headers, 'objects': self.format_value_list(objects), 'viewSet': self,
-                       'canEdit': request.user.has_perms(self.get_permissions_as_dict()["Edit"])})
+                       'canEdit': request.user.has_perms(self.get_permissions_as_dict()["Edit"]),
+                       'back_link': reverse("edit:admin_home"), 'verb': "View/Edit",
+                       'additionalNavigationButtons': render_to_string("db/overview_navigation_buttons.html",
+                                                                       context={'viewSet': self}), 'plural': True})
 
     def get_view_functions(self):
         """ This function sets up proxy functions

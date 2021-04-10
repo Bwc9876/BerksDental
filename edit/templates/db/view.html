@@ -1,4 +1,4 @@
-{% extends 'base.html' %}
+{% extends 'db/db_base.html' %}
 {% comment %}
     This file is used to view a table that shows all objects in the database
     This template expects a list of headers in the headers variable
@@ -8,21 +8,16 @@
 {% endcomment %}
 {% load static %}
 
-{% block links %}
+{% block adminLinks %}
 
     <style>
-
-        h1 {
-            margin-left: 2vw;
-        }
 
         table {
             border-collapse: collapse;
             text-align: center;
-            margin-left: 2vw;
         }
 
-        a {
+        a.action {
             font-size: var(--h6);
         }
 
@@ -33,12 +28,6 @@
         table tr td, table tr th {
             border: black 1px solid;
             padding: 1vh 2vw;
-        }
-
-        ul {
-            list-style: none;
-            margin-left: 2vw;
-            padding-left: 0;
         }
 
         a.action {
@@ -59,27 +48,20 @@
         }
 
         i.fa-times-circle {
-            color: red;
+            color: #d93b3b;
         }
 
-        .back {
-            font-size: var(--h2);
-            color: var(--clr-header);
-            transition: color 100ms linear;
+        a.add:hover {
+            color: lightgreen;
         }
-
-        .back:hover {
-            color: #38abe0;
-        }
-
 
     </style>
 
 {% endblock %}
 
-{% block content %}
+{% block adminContent %}
+    {% load adminTags %}
 
-    <h1><a href="{% url "edit:admin_home" %}"><i class="fas back fa-arrow-left"></i></a> View/Edit {{ viewSet.displayName|title }}s</h1>
     <table>
         <tr>
             {% if objects|length > 0 %}
@@ -117,14 +99,4 @@
         {% endfor %}
     </table>
 
-    <ul id="universalActions">
-        {% if canEdit %}
-            <li><a href="{{ viewSet.edit_link }}">Add</a></li>
-            {% if viewSet.ordered %}
-                <li><a href="{{ viewSet.order_link }}">Change Order</a></li>
-            {% endif %}
-        {% endif %}
-{#        <li><a href="{% url 'edit:admin_home' %}">Back</a></li>#}
-    </ul>
-
-{% endblock content %}
+{% endblock %}

@@ -4,40 +4,35 @@
 
     <style>
 
-        ul {
-            list-style: none;
-        }
-
-        a {
-            color: blue;
-            text-decoration: none;
+        h1.welcomeText {
+            margin: 2vw;
         }
 
         .actions {
             display: flex;
             flex-wrap: wrap;
-            margin: 24px 24px 0 24px;
+            margin: 2vw;
         }
 
-        .action {
-            {#border: black 1px solid;#}
+        a.action {
             width: 450px;
             box-shadow: 4px 4px 18px -2px rgba(0,0,0,0.5);
             margin-right: 30px;
             margin-bottom: 30px;
             border-radius: 15px;
             transition: background-color 0.10s linear;
+            text-decoration: none;
         }
 
-        .action:hover {
+        a.action:hover {
             background-color: #f2f2f2;
         }
 
-        .action:hover .action_thumbnail {
+        a.action:hover .action_thumbnail {
             background-color: #ccc;
         }
 
-        .action_thumbnail {
+        div.action_thumbnail {
             display: flex;
             align-items: center;
             justify-content: center;
@@ -48,12 +43,12 @@
             border-top-right-radius: 15px;
         }
 
-        .action_thumbnail i {
+        div.action_thumbnail i {
             color: #5b5b5b;
             font-size: 150px;
         }
 
-        .action_name {
+        h3.action_name {
             margin: 10px 2px;
             text-align: center;
         }
@@ -64,7 +59,7 @@
 
 {% block content %}
 
-    <h1>Welcome, {{ user.username }}</h1>
+    <h1 class="welcomeText">Welcome, {{ user|title }}</h1>
 
     <section class="actions">
         <a href="{% url "main:home" %}" class="action">

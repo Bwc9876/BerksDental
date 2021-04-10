@@ -241,13 +241,17 @@ class UserViewSet(EditViewSet):
                 target_user.save()
                 return redirect(self.overview_link())
             else:
-                return render(request, "db/edit.html", {"form": form, "viewSet": self, "new": False})
+                return render(request, "db/edit.html",
+                              {"form": form, "viewSet": self, "new": False, "verb": "Change Password For",
+                               'back_link': self.overview_link()})
         else:
             form = forms.SetUserPasswordForm()
             form.set_user(target_user)
-            return render(request, "db/edit.html", {"form": form, "viewSet": self, "new": False})
+            return render(request, "db/edit.html",
+                          {"form": form, "viewSet": self, "new": False, "verb": "Change Password For",
+                           'back_link': self.overview_link()})
 
-    def gen_password_view_function(self):
+    def get_password_view_function(self):
 
         @require_http_methods(["GET", "POST"])
         def change_password(request):
@@ -300,7 +304,7 @@ def setup_viewsets():
         new_patterns += generate_paths_from_view_set(viewset)
 
     new_patterns += generate_paths_from_view_set(UserViewSet)
-    new_patterns.append(path("password/user/", UserViewSet().gen_password_view_function(), name="password_user"))
+    new_patterns.append(path("password/user/", UserViewSet().get_password_view_function(), name="password_user"))
 
     return new_patterns
 
@@ -320,8 +324,9 @@ def admin_home(request):
     accessible_viewsets = []
 
     for vs in REGISTERED_VIEWSETS:
-        if request.user.has_perms(vs().get_permissions_as_dict()["View"]):
-            accessible_viewsets.append(vs())
+        vs_obj = vs()
+        if request.user.has_perms(vs_obj.get_permissions_as_dict()["View"]):
+            accessible_viewsets.append(vs_obj)
 
     if request.user.has_perms(UserViewSet().get_permissions_as_dict()["View"]):
         accessible_viewsets.append(UserViewSet())
