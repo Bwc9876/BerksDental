@@ -37,7 +37,7 @@ class RequiredCharactersValidator:
                 else:
                     number_of_characters['lower'] += 1
             else:
-                if self.allow_other_characters:
+                if not self.allow_other_characters:
                     raise ValidationError(_(f"{character} is not allowed"))
 
         errors = []

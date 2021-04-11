@@ -1,5 +1,14 @@
 {% load adminTags %}
 {% autoescape off %}
+    {% if page.has_other_pages %}
+        {% if page.has_previous %}
+            {% action "previous" previous_link "fa-arrow-alt-circle-left" "h2" %}
+        {% endif %}
+        Page {{ page.number }}/{{ max_pages }}
+        {% if page.has_next %}
+            {% action "next" next_link "fa-arrow-alt-circle-right" "h2" %}
+        {% endif %}
+    {% endif %}
     {% if viewSet.ordered %}
         {% action "add" viewSet.edit_link "fa-plus" "h2" %}  {% action "order" viewSet.order_link "fa-sort" "h2" %}
     {% else %}

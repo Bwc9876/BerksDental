@@ -21,11 +21,10 @@ from edit.viewSet import EditViewSet
 
 
 class Action:
-    def __init__(self, name, icon, link, color):
+    def __init__(self, name, icon, link):
         self.name = name
         self.icon = icon
         self.link = link
-        self.color = color
 
 
 # The following classes inherit from EditViewSet class, and are used to add functionality to the models we want
@@ -136,7 +135,7 @@ class GalleryPhotoViewSet(EditViewSet):
 
 class OfficerViewSet(GalleryPhotoViewSet):
     displayName = "Officer"
-    pictureClass = "fa-users"
+    pictureClass = "fa-user-tie"
     model = models.Officer
     modelForm = forms.OfficerForm
     photoFolder = "officer-photos"
@@ -180,7 +179,7 @@ def view_set_to_permission_pair(user, viewset):
 class UserViewSet(EditViewSet):
     displayName = "User"
     pictureClass = "fa-users-cog"
-    additionalActions = [Action("Change Password", "fa-key", "/admin/password/user/", "#949739")]
+    additionalActions = [Action("Change Password", "fa-key", "/admin/password/user/")]
     model = models.User
     modelForm = forms.UserEditForm
     displayFields = ["username", "email", "is_staff", "first_name", "last_name"]

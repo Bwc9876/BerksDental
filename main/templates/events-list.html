@@ -5,35 +5,100 @@
 
     <style>
 
-        .events {
+        div.events {
             margin-left: 10px;
         }
 
-        .eventContainer {
+        div.top {
+            display: flex;
+            padding-bottom: 20px;
+        }
+
+        div.eventContainer {
             border: 1px solid black;
-            width: 35vw;
             margin-bottom: 10px;
             border-radius: 5px;
             padding: 10px;
+            width: 45vw;
+            display: flex;
+            flex-direction: column;
         }
 
-        .eventContainer *:not(a) {
-            color: black;
+        div.dateTimeInfo {
+            display: flex;
         }
 
-        .eventName {
-            margin-top: 10px;
-            margin-bottom: 15px;
-            border-bottom: solid 1px black;
+        div.dateTime {
+            width: 9vw;
         }
 
-        .eventTime {
-            margin: 10px 0;
+        div.dateTime.start {
+            margin-right: 10px;
         }
 
-        .eventLocation {
+        p.time {
+            border: solid 1px black;
+            border-top: none;
+            font-size: var(--h6);
             margin: 0;
-            border-bottom: solid 1px black;
+            text-align: center;
+        }
+
+        p.separator {
+            margin: 0 10px 0 0;
+            align-self: center;
+        }
+
+        div.date {
+            display: flex;
+            flex-direction: column;
+            border: solid 1px black;
+        }
+
+        p.month {
+            color: white;
+            background-color: red;
+            margin: 0;
+            text-align: center;
+        }
+
+        p.day {
+            padding: 10px;
+            margin: 0;
+            text-align: center;
+        }
+
+        div.name {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-left: 10px;
+            border-left: solid 1px black;
+        }
+
+        div.details {
+            border-top: 1px solid black;
+        }
+
+        p.eventName {
+            margin: auto;
+            display: block;
+            text-align: center;
+            font-size: var(--h1);
+            padding-left: 1vw;
+        }
+
+        p.eventLoc, a.eventLoc {
+            margin: auto;
+        }
+
+        div.eventLocation {
+            border-bottom: 1px solid black;
+            padding: 1vh 0;
+        }
+
+        p.eventDescription {
+            word-break: break-word;
         }
 
     </style>
@@ -50,22 +115,46 @@
         {% for event in upcoming %}
 
             <div class="eventContainer">
-
-                <h3 class="eventName">{{ event.name }}</h3>
-                {% if event.startDate == event.endDate %}
-                    <h6 class="eventTime">On {{ event.startDate }} From {{ event.startTime }}
-                        To {{ event.endTime }}</h6>
-                {% else %}
-                    <h6 class="eventTime">Starts On {{ event.startDate }} At {{ event.startTime }}</h6>
-                    <h6 class="eventTime">Ends On {{ event.endDate }} At {{ event.endTime }}</h6>
-                {% endif %}
-                {% if event.virtual %}
-                    <h6 class="eventLocation"><a href="{{ event.link }}">Link</a></h6>
-                {% else %}
-                    <h6 class="eventLocation">Location: {{ event.location }}</h6>
-                {% endif %}
-                <p class="eventDescription">{{ event.description }}</p>
-
+                <div class="top">
+                    <div class="dateTimeInfo">
+                        <div class="dateTime start">
+                            <div class="date">
+                                <p class="month">
+                                    {{ event.startDate|date:"b"|upper }}
+                                </p>
+                                <p class="day">
+                                    {{ event.startDate|date:"d" }}
+                                </p>
+                            </div>
+                            <p class="time">{{ event.startTime }}</p>
+                        </div>
+                        <p class="separator"> - </p>
+                        <div class="dateTime end">
+                            <div class="date">
+                                <p class="month">
+                                    {{ event.endDate|date:"b"|upper }}
+                                </p>
+                                <p class="day">
+                                    {{ event.endDate|date:"d" }}
+                                </p>
+                            </div>
+                            <p class="time">{{ event.endTime }}</p>
+                        </div>
+                    </div>
+                    <div class="name">
+                        <p class="eventName">{{ event.name }}</p>
+                    </div>
+                </div>
+                <div class="details">
+                    <div class="eventLocation">
+                        {% if event.virtual %}
+                            <a class="eventLoc" href="{{ event.link }}">Link</a>
+                        {% else %}
+                            <p class="eventLoc">{{ event.location }}</p>
+                        {% endif %}
+                    </div>
+                    <p class="eventDescription">{{ event.description }}</p>
+                </div>
             </div>
 
         {% endfor %}
@@ -79,25 +168,49 @@
         {% for event in past %}
 
             <div class="eventContainer">
-                <h3 class="eventName">{{ event.name }}</h3>
-                {% if event.startDate == event.endDate %}
-                    <h6 class="eventTime">On {{ event.startDate }} From {{ event.startTime }}
-                        To {{ event.endTime }}</h6>
-                {% else %}
-                    <h6 class="eventTime">Starts On {{ event.startDate }} At {{ event.startTime }}</h6>
-                    <h6 class="eventTime">Ends On {{ event.endDate }} At {{ event.endTime }}</h6>
-                {% endif %}
-                {% if event.virtual %}
-                    <h6 class="eventLocation"><a href="{{ event.link }}">Link</a></h6>
-                {% else %}
-                    <h6 class="eventLocation">Location: {{ event.location }}</h6>
-                {% endif %}
-                <p class="eventDescription">{{ event.description }}</p>
-
+                <div class="top">
+                    <div class="dateTimeInfo">
+                        <div class="dateTime start">
+                            <div class="date">
+                                <p class="month">
+                                    {{ event.startDate|date:"b"|upper }}
+                                </p>
+                                <p class="day">
+                                    {{ event.startDate|date:"d" }}
+                                </p>
+                            </div>
+                            <p class="time">{{ event.startTime }}</p>
+                        </div>
+                        <p class="separator"> - </p>
+                        <div class="dateTime end">
+                            <div class="date">
+                                <p class="month">
+                                    {{ event.endDate|date:"b"|upper }}
+                                </p>
+                                <p class="day">
+                                    {{ event.endDate|date:"d" }}
+                                </p>
+                            </div>
+                            <p class="time">{{ event.endTime }}</p>
+                        </div>
+                    </div>
+                    <div class="name">
+                        <p class="eventName">{{ event.name }}</p>
+                    </div>
+                </div>
+                <div class="details">
+                    <div class="eventLocation">
+                        {% if event.virtual %}
+                            <a class="eventLoc" href="{{ event.link }}">Link</a>
+                        {% else %}
+                            <p class="eventLoc">{{ event.location }}</p>
+                        {% endif %}
+                    </div>
+                    <p class="eventDescription">{{ event.description }}</p>
+                </div>
             </div>
 
         {% endfor %}
-
     </div>
 
     <a href="{% url "main:events" %}?view=calendar">View As Calendar</a>

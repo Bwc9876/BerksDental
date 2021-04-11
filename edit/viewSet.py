@@ -3,6 +3,7 @@ from uuid import UUID
 
 from django.conf import settings
 from django.contrib.auth.decorators import login_required
+from django.core.paginator import Paginator
 from django.db import models as model_fields
 from django.forms import ValidationError
 from django.http import Http404
@@ -36,6 +37,7 @@ class EditViewSet:
     model = None
     modelForm = None
     ordered = False
+    per_page = 10
     displayFields = []
     labels = {}
 
@@ -370,15 +372,32 @@ class EditViewSet:
         :returns: An HttpResponse containing the rendered html file
         :rtype: class:`django.http.HttpResponse`
         """
-
+        page_number = request.GET.get('page', 1)
+        model_paginator = Paginator(self.model.objects.all(), self.per_page, allow_empty_first_page=True)
+        page = model_paginator.get_page(page_number)
+        start = page.start_index() - 1
+        end = page.end_index()
+        next_link = "#"
+        previous_link = "#"
+        if page.has_next():
+            next_link = f"{self.overview_link()}?page={page.next_page_number()}"
+        if page.has_previous():
+            previous_link = f"{self.overview_link()}?page={page.previous_page_number()}"
         headers = self.displayFields.copy()
-        objects = self.model.objects.all().values_list(*self.displayFields, 'id')
+        if start >= 0:
+            objects = self.model.objects.all()[start:end].values_list(*self.displayFields, 'id')
+        else:
+            objects = []
         for target in self.labels.keys():
             if target in headers:
                 headers[headers.index(target)] = self.labels[target]
         additional_navigation_buttons = ""
         if request.user.has_perms(self.get_permissions_as_dict()["Edit"]):
-            additional_navigation_buttons = render_to_string("db/overview_navigation_buttons.html", context={'viewSet': self})
+            additional_navigation_buttons = render_to_string("db/overview_navigation_buttons.html",
+                                                             context={'viewSet': self, 'page': page,
+                                                                      'max_pages': model_paginator.num_pages,
+                                                                      "next_link": next_link,
+                                                                      "previous_link": previous_link})
         return render(request, 'db/view.html',
                       {'headers': headers, 'objects': self.format_value_list(objects), 'viewSet': self,
                        'canEdit': request.user.has_perms(self.get_permissions_as_dict()["Edit"]),
