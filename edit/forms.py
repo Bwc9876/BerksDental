@@ -215,4 +215,3 @@ class SetUserPasswordForm(Form):
             validate_password(new_password, user=self.user)
         except ValidationError as ve:
             [self.add_error("new_password", error) for error in list(ve)]
-

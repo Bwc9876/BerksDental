@@ -1,8 +1,8 @@
 {% extends 'base.html' %}
 {% block meta %}
-  <title>Berks Dental Assistants: Home</title>
-  <meta name="description" content="Berks Dental Assistants' Home Page.">
-  {% endblock %}
+    <title>Berks Dental Assistants: Home</title>
+    <meta name="description" content="Berks Dental Assistants' Home Page.">
+{% endblock %}
 {% block links %}
     {% load static %}
     <link href="{% static "/home/home.css" %}" type="text/css" rel="stylesheet">
@@ -18,18 +18,18 @@
         <h1 class="captioned-header">Upcoming Events</h1>
         <p class="h6 captioned-header-caption">(Click on a card for more information)</p>
         <div class="event-card-container">
-{#            <div class="event-card-grouper">#}
-{#                <div class="event-card">#}
-{#                    <h2>Test Event</h2>#}
-{#                    <p class="month h3">JUN</p>#}
-{#                    <p class="day h2">17</p>#}
-{#                    <p class="h4">7:00 PM - 8:00 PM</p>#}
-{#                    <p class="h4">1001 Montgomery Ave, Boyertown, PA 19512</p>#}
-{#                </div>#}
-{#                <div class="event-description">#}
-{#                    pqmrifiorenqoifnr#}
-{#                </div>#}
-{#            </div>#}
+            {#            <div class="event-card-grouper">#}
+            {#                <div class="event-card">#}
+            {#                    <h2>Test Event</h2>#}
+            {#                    <p class="month h3">JUN</p>#}
+            {#                    <p class="day h2">17</p>#}
+            {#                    <p class="h4">7:00 PM - 8:00 PM</p>#}
+            {#                    <p class="h4">1001 Montgomery Ave, Boyertown, PA 19512</p>#}
+            {#                </div>#}
+            {#                <div class="event-description">#}
+            {#                    pqmrifiorenqoifnr#}
+            {#                </div>#}
+            {#            </div>#}
             {% for event in upcomingEvents %}
                 <div class="event-card-grouper">
                     <div class="event-card">
@@ -37,7 +37,8 @@
                         <p class="month h3">{{ event.startDate|date:"b"|upper }}</p>
                         <p class="day h2">{{ event.startDate|date:"d" }}</p>
                         <p class="h4">{{ event.startTime }} - {{ event.endTime }}</p>
-                        <p class="h4">{% if event.virtual %}<a href="{{ event.link }}">{{ event.link }}</a>{% else %}{{ event.location }}{% endif %}</p>
+                        <p class="h4">{% if event.virtual %}<a href="{{ event.link }}">{{ event.link }}</a>{% else %}
+                            {{ event.location }}{% endif %}</p>
                     </div>
                     <div class="event-description">
                         {{ event.description }}

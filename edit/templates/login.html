@@ -1,10 +1,4 @@
-{% extends 'base.html' %}
+{% extends 'db/edit.html' %}
 
-
-{% block content %}
-    <form method="post">
-        {% csrf_token %}
-        {{ form }}
-        <button type="submit">Login</button>
-    </form>
-{% endblock %}
+{% block adminHeader %}<h1 class="adminHeader">Login</h1>{% endblock %}
+{% block submitWord %}Login{% endblock %}

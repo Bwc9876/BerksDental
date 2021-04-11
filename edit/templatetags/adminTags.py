@@ -3,8 +3,8 @@
 """
 
 from django import template
-from django.urls import reverse
 from django.template.defaultfilters import safe
+
 from edit.models import Social
 
 register = template.Library()

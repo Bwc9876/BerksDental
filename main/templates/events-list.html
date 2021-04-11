@@ -18,7 +18,7 @@
         }
 
         .eventContainer *:not(a) {
-            color: black;   
+            color: black;
         }
 
         .eventName {
@@ -43,62 +43,64 @@
 
 {% block content %}
 
-<h1>Upcoming</h1>
+    <h1>Upcoming</h1>
 
-<div class="events">
+    <div class="events">
 
-    {% for event in upcoming %}
+        {% for event in upcoming %}
 
-        <div class="eventContainer">
+            <div class="eventContainer">
 
-            <h3 class="eventName">{{ event.name }}</h3>
-            {% if event.startDate == event.endDate %}
-                <h6 class="eventTime">On {{ event.startDate }} From {{ event.startTime }} To {{ event.endTime }}</h6>
-            {% else %}
-                <h6 class="eventTime">Starts On {{ event.startDate }} At {{ event.startTime }}</h6>
-                <h6 class="eventTime">Ends On {{ event.endDate }} At {{ event.endTime }}</h6>
-            {% endif %}
-            {% if event.virtual %}
-                <h6 class="eventLocation"><a href="{{ event.link }}">Link</a></h6>
-            {% else %}
-                <h6 class="eventLocation">Location: {{ event.location }}</h6>
-            {% endif %}
+                <h3 class="eventName">{{ event.name }}</h3>
+                {% if event.startDate == event.endDate %}
+                    <h6 class="eventTime">On {{ event.startDate }} From {{ event.startTime }}
+                        To {{ event.endTime }}</h6>
+                {% else %}
+                    <h6 class="eventTime">Starts On {{ event.startDate }} At {{ event.startTime }}</h6>
+                    <h6 class="eventTime">Ends On {{ event.endDate }} At {{ event.endTime }}</h6>
+                {% endif %}
+                {% if event.virtual %}
+                    <h6 class="eventLocation"><a href="{{ event.link }}">Link</a></h6>
+                {% else %}
+                    <h6 class="eventLocation">Location: {{ event.location }}</h6>
+                {% endif %}
                 <p class="eventDescription">{{ event.description }}</p>
 
-        </div>
+            </div>
 
-    {% endfor %}
+        {% endfor %}
 
-</div>
+    </div>
 
-<h1>Previous</h1>
+    <h1>Previous</h1>
 
-<div class="events">
+    <div class="events">
 
-    {% for event in past %}
+        {% for event in past %}
 
-        <div class="eventContainer">
-            <h3 class="eventName">{{ event.name }}</h3>
-            {% if event.startDate == event.endDate %}
-                <h6 class="eventTime">On {{ event.startDate }} From {{ event.startTime }} To {{ event.endTime }}</h6>
-            {% else %}
-                <h6 class="eventTime">Starts On {{ event.startDate }} At {{ event.startTime }}</h6>
-                <h6 class="eventTime">Ends On {{ event.endDate }} At {{ event.endTime }}</h6>
-            {% endif %}
-            {% if event.virtual %}
-                <h6 class="eventLocation"><a href="{{ event.link }}">Link</a></h6>
-            {% else %}
-                <h6 class="eventLocation">Location: {{ event.location }}</h6>
-            {% endif %}
+            <div class="eventContainer">
+                <h3 class="eventName">{{ event.name }}</h3>
+                {% if event.startDate == event.endDate %}
+                    <h6 class="eventTime">On {{ event.startDate }} From {{ event.startTime }}
+                        To {{ event.endTime }}</h6>
+                {% else %}
+                    <h6 class="eventTime">Starts On {{ event.startDate }} At {{ event.startTime }}</h6>
+                    <h6 class="eventTime">Ends On {{ event.endDate }} At {{ event.endTime }}</h6>
+                {% endif %}
+                {% if event.virtual %}
+                    <h6 class="eventLocation"><a href="{{ event.link }}">Link</a></h6>
+                {% else %}
+                    <h6 class="eventLocation">Location: {{ event.location }}</h6>
+                {% endif %}
                 <p class="eventDescription">{{ event.description }}</p>
 
-        </div>
+            </div>
 
-    {% endfor %}
+        {% endfor %}
 
-</div>
+    </div>
 
-<a href="{% url "main:events" %}?view=calendar">View As Calendar</a>
+    <a href="{% url "main:events" %}?view=calendar">View As Calendar</a>
 
 
 {% endblock content %}

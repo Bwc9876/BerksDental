@@ -1,8 +1,8 @@
 {% load adminTags %}
 {% autoescape off %}
-{% if viewSet.ordered %}
-    {% action "add" viewSet.edit_link "fa-plus" "h2" %}  {% action "order" viewSet.order_link "fa-sort" "h2" %}
-{% else %}
-    {% action "add" viewSet.edit_link "fa-plus" "h2" %}
-{% endif %}
+    {% if viewSet.ordered %}
+        {% action "add" viewSet.edit_link "fa-plus" "h2" %}  {% action "order" viewSet.order_link "fa-sort" "h2" %}
+    {% else %}
+        {% action "add" viewSet.edit_link "fa-plus" "h2" %}
+    {% endif %}
 {% endautoescape %}

@@ -241,15 +241,15 @@ class UserViewSet(EditViewSet):
                 target_user.save()
                 return redirect(self.overview_link())
             else:
-                return render(request, "db/edit.html",
-                              {"form": form, "viewSet": self, "new": False, "verb": "Change Password For",
-                               'back_link': self.overview_link()})
+                return render(request, "db/change_password.html",
+                              {"form": form, "viewSet": self, "new": False,
+                               'back_link': self.overview_link(), "targetUser": str(target_user)})
         else:
             form = forms.SetUserPasswordForm()
             form.set_user(target_user)
-            return render(request, "db/edit.html",
-                          {"form": form, "viewSet": self, "new": False, "verb": "Change Password For",
-                           'back_link': self.overview_link()})
+            return render(request, "db/change_password.html",
+                          {"form": form, "viewSet": self, "new": False,
+                           'back_link': self.overview_link(), "targetUser": str(target_user)})
 
     def get_password_view_function(self):
 

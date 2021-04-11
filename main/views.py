@@ -69,7 +69,8 @@ def events(request):
     if view_type == "calendar":
         month = request.GET.get("month", date.today().month)
         year = request.GET.get("year", date.today().year)
-        matching_events = models.Event.objects.filter(startDate__month=month, startDate__year=year).order_by("startDate")
+        matching_events = models.Event.objects.filter(startDate__month=month, startDate__year=year).order_by(
+            "startDate")
         return render(request, "events-calendar.html", {"events": matching_events})
     elif view_type == "list":
         upcoming_events = models.Event.objects.filter(startDate__gte=date.today()).order_by("startDate")

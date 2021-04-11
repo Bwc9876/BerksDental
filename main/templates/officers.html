@@ -53,23 +53,26 @@
     <div class="cardContainer">
 
         {% for officer in officers %}
-        
+
             <div class="officerCard">
-                <img draggable="false" width="300px" height="300px" src="{{ officer.photo_link }}" alt="{{ officer.name }}'s Picture"/>
+                <img draggable="false" width="300px" height="300px" src="{{ officer.photo_link }}"
+                     alt="{{ officer.name }}'s Picture"/>
                 <h4>{{ officer.name }}</h4>
                 <p style="color: black;">{{ officer.biography }}</p>
                 {% if officer.email or officer.phone %}
-                <div class="contactMethods">
-                    {% if officer.email %}
-                    <a class="contactLink" href="{{ officer.masked_email_link }}"><i class="fas fa-envelope fa-lg"></i></a>
-                    {% endif %}
-                    {% if officer.phone %}
-                    <a class="contactLink" href="{{ officer.masked_phone_link }}"><i class="fas fa-phone-alt fa-lg"></i></a>
-                    {% endif %}
-                </div>
+                    <div class="contactMethods">
+                        {% if officer.email %}
+                            <a class="contactLink" href="{{ officer.masked_email_link }}"><i
+                                    class="fas fa-envelope fa-lg"></i></a>
+                        {% endif %}
+                        {% if officer.phone %}
+                            <a class="contactLink" href="{{ officer.masked_phone_link }}"><i
+                                    class="fas fa-phone-alt fa-lg"></i></a>
+                        {% endif %}
+                    </div>
                 {% endif %}
             </div>
-        
+
         {% endfor %}
 
     </div>

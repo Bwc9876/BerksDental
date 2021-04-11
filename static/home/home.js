@@ -1,5 +1,5 @@
-$(document).ready(function() {
-    $(".event-card").click(function() {
+$(document).ready(function () {
+    $(".event-card").click(function () {
         let hadClass = $(this).hasClass("focused-event-card");
         $(".event-card").each(function (index, value) {
             $(value).removeClass("focused-event-card");

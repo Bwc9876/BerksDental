@@ -13,7 +13,7 @@
 
         ul.errorList {
             list-style: none;
-            padding-left:0;
+            padding-left: 0;
         }
 
         li.error {
@@ -34,6 +34,10 @@
 
         input {
             font-size: var(--h4);
+        }
+
+        button.submitButton {
+            width: 100%;
         }
 
     </style>
@@ -73,7 +77,7 @@
                 </fieldset>
             {% endfor %}
 
-            <button type="submit">Save</button>
+            <button class="submitButton" type="submit">{% block submitWord %}Save{% endblock %}</button>
 
         </form>
 

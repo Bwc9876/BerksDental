@@ -8,71 +8,73 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  {% comment %}
+    {% comment %}
     Meta Tags
   {% endcomment %}
-  {% load static %}
-  <meta charset="UTF-8">
-  {% block meta %}
-  <title>Berks Dental Assistants: Base</title>
-  <meta name="description" content="Berks Dental Assistants' Base Page.">
-  {% endblock %}
-  {% include "favicon-data.html" %}
-  <meta name="keywords" content="Berks Dental Assistants, Dental Health, Dental"/>
-  <meta name="author" content="TBD" />
-  <meta name="copyright" content="TBD" />
-  <meta name="robots" content="index, nofollow" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, shrink-to-fit=no">
-  {% comment %}
+    {% load static %}
+    <meta charset="UTF-8">
+    {% block meta %}
+        <title>Berks Dental Assistants: Base</title>
+        <meta name="description" content="Berks Dental Assistants' Base Page.">
+    {% endblock %}
+    {% include "favicon-data.html" %}
+    <meta name="keywords" content="Berks Dental Assistants, Dental Health, Dental"/>
+    <meta name="author" content="TBD"/>
+    <meta name="copyright" content="TBD"/>
+    <meta name="robots" content="index, nofollow"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, shrink-to-fit=no">
+    {% comment %}
     Links
   {% endcomment %}
-  {% comment %}
+    {% comment %}
     CSS
   {% endcomment %}
-  <link href="{% static "/base/text-sizing.css" %}" type="text/css" rel="stylesheet">
-  <link href="{% static "/base/base.css" %}" type="text/css" rel="stylesheet">
-  {% comment %}
+    <link href="{% static "/base/text-sizing.css" %}" type="text/css" rel="stylesheet">
+    <link href="{% static "/base/base.css" %}" type="text/css" rel="stylesheet">
+    {% comment %}
     Javascript
   {% endcomment %}
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-  <script src="https://kit.fontawesome.com/b7739b9b58.js" crossorigin="anonymous"></script>
-  <script src="{% static "/base/base.js" %}" type="text/javascript"></script>
-  {% block links %}{% endblock %}
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://kit.fontawesome.com/b7739b9b58.js" crossorigin="anonymous"></script>
+    <script src="{% static "/base/base.js" %}" type="text/javascript"></script>
+    {% block links %}{% endblock %}
 </head>
 <body>
-  {# If the user is using ie (or any Trident based browser), most of the site won't work, so we display a message telling the user to use a different browser #}
-  {% if "Trident" in agent_type %}
+{# If the user is using ie (or any Trident based browser), most of the site won't work, so we display a message telling the user to use a different browser #}
+{% if "Trident" in agent_type %}
     {% include 'ie-card.html' %}
-  {% endif %}
-  <header>
-      <div class="nav-bar">
-          <a href="{% url "main:home" %}"><img alt="Berks Dental Assistants Logo" class="nav-img" src="{% static "/base/logo.png" %}"/></a>
-          <nav class="nav-link-container">
-              <a href="{% url "main:home" %}" class="nav-link">Home</a>
-              <a href="{% url "main:gallery" %}" class="nav-link">Gallery</a>
-              <a href="{% url "main:officers" %}" class="nav-link">Officers</a>
-              <a href="{% url "main:events" %}" class="nav-link">Events</a>
-              <a href="{% url "main:about" %}" class="nav-link">About</a>
-          </nav>
-          <button class="nav-button">Menu</button>
-      </div>
-      <div class="nav-placeholder"></div>
-      {% block header %}{% endblock %}
-  </header>
-  <div class="main-content">
-  {% block content %}
-      <h1>This html file is meant to be inherited! Please don't render the base version!</h1>
-  {% endblock %}
-  </div>
-  <footer class="footer-main">
-      <a href="{% url "main:sitemap" %}" class="footer-link">Site Map</a>
-      <a href="{% url "main:about" %}" class="footer-link">About</a>
-      {% load adminTags %}
-      {% getSocials as socials %}
-      {% for social in socials %}
-          <a target="_blank" rel="nofollow" class="footer-link social-link" href="{{ social.link }}"><i class="fab {{ social.fa_icon_class }} fa-lg"></i></a>
-      {% endfor %}
-  </footer>
+{% endif %}
+<header>
+    <div class="nav-bar">
+        <a href="{% url "main:home" %}"><img alt="Berks Dental Assistants Logo" class="nav-img"
+                                             src="{% static "/base/logo.png" %}"/></a>
+        <nav class="nav-link-container">
+            <a href="{% url "main:home" %}" class="nav-link">Home</a>
+            <a href="{% url "main:gallery" %}" class="nav-link">Gallery</a>
+            <a href="{% url "main:officers" %}" class="nav-link">Officers</a>
+            <a href="{% url "main:events" %}" class="nav-link">Events</a>
+            <a href="{% url "main:about" %}" class="nav-link">About</a>
+        </nav>
+        <button class="nav-button">Menu</button>
+    </div>
+    <div class="nav-placeholder"></div>
+    {% block header %}{% endblock %}
+</header>
+<div class="main-content">
+    {% block content %}
+        <h1>This html file is meant to be inherited! Please don't render the base version!</h1>
+    {% endblock %}
+</div>
+<footer class="footer-main">
+    <a href="{% url "main:sitemap" %}" class="footer-link">Site Map</a>
+    <a href="{% url "main:about" %}" class="footer-link">About</a>
+    {% load adminTags %}
+    {% getSocials as socials %}
+    {% for social in socials %}
+        <a target="_blank" rel="nofollow" class="footer-link social-link" href="{{ social.link }}"><i
+                class="fab {{ social.fa_icon_class }} fa-lg"></i></a>
+    {% endfor %}
+</footer>
 </body>
 </html>
 
