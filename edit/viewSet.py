@@ -383,7 +383,7 @@ class EditViewSet:
                       {'headers': headers, 'objects': self.format_value_list(objects), 'viewSet': self,
                        'canEdit': request.user.has_perms(self.get_permissions_as_dict()["Edit"]),
                        'back_link': reverse("edit:admin_home"), 'verb': "View/Edit",
-                       'additionalNavigationButtons': additional_navigation_buttons})
+                       'additionalNavigationButtons': additional_navigation_buttons, 'plural': True})
 
     @staticmethod
     def missing_permissions_link():

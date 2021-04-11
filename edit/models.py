@@ -185,7 +185,8 @@ class Officer(models.Model):
     """
 
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    name = models.CharField(max_length=100)
+    first_name = models.CharField(max_length=100)
+    last_name = models.CharField(max_length=100)
     picture = models.ImageField(upload_to="officer-photos")
     biography = models.TextField(max_length=2000)
     phone = models.CharField(max_length=50, blank=True, null=True)
@@ -243,7 +244,7 @@ class Officer(models.Model):
         :rtype: str
         """
 
-        return self.name
+        return f"{self.first_name} {self.last_name}"
 
     class Meta:
         ordering = ['sort_order']

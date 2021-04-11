@@ -15,17 +15,19 @@
         table {
             border-collapse: collapse;
             text-align: center;
+            width: 100%;
         }
 
         a.action {
             font-size: var(--h6);
         }
 
-        table tr {
+        table.modelTable tr {
             border: var(--clr-header) 1px solid;
         }
 
-        table tr td, table tr th {
+        table.modelTable tr td, table.modelTable tr th {
+            font-size: var(--h5);
             border: var(--clr-header) 1px solid;
             padding: 1vh 2vw;
         }
@@ -33,6 +35,10 @@
         a.action {
             color: var(--clr-header);
             transition: var(--hover-transition);
+        }
+
+        tr.tinted {
+            background-color: var(--ac-light);
         }
 
         td.value {
@@ -68,9 +74,8 @@
 {% endblock %}
 
 {% block adminContent %}
-    {% load adminTags %}
 
-    <table>
+    <table class="modelTable">
         <tr>
             {% if objects|length > 0 %}
                 {% for header in headers %}
