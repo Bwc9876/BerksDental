@@ -1,4 +1,4 @@
-{% extends 'db/db_base.html' %}
+{% extends 'admin_base.html' %}
 
 {% block adminLinks %}
     <script crossorigin="anonymous" src="https://cdn.jsdelivr.net/npm/sortablejs@latest/Sortable.min.js"></script>
@@ -63,7 +63,7 @@
         }
 
         .ghostSortTarget {
-            background-color: skyblue;
+            background-color: var(--ac-light);
         }
 
         .handle {

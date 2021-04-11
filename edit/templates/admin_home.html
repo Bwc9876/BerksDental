@@ -1,35 +1,60 @@
-{% extends 'base.html' %}
+{% extends 'admin_base.html' %}
 
-{% block links %}
+{% block adminLinks %}
 
     <style>
 
-        h1.welcomeText {
-            margin: 2vw;
+        :root {
+            --action-size: 450px;
+            --all-margin: 10vw;
         }
 
-        .actions {
-            display: flex;
-            flex-wrap: wrap;
-            margin: 2vw;
+        h1.welcomeText {
+            margin: 1vh var(--all-margin) 0;
+            user-select: none;
+        }
+
+        div.adminContent {
+            margin: 0;
+        }
+
+        section.actions {
+            display: grid;
+            grid-auto-flow: row;
+            gap: 2vw;
+            grid-template-columns: repeat(auto-fill, var(--action-size));
+            margin: 3vh var(--all-margin);
+            align-items: center;
+            justify-items: center;
         }
 
         a.action {
-            width: 450px;
-            box-shadow: 4px 4px 18px -2px rgba(0,0,0,0.5);
-            margin-right: 30px;
-            margin-bottom: 30px;
+            user-select: none;
+            width: var(--action-size);
+            box-shadow: 4px 4px 18px -2px rgba(0, 0, 0, 0.5);
             border-radius: 15px;
-            transition: background-color 0.10s linear;
+            transition: var(--hover-bg-transition);
             text-decoration: none;
         }
 
         a.action:hover {
-            background-color: #f2f2f2;
+            background-color: var(--ac-light-grey);
         }
 
         a.action:hover .action_thumbnail {
-            background-color: #ccc;
+            background-color: var(--ac-grey);
+        }
+
+        a.action:hover .action_thumbnail i {
+            color: var(--ac-dark);
+        }
+
+        a.action:hover .action_name {
+            color: var(--ac-dark);
+        }
+
+        div.action_thumbnail i {
+            transition: var(--hover-transition);
         }
 
         div.action_thumbnail {
@@ -38,63 +63,66 @@
             justify-content: center;
             background-color: #f2f2f2;
             height: 300px;
-            transition: background-color 0.10s linear;
+            transition: var(--hover-bg-transition);
             border-top-left-radius: 15px;
             border-top-right-radius: 15px;
         }
 
         div.action_thumbnail i {
-            color: #5b5b5b;
+            color: var(--clr-header);
             font-size: 150px;
         }
 
-        h3.action_name {
+        h2.action_name {
             margin: 10px 2px;
             text-align: center;
+            color: var(--clr-header);
+            transition: var(--hover-transition);
         }
+
 
     </style>
 
 {% endblock %}
 
-{% block content %}
+{% block adminHeader %}<h1 class="welcomeText">Welcome, {{ user|title }}</h1>{% endblock %}
 
-    <h1 class="welcomeText">Welcome, {{ user|title }}</h1>
+{% block adminContent %}
 
     <section class="actions">
         <a href="{% url "main:home" %}" class="action">
             <div class="action_thumbnail">
                 <i class="fas fa-eye"></i>
             </div>
-            <h3 class="action_name">View Site</h3>
+            <h2 class="action_name">View Site</h2>
         </a>
         {% for vs in viewsets %}
-        <a href="{{ vs.overview_link }}" class="action">
-            <div class="action_thumbnail">
-                <i class="fas {{ vs.pictureClass }}"></i>
-            </div>
-            <h3 class="action_name">{{ vs.displayName }}s</h3>
-        </a>
+            <a href="{{ vs.overview_link }}" class="action">
+                <div class="action_thumbnail">
+                    <i class="fas {{ vs.pictureClass }}"></i>
+                </div>
+                <h2 class="action_name">{{ vs.displayName }}s</h2>
+            </a>
         {% endfor %}
         <a href="{% url "edit:logout" %}" class="action">
             <div class="action_thumbnail">
                 <i class="fas fa-sign-out-alt"></i>
             </div>
-            <h3 class="action_name">Logout</h3>
+            <h2 class="action_name">Logout</h2>
         </a>
         <a href="#" class="action">
             <div class="action_thumbnail">
                 <i class="fas fa-question-circle"></i>
             </div>
-            <h3 class="action_name">Help</h3>
+            <h2 class="action_name">Help</h2>
         </a>
         {% if debug %}
-        <a target="_blank" href="/debug_admin/" class="action">
-            <div class="action_thumbnail">
-                <i class="fas fa-code"></i>
-            </div>
-            <h3 class="action_name">Debug</h3>
-        </a>
+            <a target="_blank" href="/debug_admin/" class="action">
+                <div class="action_thumbnail">
+                    <i class="fas fa-code"></i>
+                </div>
+                <h2 class="action_name">Debug</h2>
+            </a>
         {% endif %}
     </section>
 

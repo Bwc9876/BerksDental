@@ -1,4 +1,4 @@
-{% extends 'db/db_base.html' %}
+{% extends 'admin_base.html' %}
 {% comment %}
     This file is used to view a table that shows all objects in the database
     This template expects a list of headers in the headers variable
@@ -22,37 +22,45 @@
         }
 
         table tr {
-            border: black 1px solid;
+            border: var(--clr-header) 1px solid;
         }
 
         table tr td, table tr th {
-            border: black 1px solid;
+            border: var(--clr-header) 1px solid;
             padding: 1vh 2vw;
         }
 
         a.action {
-            color: black;
-            transition: color 0.10s linear;
+            color: var(--clr-header);
+            transition: var(--hover-transition);
+        }
+
+        td.value {
+            color: var(--clr-header);
+        }
+
+        th.header {
+            color: var(--clr-header);
         }
 
         a.edit:hover {
-            color: #38abe0;
+            color: var(--ac-dark);
         }
 
         a.delete:hover {
-            color: #e3463d;
+            color: var(--red-color);
         }
 
         i.fa-check-circle {
-            color: #2eb72e;
+            color: var(--green-color);
         }
 
         i.fa-times-circle {
-            color: #d93b3b;
+            color: var(--red-color);
         }
 
         a.add:hover {
-            color: lightgreen;
+            color: var(--green-color);
         }
 
     </style>
@@ -66,10 +74,10 @@
         <tr>
             {% if objects|length > 0 %}
                 {% for header in headers %}
-                    <th>{{ header|title }}</th>
+                    <th class="header">{{ header|title }}</th>
                 {% endfor %}
                 {% if canEdit %}
-                <th colspan="{{ viewSet.additionalActions|length|add:2 }}">Actions</th>
+                <th class="header" colspan="{{ viewSet.additionalActions|length|add:2 }}">Actions</th>
                 {% endif %}
             {% endif %}
         </tr>
@@ -78,7 +86,7 @@
             <tr>
                 {% for value in object %}
                     {% if forloop.first %}
-                        <td><b>{{ value|safe|default:"Not Entered" }}</b></td>
+                        <td class="value"><b>{{ value|safe|default:"Not Entered" }}</b></td>
                     {% elif forloop.last %}
                         {% if canEdit %}
                             <td><a class="action edit" href="{{ viewSet.edit_link }}?id={{ value }}"><i class="fas fa-edit fa-lg"></i></a></td>
@@ -88,7 +96,7 @@
                             <td><a class="action delete" href="{{ viewSet.delete_link }}?id={{ value }}"><i class="fas fa-trash fa-lg"></i></a></td>
                         {% endif %}
                     {% else %}
-                        <td>{{ value|safe|default:"Not Entered" }}</td>
+                        <td class="value">{{ value|safe|default:"Not Entered" }}</td>
                     {% endif %}
                 {% endfor %}
             </tr>
