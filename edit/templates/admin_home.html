@@ -116,7 +116,7 @@
             </div>
             <h2 class="action_name">Help</h2>
         </a>
-        {% if debug %}
+        {% if debug and user.is_staff %}
             <a target="_blank" href="/debug_admin/" class="action">
                 <div class="action_thumbnail">
                     <i class="fas fa-code"></i>

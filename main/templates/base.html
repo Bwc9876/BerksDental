@@ -68,7 +68,7 @@
 <footer class="footer-main">
     <a href="{% url "main:sitemap" %}" class="footer-link">Site Map</a>
     <a href="{% url "main:about" %}" class="footer-link">About</a>
-    {% load adminTags %}
+    {% load socialTags %}
     {% getSocials as socials %}
     {% for social in socials %}
         <a target="_blank" rel="nofollow" class="footer-link social-link" href="{{ social.link }}"><i

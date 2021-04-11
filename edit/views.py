@@ -236,10 +236,10 @@ class UserViewSet(EditViewSet):
             form = forms.SetUserPasswordForm(request.POST)
             form.set_user(target_user)
             if form.is_valid():
-                new_password = form.cleaned_data.get("newPassword", "")
+                new_password = form.cleaned_data.get("new_password", "")
                 target_user.set_password(new_password)
                 target_user.save()
-                return redirect(self.overview_link())
+                return redirect(f'{self.overview_link()}?alert=Password Changed&alertType=success')
             else:
                 return render(request, "db/change_password.html",
                               {"form": form, "viewSet": self, "new": False,
@@ -258,7 +258,7 @@ class UserViewSet(EditViewSet):
             if request.user.has_perms(self.gen_perms(["edit", "view"])):
                 return self.change_password_view(request)
             else:
-                return redirect(reverse("edit:admin_home"))
+                return redirect(self.missing_permissions_link())
 
         return change_password
 

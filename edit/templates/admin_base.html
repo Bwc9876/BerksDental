@@ -10,8 +10,9 @@
             --all-margin: 2vw;
             --red-color: #e33434;
             --green-color: #2eb72e;
-            --hover-transition: color 100ms linear;
-            --hover-bg-transition: background-color 100ms linear;
+            --color-transition-time: 100ms;
+            --hover-transition: color var(--color-transition-time) linear;
+            --hover-bg-transition: background-color var(--color-transition-time) linear;
         }
 
         h1.adminHeader {
@@ -35,6 +36,47 @@
             color: var(--ac-dark);
         }
 
+        h3.alert {
+            --border-color: var(--ac-grey);
+            --bg-color: var(--ac-light-grey);
+            color: var(--clr-header);
+        }
+
+        h3.alert-error {
+            --border-color: #c40000;
+            --bg-color: #e38282;
+        }
+
+        h3.alert-warning {
+            --border-color: #878700;
+            --bg-color: #ffff74;
+        }
+
+        h3.alert-info {
+            --border-color: #0071ae;
+            --bg-color: skyblue;
+        }
+
+        h3.alert-success {
+            --border-color: #147914;
+            --bg-color: lightgreen;
+        }
+
+        h3.alert {
+            border: solid 1px var(--border-color);
+            background-color: var(--bg-color);
+            margin: 2vh var(--all-margin);
+            padding-left: 1vw;
+            display: flex;
+            align-items: center;
+        }
+
+        h3.alert i.alert-icon {
+            color: var(--border-color);
+            font-size: var(--h5);
+            margin-right: 10px;
+        }
+
     </style>
 
     {% block adminLinks %}
@@ -45,6 +87,19 @@
 {% endblock %}
 
 {% block content %}
+
+    {% load adminTags %}
+    {% getAlert request as alert %}
+    {% if alert %}
+        <script type="text/javascript" defer="defer">
+            history.pushState({'alert':true}, document.title, window.location.pathname);
+        </script>
+        <h3 class="alert alert-{% getAlertType request %}">
+            <i class="fas alert-icon fa-{% getAlertIcon request %}"></i>
+            {{ alert }}
+        </h3>
+    {% endif %}
+
 
     {% block adminHeader %}
         <h1 class="adminHeader">{% action "back" back_link "fa-arrow-left" "h2" %}

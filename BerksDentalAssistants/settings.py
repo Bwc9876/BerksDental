@@ -81,7 +81,7 @@ AUTH_PASSWORD_VALIDATORS = [{
 
 LOGIN_URL = "/admin/login/"
 LOGIN_REDIRECT_URL = "/admin/"
-LOGOUT_REDIRECT_URL = "/"
+LOGOUT_REDIRECT_URL = "/admin/login/?alert=You Have Been Logged Out&alertType=info"
 
 LANGUAGE_CODE = 'en-us'
 

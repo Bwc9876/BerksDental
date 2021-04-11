@@ -173,6 +173,8 @@ class UserCreateForm(UserCreationForm):
         self.fields['first_name'].widget.attrs.update(required=True)
         self.fields['last_name'].widget.attrs.update(required=True)
         self.fields['email'].widget.attrs.update(required=True)
+        self.fields["password1"].widget.attrs.update(autocomplete="new-password")
+        self.fields["password2"].widget.attrs.update(autocomplete="new-password")
 
 
 class UserEditForm(ModelForm):
@@ -201,6 +203,8 @@ class SetUserPasswordForm(Form):
         super().__init__(*args, **kargs)
         self.fields["new_password"].label = "New Password"
         self.fields["confirm_new_password"].label = "Confirm New Password"
+        self.fields["new_password"].widget.attrs.update(autocomplete="new-password")
+        self.fields["confirm_new_password"].widget.attrs.update(autocomplete="new-password")
 
     def set_user(self, user):
         self.user = user

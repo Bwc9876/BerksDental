@@ -235,7 +235,7 @@ class EditViewSet:
                 new_obj.sort_order = len(list(self.model.objects.all())) - 1
                 new_obj.save()
             self.post_save(new_obj, form.cleaned_data, True)
-            return redirect(self.overview_link())
+            return redirect(f'{self.overview_link()}?alert=New {self.displayName} Saved&alertType=success')
         else:
             return render(request, "db/edit.html", {'form': form, 'viewSet': self, 'new': True, "verb": "Add",
                                                     "back_link": self.overview_link()})
@@ -258,7 +258,7 @@ class EditViewSet:
             self.pre_save(target_obj, form.cleaned_data, False)
             edited_obj = form.save()
             self.post_save(edited_obj, form.cleaned_data, False)
-            return redirect(self.overview_link())
+            return redirect(f'{self.overview_link()}?alert={self.displayName} Saved&alertType=success')
         else:
             return render(request, "db/edit.html",
                           {'form': form, 'viewSet': self, 'new': False, "verb": "Edit",
@@ -285,7 +285,7 @@ class EditViewSet:
                     object_to_fix.sort_order -= 1
                     object_to_fix.save()
             self.post_del(target_obj)
-            return redirect(self.overview_link())
+            return redirect(f'{self.overview_link()}?alert={self.displayName} Deleted&alertType=success')
         else:
             target_obj = get_object_or_404(self.model, id=request.GET.get('id', ''))
             return render(request, "db/delete.html",
@@ -352,7 +352,7 @@ class EditViewSet:
                     object_to_be_sorted = self.model.objects.get(id=target_id)
                     object_to_be_sorted.sort_order = new_order.index(target_id)
                     object_to_be_sorted.save()
-                return redirect(self.overview_link())
+                return redirect(f'{self.overview_link()}?alert=New Order Saved&alertType=success')
             else:
                 return render(request, 'db/order.html',
                               {'error': 'Invalid List!', 'objects': self.model.objects.all, 'viewSet': self})
@@ -376,12 +376,19 @@ class EditViewSet:
         for target in self.labels.keys():
             if target in headers:
                 headers[headers.index(target)] = self.labels[target]
+        additional_navigation_buttons = ""
+        if request.user.has_perms(self.get_permissions_as_dict()["Edit"]):
+            additional_navigation_buttons = render_to_string("db/overview_navigation_buttons.html", context={'viewSet': self})
         return render(request, 'db/view.html',
                       {'headers': headers, 'objects': self.format_value_list(objects), 'viewSet': self,
                        'canEdit': request.user.has_perms(self.get_permissions_as_dict()["Edit"]),
                        'back_link': reverse("edit:admin_home"), 'verb': "View/Edit",
-                       'additionalNavigationButtons': render_to_string("db/overview_navigation_buttons.html",
-                                                                       context={'viewSet': self}), 'plural': True})
+                       'additionalNavigationButtons': additional_navigation_buttons})
+
+    @staticmethod
+    def missing_permissions_link():
+        missing_permissions_message = "You don't have sufficient permissions to perform this action"
+        return f"{reverse('edit:admin_home')}?alert={missing_permissions_message}&alertType=error"
 
     def get_view_functions(self):
         """ This function sets up proxy functions
@@ -398,7 +405,7 @@ class EditViewSet:
             if request.user.has_perms(self.get_permissions_as_dict()["View"]):
                 return self.obj_overview_view(request)
             else:
-                return redirect(reverse("edit:admin_home"))
+                return redirect(self.missing_permissions_link())
 
         @require_http_methods(["GET", "POST"])
         @login_required
@@ -406,7 +413,7 @@ class EditViewSet:
             if request.user.has_perms(self.gen_perms(["change", "add"])):
                 return self.obj_edit_or_add_view(request)
             else:
-                return redirect(reverse("edit:admin_home"))
+                return redirect(self.missing_permissions_link())
 
         @require_http_methods(["GET", "POST"])
         @login_required
@@ -414,7 +421,7 @@ class EditViewSet:
             if request.user.has_perms(self.gen_perms(["delete", "edit"])):
                 return self.obj_delete_view(request)
             else:
-                return redirect(reverse("edit:admin_home"))
+                return redirect(self.missing_permissions_link())
 
         return viewset_overview, viewset_edit_or_add, viewset_delete
 
@@ -425,6 +432,6 @@ class EditViewSet:
             if request.user.has_perms(self.gen_perms(["change"])):
                 return self.object_order_view(request)
             else:
-                return redirect(reverse("edit:admin_home"))
+                return redirect(self.missing_permissions_link())
 
         return edit_order_view
