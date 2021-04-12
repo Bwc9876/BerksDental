@@ -9,12 +9,13 @@
     padding: 0 22px 45px 0;
 }
 
-.event-card-grouper {
+.event-card {
     position: relative;
     margin: 0 22px;
+    display: flex;
 }
 
-.event-card {
+.front-event-card {
     position: relative;
     bottom: 0;
     z-index: 3;
@@ -27,12 +28,12 @@
     --hover-height: 3px;
 }
 
-.event-card:hover {
+.front-event-card:hover, .focused-event-card > .front-event-card:hover {
     bottom: var(--hover-height);
     box-shadow: 0 var(--hover-height) 8px 0;
 }
 
-.focused-event-card {
+.focused-event-card > .front-event-card {
     bottom: 8px;
     margin-right: calc(var(--h4) * 13);
     box-shadow: 0 8px 8px 0;
@@ -40,29 +41,28 @@
     --hover-height: 11px;
 }
 
-.event-description {
+.back-event-card {
     position: absolute;
     top: 0;
     left: 0;
     bottom: 0;
     width: calc(var(--h4) * 12);
-    padding-top: 30px;
-    padding-left: 0;
+    padding: 0;
     background-color: #bfbfbf;
     border: var(--clr-header) 3px solid;
-    transition: left 350ms linear, padding-left 350ms linear, box-shadow 350ms linear;
+    transition: left 350ms linear, padding 350ms linear, box-shadow 350ms linear;
 }
 
-.focused-event-card + .event-description {
+.focused-event-card > .back-event-card {
     left: calc(var(--h4) * 12);
-    padding-left: 30px;
+    padding: 30px 0 0 30px;
     box-shadow: -3px 3px 3px 0;
 }
 
-.month {
+.event-month {
     margin-bottom: 0;
 }
 
-.day {
+.event-day {
     margin-top: 10px;
 }
