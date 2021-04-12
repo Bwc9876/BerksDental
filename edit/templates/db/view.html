@@ -22,19 +22,10 @@
             font-size: var(--h6);
         }
 
-        table.modelTable tr {
-            border: var(--clr-header) 1px solid;
-        }
-
         table.modelTable tr td, table.modelTable tr th {
             font-size: var(--h5);
             border: var(--clr-header) 1px solid;
             padding: 1vh 2vw;
-        }
-
-        a.action {
-            color: var(--clr-header);
-            transition: var(--hover-transition);
         }
 
         td.value {
@@ -45,12 +36,24 @@
             color: var(--clr-header);
         }
 
-        a.edit:hover {
-            color: var(--ac-dark);
+        a.action {
+            --size: var(--h1);
+            --hover-color: var(--ac-dark);
+            color: var(--clr-header);
+            transition: var(--hover-transition);
+            font-size: var(--size);
         }
 
-        a.delete:hover {
-            color: var(--red-color);
+        a.action > i.fas {
+            font-size: var(--size);
+        }
+
+        a.action.delete:hover {
+            --hover-color: var(--red-color);
+        }
+
+        a.action:hover {
+            color: var(--hover-color);
         }
 
         i.fa-check-circle {
@@ -91,13 +94,13 @@
                     {% elif forloop.last %}
                         {% if canEdit %}
                             <td><a class="action edit" href="{{ viewSet.edit_link }}?id={{ value }}"><i
-                                    class="fas fa-edit fa-lg"></i></a></td>
+                                    class="fas fa-edit"></i></a></td>
                             {% for action in viewSet.additionalActions %}
                                 <td><a class="action edit" href="{{ action.link }}?id={{ value }}"><i
-                                        class="fas {{ action.icon }} fa-lg"></i></a></td>
+                                        class="fas {{ action.icon }}"></i></a></td>
                             {% endfor %}
                             <td><a class="action delete" href="{{ viewSet.delete_link }}?id={{ value }}"><i
-                                    class="fas fa-trash fa-lg"></i></a></td>
+                                    class="fas fa-trash"></i></a></td>
                         {% endif %}
                     {% else %}
                         <td class="value">{{ value|safe|default:"Not Entered" }}</td>

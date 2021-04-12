@@ -140,11 +140,19 @@ class OfficerViewSet(GalleryPhotoViewSet):
     modelForm = forms.OfficerForm
     photoFolder = "officer-photos"
     ordered = True
-    displayFields = ["first_name", "last_name", 'picture']
+    displayFields = ["first_name", 'picture']
     labels = {
-        "first_name": "First Name",
-        "last_name": "Last Name"
+        "first_name": "Name"
     }
+
+    def format_value_list(self, valueList):
+        new_value_list = super().format_value_list(valueList)
+
+        for officer in new_value_list:
+            first_name_index = self.displayFields.index("first_name")
+            officer[first_name_index] = str(self.model.objects.get(id=officer[-1]))
+
+        return new_value_list
 
 
 REGISTERED_VIEWSETS = [EventViewSet, LinkViewSet, GalleryPhotoViewSet, OfficerViewSet, SocialViewSet]

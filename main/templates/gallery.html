@@ -4,26 +4,28 @@
 
     <style>
 
-        .imgContainer {
+        div.imgContainer {
             display: flex;
-            position: absolute;
-            margin-left: 10px;
+            flex-wrap: wrap;
+            margin: auto;
+            width: calc(100% - 100px);
         }
 
-        .galleryPhoto {
+        div.galleryPhoto {
             position: relative;
             width: 500px;
             height: 500px;
-            margin-left: 10px;
+            margin-right: 10px;
+            margin-bottom: 10px;
         }
 
-        .image {
+        img.image {
             position: absolute;
             margin: 0;
             top: 0;
         }
 
-        .caption {
+        div.caption {
             background-color: black;
             position: relative;
             bottom: 1px;
@@ -32,11 +34,11 @@
             transition: opacity 0.3s 0s linear;
         }
 
-        .image:hover ~ .caption {
+        div.galleryPhoto:hover div.caption {
             opacity: 0.75;
         }
 
-        .captionText {
+        p.captionText {
             color: white;
             margin: 0;
         }

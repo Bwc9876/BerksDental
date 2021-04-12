@@ -8,7 +8,7 @@ class RequiredCharactersValidator:
                  min_special=0,
                  min_lowercase=1,
                  min_uppercase=1,
-                 special_characters="!@#$%^&*",
+                 special_characters="!@#$%^&*?\"\\/-=_+()[]{}.,<>|;:",
                  allow_other_characters=True):
         self.min_numbers = min_numbers
         self.min_special = min_special

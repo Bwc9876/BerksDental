@@ -13,9 +13,9 @@ function requestPage(number) {
      *   hasNext: whether or not there is a next page
      */
 
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
 
-        $.post("/gallery-page/", {'page': number}, (data, status) => {
+        $.post("/gallery-page/", {'page': number}, (data) => {
 
             resolve(data);
 

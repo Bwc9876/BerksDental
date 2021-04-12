@@ -15,7 +15,10 @@ class User(AbstractUser):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
 
     def __str__(self):
-        return f"{self.first_name} {self.last_name}"
+        if self.first_name and self.last_name:
+            return f"{self.first_name} {self.last_name}"
+        else:
+            return self.username
 
 
 class GalleryPhoto(models.Model):
@@ -39,7 +42,9 @@ class GalleryPhoto(models.Model):
     picture = models.ImageField(upload_to="gallery-photos")
     caption = models.CharField(max_length=1000)
     date_posted = models.DateTimeField(auto_now_add=True)
-    featured = models.BooleanField(default=False)
+    featured = models.BooleanField(default=False,
+                                   help_text="This will determine whether or not to show this image on the home page "
+                                             "(Max of 6)")
 
     def get_extension(self):
         """ Used to get the file extension of the uploaded image

@@ -135,3 +135,7 @@ def test_error(request):
         raise Http404()
     except TemplateDoesNotExist:
         raise Http404()
+
+
+def robots(request):
+    return render(request, "robots.txt", content_type="text/plain")

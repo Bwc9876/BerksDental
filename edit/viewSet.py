@@ -429,7 +429,7 @@ class EditViewSet:
         @require_http_methods(["GET", "POST"])
         @login_required
         def viewset_edit_or_add(request):
-            if request.user.has_perms(self.gen_perms(["change", "add"])):
+            if request.user.has_perms(self.get_permissions_as_dict()["Edit"]):
                 return self.obj_edit_or_add_view(request)
             else:
                 return redirect(self.missing_permissions_link())
@@ -437,7 +437,7 @@ class EditViewSet:
         @require_http_methods(["GET", "POST"])
         @login_required
         def viewset_delete(request):
-            if request.user.has_perms(self.gen_perms(["delete", "edit"])):
+            if request.user.has_perms(self.get_permissions_as_dict()["Edit"]):
                 return self.obj_delete_view(request)
             else:
                 return redirect(self.missing_permissions_link())
