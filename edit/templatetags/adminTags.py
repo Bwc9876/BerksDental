@@ -17,7 +17,9 @@ alertIcons = {
 
 @register.simple_tag(name="action")
 def action(name, url, icon, size="fa-lg"):
-    return safe(f'<a class="{name} navigationAction" href="{url}"><i class="fas {name}-icon {icon} {size}"></i></a>')
+    return safe(
+        f'<a class="{name} navigationAction" href="{url}"><i class="fas {name}-icon {icon} {size}">'
+        f'</i></a>')
 
 
 @register.simple_tag(name="getAlertIcon")

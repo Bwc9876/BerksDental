@@ -95,7 +95,7 @@
     {% getAlert request as alert %}
     {% if alert %}
         <script type="text/javascript" defer="defer">
-            history.pushState({'alert':true}, document.title, window.location.pathname);
+            history.pushState({'alert': true}, document.title, window.location.pathname);
         </script>
         <h3 class="alert alert-{% getAlertType request %}">
             <i class="fas alert-icon fa-{% getAlertIcon request %}"></i>

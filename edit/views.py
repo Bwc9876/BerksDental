@@ -12,7 +12,7 @@ from json import dumps, loads
 from django.conf import settings
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import Permission
-from django.shortcuts import render, get_object_or_404, redirect, reverse
+from django.shortcuts import render, get_object_or_404, redirect
 from django.urls import path
 from django.views.decorators.http import require_safe, require_http_methods
 
