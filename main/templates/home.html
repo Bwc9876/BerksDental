@@ -18,36 +18,30 @@
         <h1 class="captioned-header">Upcoming Events</h1>
         <p class="h6 captioned-header-caption">(Click on a card for more information)</p>
         <div class="event-card-container">
-            {#            <div class="event-card-grouper">#}
-            {#                <div class="event-card">#}
-            {#                    <h2>Test Event</h2>#}
-            {#                    <p class="month h3">JUN</p>#}
-            {#                    <p class="day h2">17</p>#}
-            {#                    <p class="h4">7:00 PM - 8:00 PM</p>#}
-            {#                    <p class="h4">1001 Montgomery Ave, Boyertown, PA 19512</p>#}
-            {#                </div>#}
-            {#                <div class="event-description">#}
-            {#                    pqmrifiorenqoifnr#}
-            {#                </div>#}
-            {#            </div>#}
             {% for event in upcomingEvents %}
-                <div class="event-card-grouper">
-                    <div class="event-card">
+                <div class="event-card">
+                    <div class="front-event-card">
                         <h2>{{ event.name }}</h2>
-                        <p class="month h3">{{ event.startDate|date:"b"|upper }}</p>
-                        <p class="day h2">{{ event.startDate|date:"d" }}</p>
+                        <p class="event-month h3">{{ event.startDate|date:"b"|upper }}</p>
+                        <p class="event-day h2">{{ event.startDate|date:"d" }}</p>
                         <p class="h4">{{ event.startTime }} - {{ event.endTime }}</p>
                         <p class="h4">{% if event.virtual %}<a href="{{ event.link }}">{{ event.link }}</a>{% else %}
                             {{ event.location }}{% endif %}</p>
                     </div>
-                    <div class="event-description">
+                    <div class="back-event-card">
                         {{ event.description }}
                     </div>
                 </div>
             {% empty %}
                 <p>No upcoming events, check back soon!</p>
             {% endfor %}
-
+            {% if upcomingEvents|length >= 1 %}
+                <div class="event-card last-event-card">
+                    <div class="front-event-card">
+                        <p class="h1">To view more events, go to the <a class="h1" href="{% url "main:events" %}">events page</a>.</p>
+                    </div>
+                </div>
+            {% endif %}
         </div>
     </section>
 {% endblock %}
