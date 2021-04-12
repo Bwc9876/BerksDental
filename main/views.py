@@ -1,9 +1,11 @@
 from datetime import date
 
-from django.http import Http404
+from django.core.paginator import Paginator
+from django.http import Http404, JsonResponse
 from django.shortcuts import render
 from django.template.exceptions import TemplateDoesNotExist
-from django.views.decorators.http import require_safe
+from django.views.decorators.csrf import csrf_exempt
+from django.views.decorators.http import require_safe, require_http_methods
 
 from edit import models
 
@@ -24,6 +26,24 @@ def home(request):
     return render(request, 'home.html', {'featuredPhotos': featured_photos, 'upcomingEvents': upcoming_events})
 
 
+MAX_IMAGES_PER_PAGE = 20
+
+
+@csrf_exempt
+@require_http_methods(["POST"])
+def get_gallery_page(request):
+    target_page_number = request.POST.get("page", 1)
+    photo_objects = models.GalleryPhoto.objects.all()
+    photo_paginator = Paginator(photo_objects, MAX_IMAGES_PER_PAGE, allow_empty_first_page=True)
+    target_page = photo_paginator.get_page(target_page_number)
+    start = target_page.start_index() - 1
+    if start < 0:
+        start = 0
+    target_list = list(photo_objects[start:target_page.end_index()])
+    photos = [{'link': photo.photo_link(), 'alt': photo.caption} for photo in target_list]
+    return JsonResponse({'photos': photos, 'hasNext': target_page.has_next()})
+
+
 @require_safe
 def gallery(request):
     """ This view function gets gallery photo objects from the database and uses them to render gallery.html
@@ -36,7 +56,9 @@ def gallery(request):
     """
 
     photo_objects = models.GalleryPhoto.objects.all()
-    return render(request, "gallery.html", {"photos": photo_objects})
+    photo_paginator = Paginator(photo_objects, MAX_IMAGES_PER_PAGE, allow_empty_first_page=True)
+    first_list = models.GalleryPhoto.objects.all()[0:photo_paginator.get_page(1).end_index()]
+    return render(request, "gallery.html", {"photos": first_list})
 
 
 @require_safe

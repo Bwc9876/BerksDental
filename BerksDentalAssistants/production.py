@@ -63,6 +63,7 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'BerksDentalAssistants.wsgi.application'
 
+DEFAULT_AUTO_FIELD = 'django.db.models.AutoField'
 # Will be changed to MySQL for PythonAnywhere
 DATABASES = {
     'default': {
