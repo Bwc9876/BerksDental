@@ -38,7 +38,7 @@
 
         a.action {
             --size: var(--h1);
-            --hover-color: var(--ac-dark);
+            --hover-color: var(--ac);
             color: var(--clr-header);
             transition: var(--hover-transition);
             font-size: var(--size);
@@ -74,6 +74,8 @@
 
 {% block adminContent %}
 
+    {% load adminTags %}
+
     <table class="modelTable">
         <tr>
             {% if objects|length > 0 %}
@@ -93,13 +95,16 @@
                         <td class="value"><b>{{ value|safe|default:"Not Entered" }}</b></td>
                     {% elif forloop.last %}
                         {% if canEdit %}
-                            <td><a class="action edit" href="{{ viewSet.edit_link }}?id={{ value }}"><i
+                            <td><a aria-label="Edit {% getPrimaryValue object %}" class="action edit"
+                                   href="{{ viewSet.edit_link }}?id={{ value }}"><i
                                     class="fas fa-edit"></i></a></td>
                             {% for action in viewSet.additionalActions %}
-                                <td><a class="action edit" href="{{ action.link }}?id={{ value }}"><i
+                                <td><a aria-label="{{ action.name }} {% getPrimaryValue object %}" class="action edit"
+                                       href="{{ action.link }}?id={{ value }}"><i
                                         class="fas {{ action.icon }}"></i></a></td>
                             {% endfor %}
-                            <td><a class="action delete" href="{{ viewSet.delete_link }}?id={{ value }}"><i
+                            <td><a aria-label="Delete {% getPrimaryValue object %}" class="action delete"
+                                   href="{{ viewSet.delete_link }}?id={{ value }}"><i
                                     class="fas fa-trash"></i></a></td>
                         {% endif %}
                     {% else %}

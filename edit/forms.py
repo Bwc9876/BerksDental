@@ -98,7 +98,7 @@ class PhotoForm(ModelForm):
         }
 
     def clean(self):
-        """ This function is run to make sure that all fields are valid outside of formatting
+        """ This function is run to make sure that all fields are valid outside formatting
         It ensures that there are only six featured photos at a time, in order to feature another photo,
         The user will need to un-set the featured attribute of another photo
 
@@ -129,7 +129,7 @@ class EventForm(ModelForm):
     """ This is a django Form object, which is used to edit the Event object in the database
     It displays all properties except id, as id isn't meant to be edited manually
 
-    It sets the widget to be used for the start and end time fields to :class:`TimeSelector`
+    It sets the widget to be used for the start and end time fields to :class:`TimeSelector`,
     and the widget to be used for the dateOf field to be :class:`DateSelector`
     """
 
@@ -148,7 +148,7 @@ class EventForm(ModelForm):
 
     def __init__(self, *args, **kargs):
         """ This function is run when the class is instantiated
-        It changes some of the labels for the field to more suitable names
+        It changes some labels for the field to more suitable names
         """
 
         super().__init__(*args, **kargs)

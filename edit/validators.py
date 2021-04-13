@@ -42,26 +42,22 @@ class RequiredCharactersValidator:
 
         errors = []
 
-        if self.min_numbers != 0 and number_of_characters[
-            'numbers'] < self.min_numbers:
+        if self.min_numbers != 0 and number_of_characters['numbers'] < self.min_numbers:
             errors += [
                 f"{self.min_numbers} numbe{self.determine_plural(self.min_numbers)}"
             ]
 
-        if self.min_special != 0 and number_of_characters[
-            'special'] < self.min_special:
+        if self.min_special != 0 and number_of_characters['special'] < self.min_special:
             errors += [
                 f"{self.min_special} special characte{self.determine_plural(self.min_special)}"
             ]
 
-        if self.min_uppercase != 0 and number_of_characters[
-            'upper'] < self.min_uppercase:
+        if self.min_uppercase != 0 and number_of_characters['upper'] < self.min_uppercase:
             errors += [
                 f"{self.min_uppercase} uppercase lette{self.determine_plural(self.min_uppercase)}"
             ]
 
-        if self.min_lowercase != 0 and number_of_characters[
-            'lower'] < self.min_lowercase:
+        if self.min_lowercase != 0 and number_of_characters['lower'] < self.min_lowercase:
             errors += [
                 f"{self.min_lowercase} lowercase lette{self.determine_plural(self.min_lowercase)}"
             ]

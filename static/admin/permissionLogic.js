@@ -24,7 +24,7 @@ $(document).ready(() => {
 
     const perms_input = $("#id_permissions");
     load_from_json(perms_input.val());
-    $(".form").submit(function (e) {
+    $(".form").submit(function () {
         let permissions = {};
         $(".permDropdown").each((index, dropdown) => {
             const viewset_name = dropdown.id.split("-")[0];

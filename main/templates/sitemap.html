@@ -23,7 +23,7 @@
         <li><a href="{% url "main:about" %}">About</a></li>
     </ul>
     {% if user.is_authenticated %}
-        <h4>Administrative Pages</h4>
+        <h2>Administrative Pages</h2>
         <ul>
             <li><a href="{% url "edit:admin_home" %}">Admin Home</a></li>
             <li><a href="{% url "edit:photo_view" %}">Gallery Photos</a></li>

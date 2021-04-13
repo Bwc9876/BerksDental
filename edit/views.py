@@ -1,6 +1,6 @@
 """
     This is a collection of functions or "views" that will inevitably return :class:`django.http.HttpResponse` objects
-    We use the "render" shortcut to render an html file using template tags and return it as an HttpResponse object
+    We use the "render" shortcut to render an HTML file using template tags and return it as an HttpResponse object
     Sometimes, we raise Http404 to display a page not found screen (ex: if an id is incorrect)
     We register what url patterns go to what views in urls.py
     The templates (html files) we render should be contained in the templates/ folder
@@ -39,8 +39,8 @@ class EventViewSet(EditViewSet):
     labels = {'location': "Location/Link", 'startDate': "Start Date", 'endDate': "End Date", 'startTime': "Start Time",
               'endTime': "End Time"}
 
-    def format_value_list(self, valueList):
-        new_value_list = super().format_value_list(valueList)
+    def format_value_list(self, value_list):
+        new_value_list = super().format_value_list(value_list)
 
         for event in new_value_list:
             virtual_location = self.displayFields.index("virtual")
@@ -60,17 +60,17 @@ class SocialViewSet(EditViewSet):
     ordered = True
     displayFields = ['service', 'link']
 
-    def format_value_list(self, valueList):
+    def format_value_list(self, value_list):
         """ This function overrides the format_value_list function the EditViewSet class
         it does this in order to provide additional formatting
         The formatting we provide is making sure the label for the social media we chose is shown and not the code
-        ("YT" -> "Youtube", "IG" -> "Instagram")
+        ("YT" -> "YouTube", "IG" -> "Instagram")
 
-        :param valueList:
+        :param value_list:
         :return:
         """
 
-        new_value_list = super().format_value_list(valueList)
+        new_value_list = super().format_value_list(value_list)
 
         if "service" in self.displayFields:
             service_location = self.displayFields.index("service")
@@ -99,38 +99,38 @@ class GalleryPhotoViewSet(EditViewSet):
     photoFolder = "gallery-photos"
     displayFields = ["picture", "caption", "featured"]
 
-    def rename_photo_file(self, photoObject):
+    def rename_photo_file(self, photo_object):
         """ This function is used to rename the picture uploaded by the user to the photo's id
         This is to prevent naming conflicts
 
-        :param photoObject: The GalleryPhoto object that we want to rename the file of
+        :param photo_object: The GalleryPhoto object that we want to rename the file of
         """
 
-        initial_path = photoObject.picture.path
-        photoObject.picture.name = f"{self.photoFolder}/{photoObject.id}.{photoObject.get_extension()}"
-        new_path = settings.MEDIA_ROOT + photoObject.picture.name
+        initial_path = photo_object.picture.path
+        photo_object.picture.name = f"{self.photoFolder}/{photo_object.id}.{photo_object.get_extension()}"
+        new_path = settings.MEDIA_ROOT + photo_object.picture.name
         if os.path.exists(new_path):
             os.remove(new_path)
         os.rename(initial_path, new_path)
-        photoObject.save()
+        photo_object.save()
 
-    def post_save(self, newObj, formData, new):
+    def post_save(self, new_obj, form_data, new):
         """ This function is run after a GalleryPhoto object is added/edited
         It renames the pictures file to prevent naming conflicts
 
         """
 
-        if new or str(newObj.id) not in newObj.picture.name:
-            self.rename_photo_file(newObj)
+        if new or str(new_obj.id) not in new_obj.picture.name:
+            self.rename_photo_file(new_obj)
 
-    def pre_del(self, objToDelete):
+    def pre_del(self, obj_to_delete):
         """ This code is run before the GalleryPhoto object is deleted from the database
         It deletes the picture if it still exists
 
         """
 
-        if os.path.exists(objToDelete.picture.path):
-            os.remove(objToDelete.picture.path)
+        if os.path.exists(obj_to_delete.picture.path):
+            os.remove(obj_to_delete.picture.path)
 
 
 class OfficerViewSet(GalleryPhotoViewSet):
@@ -145,8 +145,8 @@ class OfficerViewSet(GalleryPhotoViewSet):
         "first_name": "Name"
     }
 
-    def format_value_list(self, valueList):
-        new_value_list = super().format_value_list(valueList)
+    def format_value_list(self, value_list):
+        new_value_list = super().format_value_list(value_list)
 
         for officer in new_value_list:
             first_name_index = self.displayFields.index("first_name")
@@ -187,7 +187,7 @@ def view_set_to_permission_pair(user, viewset):
 class UserViewSet(EditViewSet):
     displayName = "User"
     pictureClass = "fa-users-cog"
-    additionalActions = [Action("Change Password", "fa-key", "/admin/password/user/")]
+    additionalActions = [Action("Change Password For", "fa-key", "/admin/password/user/")]
     model = models.User
     modelForm = forms.UserEditForm
     displayFields = ["username", "email", "is_staff", "first_name", "last_name"]
@@ -218,8 +218,8 @@ class UserViewSet(EditViewSet):
         else:
             return {"permissions": self.gen_json_from_viewsets(obj, REGISTERED_VIEWSETS)}
 
-    def post_save(self, user, formData, new):
-        raw_dict = loads(formData.get("permissions", "{}"))
+    def post_save(self, user, form_data, new):
+        raw_dict = loads(form_data.get("permissions", "{}"))
         target_perms = []
         for vs_name in raw_dict.keys():
             vs = get_viewset_by_safename(vs_name)
@@ -230,13 +230,13 @@ class UserViewSet(EditViewSet):
         user.user_permissions.set(target_perms)
         user.save()
 
-    def get_form_object(self, dataSources, instance=None):
+    def get_form_object(self, data_sources, instance=None):
         if instance is None:
-            user_form = forms.UserCreateForm(*dataSources, initial=self.additional_form_data(instance))
+            user_form = forms.UserCreateForm(*data_sources, initial=self.additional_form_data(instance))
             user_form.fields["permissions"].set_viewsets(REGISTERED_VIEWSETS)
             return user_form
         else:
-            user_form = super().get_form_object(dataSources, instance=instance)
+            user_form = super().get_form_object(data_sources, instance=instance)
             user_form.fields["permissions"].set_viewsets(REGISTERED_VIEWSETS)
             return user_form
 
@@ -274,16 +274,16 @@ class UserViewSet(EditViewSet):
         return change_password
 
 
-def generate_paths_from_view_set(viewSet):
+def generate_paths_from_view_set(view_set):
     """ This function will add give the url patterns for a given :class:`EditViewSet` class
 
-    :param viewSet: The :class:`EditViewSet` class to generate the url patterns for
+    :param view_set: The :class:`EditViewSet` class to generate the url patterns for
     :returns: A list of paths with the :class:`EditViewSet`'s url patterns
     :rtype: list(:class:`django.urls.path`)
     """
 
-    view_set_instance = viewSet()
-    if issubclass(viewSet, EditViewSet):
+    view_set_instance = view_set()
+    if issubclass(view_set, EditViewSet):
         url_name = view_set_instance.get_safe_name()
 
         overview, add_or_edit, delete = view_set_instance.get_view_functions()
@@ -300,7 +300,7 @@ def generate_paths_from_view_set(viewSet):
 
         return patterns_to_return
     else:
-        raise ValueError(f"{viewSet.__name__} Won't Work! Please pass a class that *inherits* EditViewSet!")
+        raise ValueError(f"{view_set.__name__} Won't Work! Please pass a class that *inherits* EditViewSet!")
 
 
 def setup_viewsets():

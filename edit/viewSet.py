@@ -13,6 +13,18 @@ from django.template.loader import render_to_string
 from django.urls import reverse
 from django.views.decorators.http import require_safe, require_http_methods
 
+formatters = {
+    model_fields.URLField: lambda input_val: f'<a target="_blank" href="{escape(str(input_val))}">'
+                                             f'{escape(str(input_val))}</a>',
+    model_fields.ImageField: lambda input_val: f'<a target="_blank" href="{settings.MEDIA_URL}{escape(input_val)}"'
+                                               f'>Click To View Image</a> ',
+    model_fields.BooleanField: lambda input_val: f'<i class="fas '
+                                                 f'{"fa-check-circle" if input_val is True else "fa-times-circle"}'
+                                                 f' fa-lg"></i>',
+    model_fields.TimeField: lambda input_val: input_val.strftime("%I:%M %p"),
+    model_fields.DateTimeField: lambda input_val: input_val.strftime("%d-%m-%y at %I:%M %p")
+}
+
 
 class EditViewSet:
     """ A class used to manage and render models easily, this class is meant to be inherited
@@ -23,12 +35,12 @@ class EditViewSet:
     :type model: class:`django.db.models.Model`
     :attr modelForm: The form to render in the view functions
     :type modelForm: class:`django.forms.ModelForm`
-    :attr ordered: A boolean, telling us if the order these objects appear in is editable
+    :attr ordered: A boolean, tells us if we can edit the order in which these objects appear
     :type ordered: bool
     :attr displayFields: A list of fields we want to be shown in the overview view
     :type displayFields: list(str)
-    :attr labels: If theres any fields we want to be displayed differently,
-    we put the field name as the key and the desired label as the value
+    :attr labels: If there're any fields we want to be displayed differently,
+    we put the field name as the key, and the desired label as the value
     """
 
     displayName: str = "base"
@@ -41,18 +53,6 @@ class EditViewSet:
     displayFields = []
     labels = {}
 
-    formatters = {
-        model_fields.URLField: lambda
-            inputVal: f'<a target="_blank" href="{escape(str(inputVal))}">{escape(str(inputVal))}</a>',
-        model_fields.ImageField: lambda
-            inputVal: f'<a target="_blank" href="{settings.MEDIA_URL}{escape(inputVal)}">Click To '
-                      f'View Image</a> ',
-        model_fields.BooleanField: lambda
-            inputVal: f'<i class="fas {"fa-check-circle" if inputVal is True else "fa-times-circle"} fa-lg"></i>',
-        model_fields.TimeField: lambda inputVal: inputVal.strftime("%I:%M %p"),
-        model_fields.DateTimeField: lambda inputVal: inputVal.strftime("%d-%m-%y at %I:%M %p")
-    }
-
     def __init__(self):
         """ This function is run when the ViewSet is instantiated
         It sets up a format list, which essentially tells us how each field of the object should be formatted
@@ -61,19 +61,19 @@ class EditViewSet:
         self.format_list = []
         for field in self.displayFields:
             field_object = self.model._meta.get_field(field)
-            self.format_list.append(self.formatters.get(type(field_object), lambda inputVal: str(inputVal)))
+            self.format_list.append(formatters.get(type(field_object), lambda input_val: str(input_val)))
 
-    def format_value_list(self, valueList):
+    def format_value_list(self, value_list):
         """ This function is used as a way to format any values we read from the database, like dates and links
         It reads from the format_list and if the field name matches it, it'll fun teh lambda function specified
 
-        :param valueList: A list of lists, each nested list containing the values for objects
-        :type valueList: list(list(*))
+        :param value_list: A list of lists, each nested list containing the values for objects
+        :type value_list: list(list(*))
         :returns: A new, formatted valueList
         :rtype: list(list(*))
         """
 
-        new_value_list = [list(obj) for obj in valueList]
+        new_value_list = [list(obj) for obj in value_list]
 
         for obj_counter in range(0, len(new_value_list)):
             for value_counter in range(0, len(new_value_list[obj_counter]) - 1):
@@ -82,12 +82,12 @@ class EditViewSet:
 
         return new_value_list
 
-    def pre_save(self, newObj, form_data, new):
+    def pre_save(self, new_obj, form_data, new):
         """ The function to be run before an object is saved to the database
         For now, it just passes, but classes that inherit this can override this function
 
-        :param newObj: The newObj that is about to be saved (if the item is being added, it will be :type:None)
-        :type newObj: class:`django.db.models.Model`
+        :param new_obj: The newObj that is about to be saved (if the item is being added, it will be :type:None)
+        :type new_obj: class:`django.db.models.Model`
         :param form_data: Additional data from the form that the viewSet may need
         :type form_data: dict
         :param new: True if the object is just being added to the db, false if its being edited
@@ -96,12 +96,12 @@ class EditViewSet:
 
         pass
 
-    def post_save(self, newObj, form_data, new):
+    def post_save(self, new_obj, form_data, new):
         """ The function to be run after an object is saved to the database
         For now, it just passes, but classes that inherit this can override this function
 
-        :param newObj: The newObj that has been saved
-        :type newObj: class:`django.db.models.Model`
+        :param new_obj: The newObj that has been saved
+        :type new_obj: class:`django.db.models.Model`
         :param form_data: Additional data from the form that the viewSet may need
         :type form_data: dict
         :param new: True if the object is just being added to the db, false if its being edited
@@ -110,35 +110,35 @@ class EditViewSet:
 
         pass
 
-    def pre_del(self, objToDelete):
+    def pre_del(self, obj_to_delete):
         """ The function to be run before an object is deleted from the database
         For now, it just passes, but classes that inherit this can override this function
 
-        :param objToDelete: The object that is about to be deleted
-        :type objToDelete: class:`django.db.models.Model`
+        :param obj_to_delete: The object that is about to be deleted
+        :type obj_to_delete: class:`django.db.models.Model`
         """
 
         pass
 
-    def get_form_object(self, dataSources, instance=None):
+    def get_form_object(self, data_sources, instance=None):
         # dataSources.append(self.additional_form_data(instance))
-        return self.modelForm(*dataSources, initial=self.additional_form_data(instance), instance=instance)
+        return self.modelForm(*data_sources, initial=self.additional_form_data(instance), instance=instance)
 
     def additional_form_data(self, obj):
         return {}
 
-    def post_del(self, objDeleted):
+    def post_del(self, obj_deleted):
         """ The function to be run after an object is deleted from the database
         For now, it just passes, but classes that inherit this can override this function
 
-        :param objDeleted: The object that has been deleted (the data will still be passed, but the db row is deleted)
-        :type objDeleted: class:`django.db.models.Model`
+        :param obj_deleted: The object that has been deleted (the data will still be passed, but the db row is deleted)
+        :type obj_deleted: class:`django.db.models.Model`
         """
 
         pass
 
     def get_safe_name(self):
-        """ This function is run to get the name of this view set as a url/template syntax safe string
+        """ This function is run to get the name of this view set as a template syntax safe string
         it gets rid of spaces in favor of underscores, and makes the name lowercase
 
         :returns: A safe name to be used in template syntax and url patterns
@@ -149,17 +149,17 @@ class EditViewSet:
         current_name = slugify(current_name.replace(" ", "_"))
         return current_name
 
-    def get_link(self, linkType):
-        """ This function is used to get and reverse a url name with a given type.
+    def get_link(self, link_type):
+        """ This function is used to get and reverse a name with a given type.
          So passing "add" when the model is "ExternalLink" will resolve to the url "/admin/edit/link/"
 
-        :param linkType: The type of url we want to reverse
-        :type linkType: str
+        :param link_type: The type of url we want to reverse
+        :type link_type: str
         :returns: The link to hte requested url
         :rtype: str
         """
 
-        return reverse(f"edit:{self.get_safe_name()}_{linkType}")
+        return reverse(f"edit:{self.get_safe_name()}_{link_type}")
 
     def gen_perms(self, actions, include_app_name=True):
         perms = []
@@ -365,7 +365,7 @@ class EditViewSet:
 
     def obj_overview_view(self, request):
         """ A django view function, this will add the model to the database given form data
-        It displays all the objects based off this model in the database as an html file
+        It displays all the objects based off this model in the database as an HTML file
 
         :param request: A request object sent by django
         :type request: class:`django.http.HttpRequest`
@@ -391,13 +391,13 @@ class EditViewSet:
         for target in self.labels.keys():
             if target in headers:
                 headers[headers.index(target)] = self.labels[target]
-        additional_navigation_buttons = ""
-        if request.user.has_perms(self.get_permissions_as_dict()["Edit"]):
-            additional_navigation_buttons = render_to_string("db/overview_navigation_buttons.html",
-                                                             context={'viewSet': self, 'page': page,
-                                                                      'max_pages': model_paginator.num_pages,
-                                                                      "next_link": next_link,
-                                                                      "previous_link": previous_link})
+        additional_navigation_buttons = render_to_string("db/overview_navigation_buttons.html",
+                                                         context={'viewSet': self, 'page': page,
+                                                                  'max_pages': model_paginator.num_pages,
+                                                                  "next_link": next_link,
+                                                                  "previous_link": previous_link,
+                                                                  "can_edit": request.user.has_perms(
+                                                                      self.get_permissions_as_dict()["Edit"])})
         return render(request, 'db/view.html',
                       {'headers': headers, 'objects': self.format_value_list(objects), 'viewSet': self,
                        'canEdit': request.user.has_perms(self.get_permissions_as_dict()["Edit"]),
@@ -411,7 +411,7 @@ class EditViewSet:
 
     def get_view_functions(self):
         """ This function sets up proxy functions
-        We need to use the @login_required and other decorators, yet we can't use this within classes
+        We need to use the @login_required and other decorators, but we can't use this within a class,
         So we create functions that have the decorator that use the class
 
         :returns: Three view functions (overview, edit/add, delete)

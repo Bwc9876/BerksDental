@@ -33,7 +33,7 @@ class GalleryPhoto(models.Model):
     :type caption: class:`django.db.models.CharField`
     :attr date_posted: The date the picture was posted, photos will be sorted using this
     :type date_posted: class:`django.db.models.DateField`
-    :attr featured: Whether or not to display the picture on the carousel on the home page
+    :attr featured: Whether to display the picture on the carousel on the home page
     :type featured: class:`django.db.models.BooleanField`
 
     """
@@ -43,7 +43,7 @@ class GalleryPhoto(models.Model):
     caption = models.CharField(max_length=1000)
     date_posted = models.DateTimeField(auto_now_add=True)
     featured = models.BooleanField(default=False,
-                                   help_text="This will determine whether or not to show this image on the home page "
+                                   help_text="This will determine whether to show this image on the home page "
                                              "(Max of 6)")
 
     def get_extension(self):
@@ -65,7 +65,7 @@ class GalleryPhoto(models.Model):
         return f"{settings.MEDIA_URL}{self.picture.name}"
 
     def __str__(self):
-        """ Defines how this object will be casted to a string
+        """ Defines how this object will be cast to a string
 
         :returns: The caption of the image
         :rtype: str
@@ -98,7 +98,7 @@ class ExternalLink(models.Model):
     sort_order = models.PositiveSmallIntegerField(default=0)
 
     def __str__(self):
-        """ Define how this object will be casted to a string
+        """ Define how this object will be cast to a string
 
         :returns: The link's display name
         :rtype: str
@@ -120,8 +120,10 @@ class Event(models.Model):
     :type name: class:`django.db.models.CharField`
     :attr location: Where the event will take place
     :type location: class:`django.db.models.CharField`
-    :attr dateOf: On what day the event occurs
-    :type dateOf: class:`django.db.models.DateField`
+    :attr startDate: On what day the event starts
+    :type startDate: class:`django.db.models.DateField`
+    :attr endDate: On what day the event ends
+    :type endDate: class:`django.db.models.DateField`
     :attr startTime: The time the event starts
     :type startTime: class:`django.db.models.TimeField`
     :attr endTime: The time the event stops
@@ -158,7 +160,7 @@ class Event(models.Model):
                 self.link = None
 
     def __str__(self):
-        """ Defines how this object will be casted to a string
+        """ Defines how this object will be cast to a string
 
         :returns: The name of the event
         :rtype: str
@@ -176,8 +178,10 @@ class Officer(models.Model):
 
     :attr id: A UUID To identify a specific picture
     :type id: class:`django.db.models.UUIDField`
-    :attr name: The name of the Officer
-    :type name: class:`django.db.models.CharField`
+    :attr first_name: The first name of the Officer
+    :type first_name: class:`django.db.models.CharField`
+    :attr last_name: The first name of the Officer
+    :type last_name: class:`django.db.models.CharField`
     :attr picture: The photo to uploaded and displayed
     :type picture: class:`django.db.models.ImageField`
     :attr biography: A short summary about the officer
@@ -243,7 +247,7 @@ class Officer(models.Model):
             return "#"
 
     def __str__(self):
-        """ Defines how this object will be casted to a string
+        """ Defines how this object will be cast to a string
 
         :returns: The name of the officer
         :rtype: str
@@ -301,7 +305,7 @@ class Social(models.Model):
 
         :param service: The code for a service (FB, IG, YT, etc.)
         :type service: str
-        :returns: The Service's label (FaceBook, Instagram, Youtube, etc.)
+        :returns: The Service's label (FaceBook, Instagram, YouTube, etc.)
         :rtype: str
         """
 
@@ -320,7 +324,7 @@ class Social(models.Model):
             return f"fa-{self.service_label().lower()}-square"
 
     def __str__(self):
-        """ Defines how this object will be casted to a string
+        """ Defines how this object will be cast to a string
 
         :returns: The name of the social media service
         :rtype: str

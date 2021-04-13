@@ -102,16 +102,16 @@ def events(request):
         raise Http404("Invalid view type")
 
 
-def safe_render(templateName):
+def safe_render(template_name):
     """ This function is used as a shortcut to render the given html file and require that the request type is GET
 
-    :returns: A view function that can be used in a path object to render an html file
+    :returns: A view function that can be used in a path object to render an HTML file
     :rtype: function(request) -> HttpResponse
     """
 
     @require_safe
     def render_view(request):
-        return render(request, templateName)
+        return render(request, template_name)
 
     return render_view
 
@@ -120,7 +120,7 @@ def safe_render(templateName):
 def test_error(request):
     """ This function is used as a way to test how error pages will look in production
     While debugging, whenever there's an error, django will always show a stacktrace
-    So, we setup this url while debugging that allows us to see how error pages will look
+    So, we set up this url while debugging that allows us to see how error pages will look
 
     :param request: A request object sent by django
     :type request: class:`django.http.HttpRequest`

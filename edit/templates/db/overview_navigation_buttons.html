@@ -9,9 +9,11 @@
             {% action "next" next_link "fa-arrow-alt-circle-right" "h2" %}
         {% endif %}
     {% endif %}
-    {% if viewSet.ordered %}
-        {% action "add" viewSet.edit_link "fa-plus" "h2" %}  {% action "order" viewSet.order_link "fa-sort" "h2" %}
-    {% else %}
-        {% action "add" viewSet.edit_link "fa-plus" "h2" %}
+    {% if can_edit %}
+        {% if viewSet.ordered %}
+            {% action "add" viewSet.edit_link "fa-plus" "h2" %}  {% action "order" viewSet.order_link "fa-sort" "h2" %}
+        {% else %}
+            {% action "add" viewSet.edit_link "fa-plus" "h2" %}
+        {% endif %}
     {% endif %}
 {% endautoescape %}

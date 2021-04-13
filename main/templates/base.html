@@ -46,7 +46,8 @@
 {% endif %}
 <header>
     <div class="nav-bar">
-        <a href="{% url "main:home" %}"><img alt="Berks Dental Assistants Logo" class="nav-img"
+        <a href="{% url "main:home" %}"><img width="210px" height="50px" alt="Berks Dental Assistants Logo"
+                                             class="nav-img"
                                              src="{% static "/base/logo.png" %}"/></a>
         <nav class="nav-link-container">
             <a href="{% url "main:home" %}" class="nav-link">Home</a>
@@ -71,7 +72,8 @@
     {% load socialTags %}
     {% getSocials as socials %}
     {% for social in socials %}
-        <a target="_blank" rel="nofollow" class="footer-link social-link" href="{{ social.link }}"><i
+        <a aria-label="Link To {{ social }}" target="_blank" rel="noopener" class="footer-link social-link"
+           href="{{ social.link }}"><i
                 class="fab {{ social.fa_icon_class }} fa-lg"></i></a>
     {% endfor %}
 </footer>

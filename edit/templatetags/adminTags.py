@@ -3,7 +3,7 @@
 """
 
 from django import template
-from django.template.defaultfilters import safe
+from django.template.defaultfilters import safe, title
 
 register = template.Library()
 
@@ -18,7 +18,7 @@ alertIcons = {
 @register.simple_tag(name="action")
 def action(name, url, icon, size="fa-lg"):
     return safe(
-        f'<a class="{name} navigationAction" href="{url}"><i class="fas {name}-icon {icon} {size}">'
+        f'<a aria-label="{title(name)}" class="{name} navigationAction" href="{url}"><i class="fas {name}-icon {icon} {size}">'
         f'</i></a>')
 
 
@@ -36,3 +36,8 @@ def get_alert(request):
 @register.simple_tag(name="getAlertType")
 def get_alert_type(request):
     return request.GET.get("alertType", "error")
+
+
+@register.simple_tag(name="getPrimaryValue")
+def get_primary_value(target_object):
+    return target_object[0]

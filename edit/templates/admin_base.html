@@ -35,7 +35,7 @@
         }
 
         a.navigationAction:hover {
-            color: var(--ac-dark);
+            color: var(--ac);
         }
 
         h3.alert {
@@ -104,16 +104,16 @@
     {% endif %}
 
 
-    {% block adminHeader %}
-        <h1 class="adminHeader">{% action "back" back_link "fa-arrow-left" "h2" %}
-            {{ verb }} {{ viewSet.displayName|title }}{% if plural %}s{% endif %}
-            <div class="additionalNavigation">{{ additionalNavigationButtons }}</div>
-        </h1>
-    {% endblock %}
+
+    <h1 class="adminHeader">{% block adminHeader %}{% action "back" back_link "fa-arrow-left" "h2" %}
+        {{ verb }} {{ viewSet.displayName|title }}{% if plural %}s{% endif %}
+        <div class="additionalNavigation">{{ additionalNavigationButtons }}</div>{% endblock %}
+    </h1>
+
 
     <div class="adminContent">
         {% block adminContent %}
-            <h1>This html file is meant to be inherited, please dont render the base version!</h1>
+            <h1>This html file is meant to be inherited, please don't render the base version!</h1>
         {% endblock %}
     </div>
 

@@ -9,11 +9,6 @@
         {#--all-margin: 10vw;#}
         }
 
-        h1.welcomeText {
-            margin: 1vh var(--all-margin) 0;
-            user-select: none;
-        }
-
         div.adminContent {
             margin: 0;
         }
@@ -86,7 +81,7 @@
 
 {% endblock %}
 
-{% block adminHeader %}<h1 class="welcomeText adminHeader">Welcome, {{ user|title }}</h1>{% endblock %}
+{% block adminHeader %}Welcome, {{ user|title }}{% endblock %}
 
 {% block adminContent %}
 
