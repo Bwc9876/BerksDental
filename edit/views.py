@@ -190,11 +190,10 @@ class UserViewSet(EditViewSet):
     additionalActions = [Action("Change Password For", "fa-key", "/admin/password/user/")]
     model = models.User
     modelForm = forms.UserEditForm
-    displayFields = ["username", "email", "is_staff", "first_name", "last_name"]
+    displayFields = ["username", "first_name", "email", "is_staff"]
     labels = {
         "is_staff": "Manager",
-        "first_name": "First Name",
-        "last_name": "Last Name",
+        "first_name": "Name",
         "last_login": "Last Login"
     }
 
@@ -203,6 +202,15 @@ class UserViewSet(EditViewSet):
         "view": "View",
         "none": "None"
     }
+
+    def format_value_list(self, value_list):
+        new_value_list = super().format_value_list(value_list)
+
+        for user in new_value_list:
+            first_name_index = self.displayFields.index("first_name")
+            user[first_name_index] = str(self.model.objects.get(id=user[-1]))
+
+        return new_value_list
 
     @staticmethod
     def gen_json_from_viewsets(user, viewsets):

@@ -24,6 +24,7 @@
                         <h2>{{ event.name }}</h2>
                         <p class="event-month h3">{{ event.startDate|date:"b"|upper }}</p>
                         <p class="event-day h2">{{ event.startDate|date:"d" }}</p>
+                        <p class="event-name">{{ event.name }}</p>
                         <p class="h4">{{ event.startTime }} - {{ event.endTime }}</p>
                         <p class="h4">{% if event.virtual %}<a href="{{ event.link }}">{{ event.link }}</a>{% else %}
                             {{ event.location }}{% endif %}</p>

@@ -12,28 +12,46 @@
 
     <style>
 
-        table {
+        div.tableContainer {
+            width: 100%;
+            overflow-x: auto;
+        }
+
+        table.modelTable {
+            --normal-color: white;
+            --shaded-color: var(--ac-light-grey);
+            --row-border-color: grey;
+            --text-color: var(--clr-header);
             border-collapse: collapse;
             text-align: center;
             width: 100%;
         }
 
-        a.action {
-            font-size: var(--h6);
+        table.modelTable > thead {
+            background-color: var(--shaded-color);
         }
 
-        table.modelTable tr td, table.modelTable tr th {
+        table.modelTable > tbody tr.shaded {
+            background-color: var(--shaded-color);
+        }
+
+        table.modelTable > tbody tr.normal {
+            background-color: var(--normal-color);
+        }
+
+        table.modelTable td, table.modelTable th {
             font-size: var(--h5);
-            border: var(--clr-header) 1px solid;
+            color: var(--text-color);
             padding: 1vh 2vw;
         }
 
-        td.value {
-            color: var(--clr-header);
+        table.modelTable > thead > tr {
+            border-bottom: solid 2px var(--row-border-color);
+            border-top: solid 2px var(--row-border-color);
         }
 
-        th.header {
-            color: var(--clr-header);
+        table.modelTable > tbody > tr {
+            border-bottom: solid 1px var(--row-border-color);
         }
 
         a.action {
@@ -52,8 +70,17 @@
             --hover-color: var(--red-color);
         }
 
+        a.action-fa-key {
+            --hover-color: #c6c620;
+        }
+
         a.action:hover {
             color: var(--hover-color);
+            filter: none;
+        }
+
+        a.add:hover {
+            color: var(--green-color);
         }
 
         i.fa-check-circle {
@@ -64,10 +91,6 @@
             color: var(--red-color);
         }
 
-        a.add:hover {
-            color: var(--green-color);
-        }
-
     </style>
 
 {% endblock %}
@@ -76,47 +99,53 @@
 
     {% load adminTags %}
 
-    <table class="modelTable">
-        <tr>
-            {% if objects|length > 0 %}
-                {% for header in headers %}
-                    <th class="header">{{ header|title }}</th>
-                {% endfor %}
-                {% if canEdit %}
-                    <th class="header" colspan="{{ viewSet.additionalActions|length|add:2 }}">Actions</th>
-                {% endif %}
-            {% endif %}
-        </tr>
-
-        {% for object in objects %}
-            <tr>
-                {% for value in object %}
-                    {% if forloop.first %}
-                        <td class="value"><b>{{ value|safe|default:"Not Entered" }}</b></td>
-                    {% elif forloop.last %}
+    <div class="tableContainer">
+        <table class="modelTable">
+            <thead>
+                <tr class="shaded">
+                    {% if objects|length > 0 %}
+                        {% for header in headers %}
+                            <th>{{ header|title }}</th>
+                        {% endfor %}
                         {% if canEdit %}
-                            <td><a aria-label="Edit {% getPrimaryValue object %}" class="action edit"
-                                   href="{{ viewSet.edit_link }}?id={{ value }}"><i
-                                    class="fas fa-edit"></i></a></td>
-                            {% for action in viewSet.additionalActions %}
-                                <td><a aria-label="{{ action.name }} {% getPrimaryValue object %}" class="action edit"
-                                       href="{{ action.link }}?id={{ value }}"><i
-                                        class="fas {{ action.icon }}"></i></a></td>
-                            {% endfor %}
-                            <td><a aria-label="Delete {% getPrimaryValue object %}" class="action delete"
-                                   href="{{ viewSet.delete_link }}?id={{ value }}"><i
-                                    class="fas fa-trash"></i></a></td>
+                            <th colspan="{{ viewSet.additionalActions|length|add:2 }}">Actions</th>
                         {% endif %}
-                    {% else %}
-                        <td class="value">{{ value|safe|default:"Not Entered" }}</td>
                     {% endif %}
+                </tr>
+            </thead>
+            <tbody>
+                {% for object in objects %}
+                    <tr class="{% cycle "normal" "shaded" %}">
+                        {% for value in object %}
+                            {% if forloop.first %}
+                                <td><b>{{ value|safe|default:"Not Entered" }}</b></td>
+                            {% elif forloop.last %}
+                                {% if canEdit %}
+                                    <td><a aria-label="Edit {% getPrimaryValue object %}" class="action edit"
+                                           href="{{ viewSet.edit_link }}?id={{ value }}"><i
+                                            class="fas fa-edit"></i></a></td>
+                                    {% for action in viewSet.additionalActions %}
+                                        <td><a aria-label="{{ action.name }} {% getPrimaryValue object %}"
+                                               class="action action-{{ action.icon }}"
+                                               href="{{ action.link }}?id={{ value }}"><i
+                                                class="fas {{ action.icon }}"></i></a></td>
+                                    {% endfor %}
+                                    <td><a aria-label="Delete {% getPrimaryValue object %}" class="action delete"
+                                           href="{{ viewSet.delete_link }}?id={{ value }}"><i
+                                            class="fas fa-trash"></i></a></td>
+                                {% endif %}
+                            {% else %}
+                                <td>{{ value|safe|default:"Not Entered" }}</td>
+                            {% endif %}
+                        {% endfor %}
+                    </tr>
+                {% empty %}
+                    <tr>
+                        <td>No {{ viewSet.displayName|title }}s In The Database</td>
+                    </tr>
                 {% endfor %}
-            </tr>
-        {% empty %}
-            <tr>
-                <td>No {{ viewSet.displayName|title }}s In The Database</td>
-            </tr>
-        {% endfor %}
-    </table>
+            </tbody>
+        </table>
+    </div>
 
 {% endblock %}
