@@ -2,7 +2,7 @@
 User-agent: *
 Disallow: /admin/
 Disallow: /debug_admin/
-Disallow: /media/
-{% load seo_tags %}
-# Sitemaps
-{% sitemaps %}
+
+#Sitemaps
+Sitemap: https://{{ request.get_host }}/sitemap.xml
+Sitemap: http://{{ request.get_host }}/sitemap.xml
