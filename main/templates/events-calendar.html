@@ -8,26 +8,30 @@
 {% endblock %}
 {% block content %}
 
-    <h1> Calendar View </h1>
+    <h1> Calendar View For {{ month_name }} {{ year }} </h1>
 
-    <a href="{% url "main:events" %}?view=list">View As List</a>
+    <a href="{% url "main:events" %}"> Jump To Today </a> <br />
+    <a href="{{ previous_link }}">Previous</a> <br />
+    <a href="{{ next_link }}">Next</a> <br />
+
+    <a href="{% url "main:events" %}?view=list">View As List</a> <br/>
 
     {% for week in weeks %}
 
         {% for day in week %}
 
-            <div class="{% if day == 0 %}end-day{% endif %} calendar-tile {% if day == today %}today{% endif %}">
+            <div class="calendar-tile {% if day == today.day %}today{% endif %} {% if day == 0 %}end-day{% endif %}">
 
                 {% if day != 0 %}
                     <p class="day-number">{{ day }}</p>
                 {% endif %}
 
                 {% for event in events %}
-                    {% if event.startDate.day == day and event.startDate == event.endDate %}
+                    {% if event.startDate.day == day and event.startDate.month == month and event.startDate == event.endDate %}
                         {{ event.name }} <br />
-                    {% elif event.startDate.day == day %}
+                    {% elif event.startDate.day == day and event.startDate.month == month %}
                         {{ event.name }} Starts <br />
-                    {% elif event.endDate.day == day %}
+                    {% elif event.endDate.day == day and event.endDate.month == month %}
                         {{ event.name }} Ends <br />
                     {% endif %}
                 {% endfor %}

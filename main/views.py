@@ -2,9 +2,11 @@ import calendar
 from datetime import date
 
 from django.core.paginator import Paginator
+from django.db.models import Q
 from django.http import Http404, JsonResponse
 from django.shortcuts import render
 from django.template.exceptions import TemplateDoesNotExist
+from django.urls import reverse
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_safe, require_http_methods
 
@@ -77,6 +79,28 @@ def officers(request):
     return render(request, "officers.html", {"officers": officer_objects})
 
 
+def get_last_month_and_year(month, year):
+    if month == 1:
+        return 12, year - 1
+    else:
+        return month - 1, year
+
+
+def get_next_month_and_year(month, year):
+    if month == 12:
+        return 1, year + 1
+    else:
+        return month + 1, year
+
+
+def get_next_and_previous_links(month, year):
+    next_month, next_year = get_next_month_and_year(month, year)
+    next_link = f"{reverse('main:events')}?month={next_month}&year={next_year}"
+    last_month, last_year = get_last_month_and_year(month, year)
+    previous_link = f"{reverse('main:events')}?month={last_month}&year={last_year}"
+    return next_link, previous_link
+
+
 @require_safe
 def events(request):
     """ This view function gets events from the database and uses them to render events-list.html
@@ -90,14 +114,25 @@ def events(request):
     view_type = request.GET.get("view", "calendar")
 
     if view_type == "calendar":
-        calendar.setfirstweekday(calendar.SUNDAY)
-        today = date.today()
-        month = request.GET.get("month", today.month)
-        year = request.GET.get("year", today.year)
-        month_calendar = calendar.monthcalendar(year, month)
-        matching_events = models.Event.objects.filter(startDate__month=month, startDate__year=year)
-        return render(request, "events-calendar.html",
-                      {"events": matching_events, "weeks": month_calendar, 'today': today.day})
+        try:
+            calendar.setfirstweekday(calendar.SUNDAY)
+            today = date.today()
+            month = int(request.GET.get("month", today.month))
+            year = int(request.GET.get("year", today.year))
+            month_calendar = calendar.monthcalendar(year, month)
+            month_name = calendar.month_name[month]
+            matching_events = models.Event.objects.filter(
+                (Q(startDate__month=month) & Q(startDate__year=year)) | (
+                        Q(endDate__month=month) & Q(endDate__year=year)))
+            next_link, previous_link = get_next_and_previous_links(month, year)
+            return render(request, "events-calendar.html",
+                          {"events": matching_events, "weeks": month_calendar, 'today': today, "month": month,
+                           "month_name": month_name, "year": year,
+                           "next_link": next_link, "previous_link": previous_link})
+        except calendar.IllegalMonthError:
+            raise Http404("Invalid Month")
+        except ValueError:
+            raise Http404("Invalid Month/Year")
     elif view_type == "list":
         upcoming_events = models.Event.objects.filter(startDate__gte=date.today()).order_by("startDate")
         past_events = models.Event.objects.filter(startDate__lt=date.today()).order_by("-startDate")
