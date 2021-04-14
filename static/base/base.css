@@ -5,7 +5,7 @@
 
     --ac-light: #C4E5F2;
     --ac: #23B7D9;
-    --ac-light-grey: #d8e2e6;
+    --ac-light-grey: #bcd8dc;
     --ac-grey: #9ba7ac;
     --ac-dark: #0d7385;
 
@@ -24,6 +24,25 @@ body {
 
 body.menu-shown {
     overflow-y: hidden;
+}
+
+* {
+    scrollbar-width: thin;
+    scrollbar-color: rgba(155, 155, 155, 0.5) transparent;
+}
+
+*::-webkit-scrollbar {
+    width: 9px;
+    height: 9px;
+}
+
+*::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+*::-webkit-scrollbar-thumb {
+    background-color: rgba(155, 155, 155, 0.5);
+    border: transparent;
 }
 
 h1, h2, h3, h4, h5, h6 {
@@ -63,6 +82,10 @@ header {
     height: var(--nav-height);
 }
 
+.nav-img-anchor:hover {
+    filter: none;
+}
+
 .nav-img {
     max-height: calc(var(--nav-height) - 30px);
 }
@@ -88,7 +111,7 @@ header {
     left: 150vw;
     width: 100%;
     padding: 7.5vh 0;
-    color: var(--clr);
+    color: var(--ac-dark);
     background-color: var(--ac-light);
     border-bottom: #9fbbc5 2px solid;
     text-align: center;
@@ -118,7 +141,7 @@ header {
     justify-content: space-evenly;
     align-items: center;
     flex-wrap: wrap;
-    background-color: var(--ac-grey);
+    background-color: var(--ac-light-grey);
 }
 
 .footer-link {
