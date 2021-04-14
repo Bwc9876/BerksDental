@@ -4,42 +4,41 @@
     <meta name="description" content="Berks Dental Assistants' Events Page.">
 {% endblock %}
 {% block links %}
-    pass
+    {% load static %}
+    <link href="{% static "/events/events.css" %}" type="text/css" rel="stylesheet">
+    <script src="{% static "/events/events.js" %}" type="text/javascript"></script>
+{% endblock %}
+{% block header %}
+    <a href="{{ previous_link }}"><i class="h3 fas fa-arrow-alt-circle-left"></i></a>
+    <div>
+        <h1>{{ month_name }}</h1>
+        <h2>{{ year }}</h2>
+        <a href="{% url "main:events" %}">Today</a>
+    </div>
+    <a href="{{ next_link }}"><i class="h3 fas fa-arrow-alt-circle-right"></i></a>
 {% endblock %}
 {% block content %}
-
-    <h1> Calendar View For {{ month_name }} {{ year }} </h1>
-
-    <a href="{% url "main:events" %}"> Jump To Today </a> <br />
-    <a href="{{ previous_link }}">Previous</a> <br />
-    <a href="{{ next_link }}">Next</a> <br />
-
-    <a href="{% url "main:events" %}?view=list">View As List</a> <br/>
-
+    <div class="calendar">
+    {% for day in weekdays %}
+        <div class="calendar-tile calendar-weekday"><p class="tile-content">{{ day }}</p></div>
+    {% endfor %}
     {% for week in weeks %}
-
         {% for day in week %}
-
-            <div class="calendar-tile {% if day == today.day %}today{% endif %} {% if day == 0 %}end-day{% endif %}">
-
+            <div class="calendar-tile {% if day == today.day and month == today.month and year == today.year %}calendar-today focused-tile{% endif %} {% if day == 0 %} out-of-month{% endif %}">
                 {% if day != 0 %}
-                    <p class="day-number">{{ day }}</p>
+                    <p class="tile-content">{{ day }}</p>
                 {% endif %}
-
                 {% for event in events %}
                     {% if event.startDate.day == day and event.startDate.month == month and event.startDate == event.endDate %}
-                        {{ event.name }} <br />
+                        {{ event.name }}
                     {% elif event.startDate.day == day and event.startDate.month == month %}
-                        {{ event.name }} Starts <br />
+                        {{ event.name }} Starts
                     {% elif event.endDate.day == day and event.endDate.month == month %}
-                        {{ event.name }} Ends <br />
+                        {{ event.name }} Ends
                     {% endif %}
                 {% endfor %}
-
             </div>
-
         {% endfor %}
-
     {% endfor %}
-
+    </div>
 {% endblock %}

@@ -20,6 +20,7 @@ body {
     display: flex;
     flex-direction: column;
     overflow-x: hidden;
+    background-color: #9fbbc5;
 }
 
 body.menu-shown {

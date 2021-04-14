@@ -128,7 +128,8 @@ def events(request):
             return render(request, "events-calendar.html",
                           {"events": matching_events, "weeks": month_calendar, 'today': today, "month": month,
                            "month_name": month_name, "year": year,
-                           "next_link": next_link, "previous_link": previous_link})
+                           "next_link": next_link, "previous_link": previous_link,
+                           "weekdays": ["SUN", "MON", "TUE", "WED", "THU", "FRI", "SAT"]})
         except calendar.IllegalMonthError:
             raise Http404("Invalid Month")
         except ValueError:
