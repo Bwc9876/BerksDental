@@ -6,4 +6,30 @@
 
     <a href="{% url "main:events" %}?view=list">View As List</a>
 
+    {% for week in weeks %}
+
+        {% for day in week %}
+
+            <div class="{% if day == 0 %}end-day{% endif %} calendar-tile {% if day == today %}today{% endif %}">
+
+                {% if day != 0 %}
+                    <p class="day-number">{{ day }}</p>
+                {% endif %}
+
+                {% for event in events %}
+                    {% if event.startDate.day == day and event.startDate == event.endDate %}
+                        {{ event.name }} <br />
+                    {% elif event.startDate.day == day %}
+                        {{ event.name }} Starts <br />
+                    {% elif event.endDate.day == day %}
+                        {{ event.name }} Ends <br />
+                    {% endif %}
+                {% endfor %}
+
+            </div>
+
+        {% endfor %}
+
+    {% endfor %}
+
 {% endblock %}

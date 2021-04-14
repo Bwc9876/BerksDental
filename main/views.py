@@ -1,3 +1,4 @@
+import calendar
 from datetime import date
 
 from django.core.paginator import Paginator
@@ -89,11 +90,14 @@ def events(request):
     view_type = request.GET.get("view", "calendar")
 
     if view_type == "calendar":
-        month = request.GET.get("month", date.today().month)
-        year = request.GET.get("year", date.today().year)
-        matching_events = models.Event.objects.filter(startDate__month=month, startDate__year=year).order_by(
-            "startDate")
-        return render(request, "events-calendar.html", {"events": matching_events})
+        calendar.setfirstweekday(calendar.SUNDAY)
+        today = date.today()
+        month = request.GET.get("month", today.month)
+        year = request.GET.get("year", today.year)
+        month_calendar = calendar.monthcalendar(year, month)
+        matching_events = models.Event.objects.filter(startDate__month=month, startDate__year=year)
+        return render(request, "events-calendar.html",
+                      {"events": matching_events, "weeks": month_calendar, 'today': today.day})
     elif view_type == "list":
         upcoming_events = models.Event.objects.filter(startDate__gte=date.today()).order_by("startDate")
         past_events = models.Event.objects.filter(startDate__lt=date.today()).order_by("-startDate")
