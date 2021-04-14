@@ -14,9 +14,9 @@ from django.urls import reverse
 from django.views.decorators.http import require_safe, require_http_methods
 
 formatters = {
-    model_fields.URLField: lambda input_val: f'<a target="_blank" href="{escape(str(input_val))}">'
+    model_fields.URLField: lambda input_val: f'<a class="link-value" rel="noopener" target="_blank" href="{escape(str(input_val))}">'
                                              f'{escape(str(input_val))}</a>',
-    model_fields.ImageField: lambda input_val: f'<a target="_blank" href="{settings.MEDIA_URL}{escape(input_val)}"'
+    model_fields.ImageField: lambda input_val: f'<a class="link-value" target="_blank" href="{settings.MEDIA_URL}{escape(input_val)}"'
                                                f'>Click To View Image</a> ',
     model_fields.BooleanField: lambda input_val: f'<i class="fas '
                                                  f'{"fa-check-circle" if input_val is True else "fa-times-circle"}'

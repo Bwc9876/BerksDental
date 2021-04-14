@@ -227,6 +227,9 @@ class UserViewSet(EditViewSet):
             return {"permissions": self.gen_json_from_viewsets(obj, REGISTERED_VIEWSETS)}
 
     def post_save(self, user, form_data, new):
+        if new:
+            new_password = form_data.get("new_password", "")
+            user.set_password(new_password)
         raw_dict = loads(form_data.get("permissions", "{}"))
         target_perms = []
         for vs_name in raw_dict.keys():

@@ -29,6 +29,7 @@
 
         table.modelTable > thead {
             background-color: var(--shaded-color);
+            user-select: none;
         }
 
         table.modelTable > tbody tr.shaded {
@@ -54,9 +55,14 @@
             border-bottom: solid 1px var(--row-border-color);
         }
 
+        a.link-value {
+            text-decoration: underline;
+            color: var(--text-color);
+        }
+
         a.action {
             --size: var(--h1);
-            --hover-color: var(--ac);
+            --hover-color: var(--defualt-hover-color);
             color: var(--clr-header);
             transition: var(--hover-transition);
             font-size: var(--size);
@@ -68,10 +74,6 @@
 
         a.action.delete:hover {
             --hover-color: var(--red-color);
-        }
-
-        a.action-fa-key {
-            --hover-color: #c6c620;
         }
 
         a.action:hover {

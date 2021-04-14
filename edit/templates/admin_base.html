@@ -1,5 +1,10 @@
 {% extends 'base.html' %}
 
+{% block meta %}
+    <title>Berks Dental Assistants: Admin</title>
+    <meta name="description" content="Berks Dental Assistants' Admin Section.">
+{% endblock %}
+
 {% load adminTags %}
 
 {% block links %}
@@ -10,6 +15,7 @@
             --all-margin: 2vw;
             --red-color: #e33434;
             --green-color: #2eb72e;
+            --defualt-hover-color: var(--ac);
             --color-transition-time: 100ms;
             --hover-transition: color var(--color-transition-time) linear;
             --hover-bg-transition: background-color var(--color-transition-time) linear;
@@ -35,7 +41,7 @@
         }
 
         a.navigationAction:hover {
-            color: var(--ac);
+            color: var(--defualt-hover-color);
             filter: none;
         }
 
@@ -73,6 +79,11 @@
             padding: 1vh 2vw 1vh 1vw;
             display: flex;
             align-items: center;
+        }
+
+        .navigationAction.labeled {
+            padding: 0 2vw;
+            border-radius: 15px;
         }
 
         h3.alert i.alert-icon {

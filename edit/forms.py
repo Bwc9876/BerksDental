@@ -2,9 +2,9 @@
     This file contains forms, which perform validation and render to html automatically
     We can also call .save() on an instance of this class to save it to the database
 """
-from django.contrib.auth.forms import UserCreationForm
-from django.contrib.auth.password_validation import validate_password, ValidationError
-from django.forms import Form, ModelForm, fields
+from django.contrib.auth.password_validation import validate_password, ValidationError, \
+    password_validators_help_text_html
+from django.forms import Form, ModelForm, fields, PasswordInput
 from django.forms.widgets import DateInput, TimeInput, ClearableFileInput, TextInput
 
 from edit import models
@@ -45,14 +45,6 @@ class PermField(fields.CharField):
         self.widget.viewsets = viewsets
 
 
-class PasswordInput(TextInput):
-    input_type = "password"
-
-
-class PasswordField(fields.CharField):
-    widget = PasswordInput
-
-
 class PhotoField(ClearableFileInput):
     template_name = "custom_widgets/PhotoInput.html"
 
@@ -88,7 +80,8 @@ class PhotoForm(ModelForm):
     def __init__(self, *args, **kargs):
 
         super().__init__(*args, **kargs)
-        self.fields['picture'].widget.attrs.update(target="_blank", rel="nofollow")
+        self.fields['caption'].help_text = "This is required for accessibility," \
+                                           " please provide a description of the picture"
 
     class Meta:
         model = models.GalleryPhoto
@@ -124,6 +117,10 @@ class OfficerForm(ModelForm):
         model = models.Officer
         exclude = ['id', 'sort_order']
 
+    def __init__(self, *args, **kargs):
+        super().__init__(*args, **kargs)
+        self.fields["biography"].widget.attrs.update(rows="4", cols="25")
+
 
 class EventForm(ModelForm):
     """ This is a django Form object, which is used to edit the Event object in the database
@@ -152,29 +149,46 @@ class EventForm(ModelForm):
         """
 
         super().__init__(*args, **kargs)
+        self.fields["virtual"].help_text = "Determines Whether We Should Display A Link Or A Location"
+        self.fields["description"].widget.attrs.update(rows="4", cols="25")
         self.fields['startDate'].label = "Start Date"
         self.fields['endDate'].label = "End Date"
         self.fields['startTime'].label = "Start Time"
         self.fields['endTime'].label = "End Time"
 
 
-class UserCreateForm(UserCreationForm):
+class UserCreateForm(ModelForm):
+    new_password = fields.CharField(widget=PasswordInput)
+    confirm_new_password = fields.CharField(widget=PasswordInput)
     permissions = PermField()
 
     class Meta:
         model = models.User
-        fields = ["username", "email", "password1", "password2", "first_name", "last_name"]
+        fields = ["username", "first_name", "last_name", "email"]
 
     class Media:
         js = ("admin/permissionLogic.js",)
 
     def __init__(self, *args, **kargs):
         super().__init__(*args, **kargs)
+        self.fields['username'].help_text = None
         self.fields['first_name'].widget.attrs.update(required=True)
         self.fields['last_name'].widget.attrs.update(required=True)
         self.fields['email'].widget.attrs.update(required=True)
-        self.fields["password1"].widget.attrs.update(autocomplete="new-password")
-        self.fields["password2"].widget.attrs.update(autocomplete="new-password")
+        self.fields["new_password"].widget.attrs.update(autocomplete="new-password")
+        self.fields["new_password"].help_text = password_validators_help_text_html
+        self.fields["confirm_new_password"].widget.attrs.update(autocomplete="new-password")
+
+    def clean(self):
+        cleaned_data = super().clean()
+        new_password = cleaned_data.get("new_password", "")
+        confirm_password = cleaned_data.get("confirm_new_password", "")
+        if new_password != confirm_password:
+            self.add_error("confirm_new_password", "Passwords don't match")
+        try:
+            validate_password(new_password, user=None)
+        except ValidationError as ve:
+            [self.add_error("new_password", error) for error in list(ve)]
 
 
 class UserEditForm(ModelForm):
@@ -189,19 +203,21 @@ class UserEditForm(ModelForm):
 
     def __init__(self, *args, **kargs):
         super().__init__(*args, **kargs)
+        self.fields['username'].help_text = None
         self.fields['first_name'].widget.attrs.update(required=True)
         self.fields['last_name'].widget.attrs.update(required=True)
         self.fields['email'].widget.attrs.update(required=True)
 
 
 class SetUserPasswordForm(Form):
-    new_password = PasswordField()
-    confirm_new_password = PasswordField()
+    new_password = fields.CharField(widget=PasswordInput)
+    confirm_new_password = fields.CharField(widget=PasswordInput)
     user = None
 
     def __init__(self, *args, **kargs):
         super().__init__(*args, **kargs)
         self.fields["new_password"].label = "New Password"
+        self.fields["new_password"].help_text = password_validators_help_text_html
         self.fields["confirm_new_password"].label = "Confirm New Password"
         self.fields["new_password"].widget.attrs.update(autocomplete="new-password")
         self.fields["confirm_new_password"].widget.attrs.update(autocomplete="new-password")

@@ -11,9 +11,9 @@
     {% endif %}
     {% if can_edit %}
         {% if viewSet.ordered %}
-            {% action "add" viewSet.edit_link "fa-plus" "h2" %}  {% action "order" viewSet.order_link "fa-sort" "h2" %}
+            {% action "add" viewSet.edit_link "fa-plus" "h2" show_name=True %}  {% action "order" viewSet.order_link "fa-sort" "h2" show_name=True %}
         {% else %}
-            {% action "add" viewSet.edit_link "fa-plus" "h2" %}
+            {% action "add" viewSet.edit_link "fa-plus" "h2" show_name=True %}
         {% endif %}
     {% endif %}
 {% endautoescape %}

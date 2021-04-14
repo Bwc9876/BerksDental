@@ -11,9 +11,16 @@
 
     <style>
 
+
+        .form {
+            --text-size: 20px;
+            --help-error-text-size: calc(var(--text-size) - 5px);
+        }
+
         ul.errorList {
             list-style: none;
             padding-left: 0;
+            font-size: var(--help-error-text-size);
         }
 
         li.error {
@@ -28,33 +35,57 @@
             margin-bottom: 20px;
             margin-right: 20px;
             user-select: none;
+            font-weight: bold;
+            vertical-align: top;
         }
 
-        .changeText {
-            font-size: var(--h4);
+        textarea {
+            resize: none;
         }
 
         fieldset {
             border: none;
+            border-top: solid 1px var(--ac-grey);
         }
 
-        input {
-            font-size: var(--h4);
+        fieldset:last-of-type {
+            margin-bottom: 20px;
+            border-bottom: solid 1px var(--ac-grey);
+        }
+
+        input, textarea, a.currentPhotoLink, label.fieldLabel {
+            font-size: var(--text-size);
+        }
+
+        input[type="checkbox"] {
+            width: calc(var(--text-size) - 2px);
+            height: calc(var(--text-size) - 2px);
+            vertical-align: center;
         }
 
         button.submitButton {
             width: 100%;
         }
 
+        .help-text {
+            font-size: var(--help-error-text-size);
+        }
+
+        .permLabel {
+            font-size: calc(var(--text-size) - 2px);
+        }
+
     </style>
+
+    {{ form.media }}
 
 {% endblock %}
 
 {% block adminContent %}
 
-    {% if form %}
+    {% load adminTags %}
 
-        {{ form.media }}
+    {% if form %}
 
         {% if form.non_field_errors %}
 
@@ -78,8 +109,16 @@
                             {% endfor %}
                         </ul>
                     {% endif %}
-                    <label for="{{ field.id_for_label }}" class="fieldLabel h4">{{ field.label|title }}</label>
-                    {{ field }}
+                    {% if field|is_checkbox %}
+                        {{ field }}
+                        <label for="{{ field.id_for_label }}" class="fieldLabel h4">{{ field.label|title }}</label>
+                    {% else %}
+                        <label for="{{ field.id_for_label }}" class="fieldLabel h4">{{ field.label|title }}:</label>
+                        {{ field }}
+                    {% endif %}
+                    {% if field.help_text %}
+                        <p id="{{ field.label }}_help-text" class="help-text">{{ field.help_text }}</p>
+                    {% endif %}
                 </fieldset>
             {% endfor %}
 
