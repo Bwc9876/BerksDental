@@ -1,18 +1,40 @@
 .upcoming-events {
-    padding: 0 22px;
-    background-color: var(--clr-light);
     overflow: auto;
+    background-color: var(--clr-light);
+}
+
+@media only screen and (max-width: 750px) {
+    .upcoming-events .captioned-header {
+        margin-bottom: var(--h4);
+    }
+
+    .upcoming-events .captioned-header-caption {
+        display: none;
+    }
+}
+
+.upcoming-events .captioned-header, .upcoming-events .captioned-header-caption {
+    margin-left: 22px;
 }
 
 .event-card-container {
     display: flex;
-    padding: 0 22px 45px 0;
+    padding: 15px 0 45px 0;
+    overflow-x: auto;
 }
 
 .event-card {
     position: relative;
     margin: 0 22px;
     display: flex;
+    transition: margin 350ms linear;
+}
+
+.last-event-card::after {
+    content: '';
+    display: block;
+    width: 44px;
+    height: 1px;
 }
 
 .front-event-card {
@@ -24,21 +46,8 @@
     border: var(--clr-header) 3px solid;
     background-color: var(--clr-light);
     text-align: center;
-    transition: box-shadow 150ms linear, bottom 150ms linear, background-color 150ms linear, margin-right 350ms linear;
+    transition: box-shadow 150ms linear, bottom 150ms linear, background-color 150ms linear;
     --hover-height: 3px;
-}
-
-.front-event-card:hover, .focused-event-card > .front-event-card:hover {
-    bottom: var(--hover-height);
-    box-shadow: 0 var(--hover-height) 8px 0;
-}
-
-.focused-event-card > .front-event-card {
-    bottom: 8px;
-    margin-right: calc(var(--h4) * 13);
-    box-shadow: 0 8px 8px 0;
-    background-color: var(--clr);
-    --hover-height: 11px;
 }
 
 .back-event-card {
@@ -50,13 +59,7 @@
     padding: 0;
     background-color: #bfbfbf;
     border: var(--clr-header) 3px solid;
-    transition: left 350ms linear, padding 350ms linear, box-shadow 350ms linear;
-}
-
-.focused-event-card > .back-event-card {
-    left: calc(var(--h4) * 12);
-    padding: 30px 0 0 30px;
-    box-shadow: -3px 3px 3px 0;
+    transition: bottom 350ms linear,left 350ms linear, padding 350ms linear, box-shadow 350ms linear;
 }
 
 .event-month {
@@ -65,4 +68,32 @@
 
 .event-day {
     margin-top: 10px;
+}
+
+@media only screen and (min-width: 750px) {
+    .event-front-description {
+        display: none;
+    }
+
+    .front-event-card:hover, .focused-event-card > .front-event-card:hover {
+        bottom: var(--hover-height);
+        box-shadow: 0 var(--hover-height) 8px 0;
+    }
+
+    .focused-event-card > .front-event-card {
+        bottom: 8px;
+        box-shadow: 0 8px 8px 0;
+        background-color: var(--clr);
+        --hover-height: 11px;
+    }
+
+    .focused-event-card {
+        margin-right: calc(var(--h4) * 13);
+    }
+
+    .focused-event-card > .back-event-card {
+        left: calc(var(--h4) * 12);
+        padding: 30px 0 0 30px;
+        box-shadow: -3px 3px 3px 0;
+    }
 }

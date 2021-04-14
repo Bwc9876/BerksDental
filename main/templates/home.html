@@ -23,16 +23,19 @@
                     <div class="front-event-card">
                         <h2>{{ event.name }}</h2>
                         {% if event.startDate != event.endDate %}
-                        <p class="h3">{{ event.startDate|date:"b"|upper }}&nbsp;{{ event.startDate|date:"d" }}
-                            at {{ event.startTime }}<br /> to <br />{{ event.endDate|date:"b"|upper }}&nbsp;{{ event.endDate|date:"d" }}
+                        <p class="event-month h4">{{ event.startDate|date:"F" }}&nbsp;{{ event.startDate|date:"dS" }}
+                            at {{ event.startTime }}</p>
+                        <p class="event-month event-day h4">to</p>
+                        <p class="event-day h4">{{ event.endDate|date:"F" }}&nbsp;{{ event.endDate|date:"dS" }}
                             at {{ event.endTime }}</p>
                         {% else %}
                         <p class="event-month h3">{{ event.startDate|date:"b"|upper }}</p>
                         <p class="event-day h2">{{ event.startDate|date:"d" }}</p>
                         <p class="h4">{{ event.startTime }} - {{ event.endTime }}</p>
                         {% endif %}
-                        <p class="h4">{% if event.virtual %}<a href="{{ event.link }}">{{ event.link }}</a>{% else %}
+                        <p class="h{% if event.startDate != event.endDate %}5{% else %}4{% endif %}">{% if event.virtual %}<a href="{{ event.link }}">{{ event.link }}</a>{% else %}
                             {{ event.location }}{% endif %}</p>
+                        <p class="event-front-description h5">{{ event.description }}</p>
                     </div>
                     <div class="back-event-card">
                         {{ event.description }}
