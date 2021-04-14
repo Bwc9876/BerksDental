@@ -14,10 +14,11 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import Permission
 from django.shortcuts import render, get_object_or_404, redirect
 from django.urls import path
+from django.db import models as source_fields
 from django.views.decorators.http import require_safe, require_http_methods
 
 from edit import forms, models
-from edit.viewSet import EditViewSet
+from edit.viewSet import EditViewSet, formatters
 
 
 class Action:
@@ -35,7 +36,7 @@ class EventViewSet(EditViewSet):
     pictureClass = "fa-calendar-alt"
     model = models.Event
     modelForm = forms.EventForm
-    displayFields = ['name', 'virtual', 'location', 'startDate', 'endDate', 'startTime', "endTime"]
+    displayFields = ['name', 'virtual', 'location', 'startDate', 'endDate']
     labels = {'location': "Location/Link", 'startDate': "Start Date", 'endDate': "End Date", 'startTime': "Start Time",
               'endTime': "End Time"}
 
@@ -47,7 +48,7 @@ class EventViewSet(EditViewSet):
             location_index = self.displayFields.index("location")
             if "check" in event[virtual_location]:
                 new_value = self.model.objects.get(id=event[-1]).link
-                event[location_index] = f'<a href="{new_value}">{new_value}</a>'
+                event[location_index] = formatters[source_fields.URLField](new_value)
 
         return new_value_list
 

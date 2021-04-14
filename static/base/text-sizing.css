@@ -7,6 +7,14 @@
     --h6: calc(0.5rem + 1vw);
 }
 
+p, a, label, input, button, textarea, td{
+  font-family: 'Roboto', sans-serif;
+}
+
+h1, h2, h3, h4, h5, h6, th, b{
+  font-family: 'Noto Sans JP', sans-serif;
+}
+
 h1, .h1 {
     font-size: var(--h1);
 }
