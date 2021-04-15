@@ -1,0 +1,85 @@
+.tableContainer {
+    width: 100%;
+    overflow-x: auto;
+}
+
+.modelTable {
+    --normal-color: white;
+    --shaded-color: var(--ac-light-grey);
+    --row-border-color: grey;
+    --text-color: var(--clr-header);
+    border-collapse: collapse;
+    text-align: center;
+    width: 100%;
+}
+
+.modelTable > thead {
+    background-color: var(--shaded-color);
+    user-select: none;
+}
+
+.modelTable > tbody .shaded {
+    background-color: var(--shaded-color);
+}
+
+.modelTable > tbody .normal {
+    background-color: var(--normal-color);
+}
+
+.modelTable td, .modelTable th {
+    font-size: var(--h5);
+    color: var(--text-color);
+    padding: 1vh 2vw;
+}
+
+.modelTable > thead > tr {
+    border-bottom: solid 2px var(--row-border-color);
+    border-top: solid 2px var(--row-border-color);
+}
+
+.modelTable > tbody > tr {
+    border-bottom: solid 1px var(--row-border-color);
+}
+
+.link-value {
+    text-decoration: underline;
+    color: var(--text-color);
+}
+
+.action {
+    --size: var(--h1);
+    --hover-color: var(--defualt-hover-color);
+    color: var(--clr-header);
+    transition: var(--hover-transition);
+    font-size: var(--size);
+}
+
+.action > .fas {
+    font-size: var(--size);
+}
+
+.action.delete:hover {
+    --hover-color: var(--red-color);
+}
+
+.action:hover {
+    color: var(--hover-color);
+    filter: none;
+}
+
+.add:hover {
+    color: var(--green-color);
+}
+
+.fa-check-circle {
+    color: var(--green-color);
+}
+
+.fa-times-circle {
+    color: var(--red-color);
+}
+
+.boolIcon {
+    background-color: white;
+    border-radius: 100%;
+}

@@ -12,9 +12,9 @@ from json import dumps, loads
 from django.conf import settings
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import Permission
+from django.db import models as source_fields
 from django.shortcuts import render, get_object_or_404, redirect
 from django.urls import path, reverse
-from django.db import models as source_fields
 from django.views.decorators.http import require_safe, require_http_methods
 
 from edit import forms, models
@@ -356,7 +356,8 @@ def admin_home(request):
     return render(request, 'admin_home.html', {"viewsets": accessible_viewsets})
 
 
-@require_safe
-@login_required
-def help_home(request):
-    return render(request, "help/admin_help_home.html", {"back_link": reverse("edit:admin_home")})
+def help_page(name, display_name):
+    def render_function(request):
+        return render(request, f"help/{name}.html", {"article_name": display_name, "back_link": reverse("edit:help")})
+
+    return path(f"help/{name}", render_function, name=f"help_{name}")

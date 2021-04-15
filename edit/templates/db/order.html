@@ -1,90 +1,16 @@
 {% extends 'admin_base.html' %}
 
 {% block adminLinks %}
+    {% load static %}
     <script crossorigin="anonymous" src="https://cdn.jsdelivr.net/npm/sortablejs@latest/Sortable.min.js"></script>
     <script crossorigin="anonymous"
             src="https://cdn.jsdelivr.net/npm/jquery-sortablejs@latest/jquery-sortable.js"></script>
-    <script defer type="text/javascript">
-
-        $(document).ready(() => {
-            /**
-             * This event handles three things
-             * 1. Setup the sortable (drag & drop) on the sort_list element
-             * 2. Setup the form to read the order of the items in the sort_list element and send it ot the backend
-             * 3. If there's no items in the database, we disable the save button
-             */
-
-            $("#sort_list").sortable({
-                'animation': 150,
-                'ghostClass': "ghostSortTarget",
-                'filter': ".emptyNotification",
-                'handle': ".handle"
-            });
-
-            if ($(".emptyNotification").length === 0) {
-
-                $("#order_form").submit(() => {
-
-                    let new_order = [];
-                    $(".sortTarget").each((index, list_item) => {
-
-                        new_order.push($(list_item).attr("id"));
-
-                    });
-
-                    $("#new_order").val(new_order.join(","));
-
-                });
-            } else {
-
-                $("#submit").prop("disabled", true);
-
-            }
-
-        });
-
-    </script>
-
-    <style>
-
-        #sort_list {
-            list-style: none;
-            margin-bottom: 20px;
-            padding: 0;
-        }
-
-        .sortTarget {
-            border: grey 2px solid;
-            margin: 10px 5px;
-            padding: 0;
-            font-size: var(--h5);
-            user-select: none;
-        }
-
-        .ghostSortTarget {
-            background-color: var(--ac-light);
-        }
-
-        .handle {
-            margin: 0 10px;
-            color: grey;
-        }
-
-        .handle:hover {
-            cursor: grab;
-        }
-
-        button.submit {
-            width: 100%;
-        }
-
-    </style>
+    <script defer type="text/javascript" src="{% static "admin/order.js" %}"></script>
+    <link rel="stylesheet" type="text/css" href="{% static "admin/order.css" %}">
 
 {% endblock %}
 
 {% block adminContent %}
-
-    <p style="margin-top:5px;">Click on an item and drag it to re-order</p>
 
     {% if error %}
         <h3 style="color:red;">{{ error }}</h3>

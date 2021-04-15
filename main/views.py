@@ -142,16 +142,19 @@ def events(request):
         raise Http404("Invalid view type")
 
 
-def safe_render(template_name):
+def safe_render(template_name, ctx=None):
     """ This function is used as a shortcut to render the given html file and require that the request type is GET
 
     :returns: A view function that can be used in a path object to render an HTML file
     :rtype: function(request) -> HttpResponse
     """
 
+    if ctx is None:
+        ctx = {}
+
     @require_safe
     def render_view(request):
-        return render(request, template_name)
+        return render(request, template_name, ctx)
 
     return render_view
 

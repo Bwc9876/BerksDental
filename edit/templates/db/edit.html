@@ -8,84 +8,8 @@
 {% endcomment %}
 
 {% block adminLinks %}
-
-    <style>
-
-
-        .form {
-            --text-size: 20px;
-            --help-error-text-size: calc(var(--text-size) - 5px);
-        }
-
-        ul.errorList {
-            list-style: none;
-            padding-left: 0;
-            margin-bottom: 0;
-            font-size: var(--help-error-text-size);
-        }
-
-        li.error {
-            color: #ff0000;
-        }
-
-        fieldset.hiddenField {
-            display: none;
-        }
-
-        label.fieldLabel {
-            margin-bottom: 20px;
-            margin-right: 20px;
-            user-select: none;
-            font-weight: bold;
-            vertical-align: top;
-        }
-
-        textarea {
-            resize: none;
-        }
-
-        fieldset {
-            padding: 2vh;
-            border: none;
-            border-top: solid 1px var(--ac-grey);
-        }
-
-        fieldset:last-of-type {
-            margin-bottom: 20px;
-            border-bottom: solid 1px var(--ac-grey);
-        }
-
-        input, textarea, a.currentPhotoLink, label.fieldLabel {
-            font-size: var(--text-size);
-        }
-
-        input[type="checkbox"] {
-            width: calc(var(--text-size) - 2px);
-            height: calc(var(--text-size) - 2px);
-            vertical-align: center;
-        }
-
-        button.submitButton {
-            width: 100%;
-        }
-
-        .help-text {
-            font-size: var(--help-error-text-size);
-        }
-
-        .permLabel {
-            font-size: calc(var(--text-size) - 2px);
-        }
-
-        select {
-            font-size: calc(var(--text-size) - 3px);
-        }
-
-        .requiredMarker {
-            color: var(--red-color);
-        }
-
-    </style>
+    {% load static %}
+    <link rel="stylesheet" type="text/css" href="{% static "admin/edit.css" %}">
 
     {{ form.media }}
 
