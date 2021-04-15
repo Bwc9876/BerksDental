@@ -18,25 +18,19 @@
     <a href="{{ next_link }}"><i class="h3 fas fa-arrow-alt-circle-right"></i></a>
 {% endblock %}
 {% block content %}
+    {% load eventTags %}
     <div class="calendar">
     {% for day in weekdays %}
         <div class="calendar-tile calendar-weekday"><p class="tile-content">{{ day }}</p></div>
     {% endfor %}
     {% for week in weeks %}
         {% for day in week %}
-            <div class="calendar-tile {% if day == today.day and month == today.month and year == today.year %}calendar-today focused-tile{% endif %} {% if day == 0 %} out-of-month{% endif %}">
+            {% makeDateObj as date  %}
+            {% getEventsOnDate as eventsOnThisDate  %}
+            <div class="calendar-tile {% if eventsOnThisDate|length > 0 %}calendar-event{% endif %} {% if date == today %}calendar-today focused-tile{% endif %} {% if day == 0 %}out-of-month{% endif %}">
                 {% if day != 0 %}
                     <p class="tile-content">{{ day }}</p>
                 {% endif %}
-                {% for event in events %}
-                    {% if event.startDate.day == day and event.startDate.month == month and event.startDate == event.endDate %}
-                        {{ event.name }}
-                    {% elif event.startDate.day == day and event.startDate.month == month %}
-                        {{ event.name }} Starts
-                    {% elif event.endDate.day == day and event.endDate.month == month %}
-                        {{ event.name }} Ends
-                    {% endif %}
-                {% endfor %}
             </div>
         {% endfor %}
     {% endfor %}
