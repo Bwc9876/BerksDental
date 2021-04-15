@@ -13,7 +13,7 @@ from django.conf import settings
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import Permission
 from django.shortcuts import render, get_object_or_404, redirect
-from django.urls import path
+from django.urls import path, reverse
 from django.db import models as source_fields
 from django.views.decorators.http import require_safe, require_http_methods
 
@@ -37,8 +37,7 @@ class EventViewSet(EditViewSet):
     model = models.Event
     modelForm = forms.EventForm
     displayFields = ['name', 'virtual', 'location', 'startDate', 'endDate']
-    labels = {'location': "Location/Link", 'startDate': "Start Date", 'endDate': "End Date", 'startTime': "Start Time",
-              'endTime': "End Time"}
+    labels = {'location': "Location/Link", 'startDate': "Start Date", 'endDate': "End Date"}
 
     def format_value_list(self, value_list):
         new_value_list = super().format_value_list(value_list)
@@ -355,3 +354,9 @@ def admin_home(request):
         accessible_viewsets.append(UserViewSet())
 
     return render(request, 'admin_home.html', {"viewsets": accessible_viewsets})
+
+
+@require_safe
+@login_required
+def help_home(request):
+    return render(request, "help/admin_help_home.html", {"back_link": reverse("edit:admin_home")})

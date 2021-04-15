@@ -6,7 +6,6 @@
 
         :root {
             --action-size: 450px;
-        {#--all-margin: 10vw;#}
         }
 
         div.adminContent {
@@ -75,6 +74,7 @@
             text-align: center;
             color: var(--clr-header);
             transition: var(--hover-transition);
+            font-family: var(--header-font);
         }
 
 
@@ -85,7 +85,6 @@
 {% block adminHeader %}Welcome, {{ user|title }}{% endblock %}
 
 {% block adminContent %}
-
     <div class="actions">
         <a href="{% url "main:home" %}" class="action">
             <div class="action_thumbnail">
@@ -107,7 +106,7 @@
             </div>
             <h2 class="action_name">Logout</h2>
         </a>
-        <a href="#" class="action">
+        <a href="{% url "edit:help" %}" class="action">
             <div class="action_thumbnail">
                 <i class="fas fa-question-circle"></i>
             </div>
@@ -122,5 +121,4 @@
             </a>
         {% endif %}
     </div>
-
 {% endblock %}

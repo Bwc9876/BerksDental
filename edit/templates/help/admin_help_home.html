@@ -1,0 +1,38 @@
+{% extends "admin_home.html" %}
+{% load adminTags %}
+{% block adminHeader %}{% action "back" back_link "fa-arrow-left" "h2" %} Help <span style="color:red">(WIP, Links won't work)</span>{% endblock %}
+
+{% block adminContent %}
+    <div class="actions">
+        <a href="#" class="action">
+            <div class="action_thumbnail">
+                <i class="fas fa-compass"></i>
+            </div>
+            <h2 class="action_name">Navigation</h2>
+        </a>
+        <a href="#" class="action">
+            <div class="action_thumbnail">
+                <i class="fas fa-edit"></i>
+            </div>
+            <h2 class="action_name">Editing/Adding</h2>
+        </a>
+        <a href="#" class="action">
+            <div class="action_thumbnail">
+                <i class="fas fa-images"></i>
+            </div>
+            <h2 class="action_name">Uploading Pictures</h2>
+        </a>
+        <a href="#" class="action">
+            <div class="action_thumbnail">
+                <i class="fas fa-sort"></i>
+            </div>
+            <h2 class="action_name">Ordering</h2>
+        </a>
+        <a href="#" class="action">
+            <div class="action_thumbnail">
+                <i class="fas fa-user-lock"></i>
+            </div>
+            <h2 class="action_name">User Passwords</h2>
+        </a>
+    </div>
+{% endblock %}

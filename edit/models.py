@@ -172,19 +172,19 @@ class Event(models.Model):
     def as_json_script(self):
 
         raw_dict = {
-            "id": self.id,
+            "id": str(self.id),
             "name": self.name,
             "description": self.description,
-            "startDate": self.startDate,
-            "endDate": self.endDate,
-            "startTime": self.startTime,
-            "endTime": self.endTime,
+            "startDate": self.startDate.strftime("%x"),
+            "endDate": self.endDate.strftime("%x"),
+            "startTime": self.startTime.strftime("%X"),
+            "endTime": self.endTime.strftime("%X"),
             "virtual": self.virtual,
             "link": self.link,
             "location": self.location
         }
 
-        return f'<script type="text/javascript">dumps(raw_dict)</script>'
+        return f'<script type="text/javascript">{dumps(raw_dict)}</script>'
 
     class Meta:
         ordering = ["-startDate", "-endDate", ]

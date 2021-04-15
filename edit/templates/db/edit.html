@@ -20,6 +20,7 @@
         ul.errorList {
             list-style: none;
             padding-left: 0;
+            margin-bottom: 0;
             font-size: var(--help-error-text-size);
         }
 
@@ -76,6 +77,14 @@
             font-size: calc(var(--text-size) - 2px);
         }
 
+        select {
+            font-size: calc(var(--text-size) - 3px);
+        }
+
+        .requiredMarker {
+            color: var(--red-color);
+        }
+
     </style>
 
     {{ form.media }}
@@ -114,7 +123,7 @@
                         {{ field }}
                         <label for="{{ field.id_for_label }}" class="fieldLabel h4">{{ field.label|title }}</label>
                     {% else %}
-                        <label for="{{ field.id_for_label }}" class="fieldLabel h4">{{ field.label|title }}:</label>
+                    <label for="{{ field.id_for_label }}" class="fieldLabel h4">{{ field.label|title }}:</label>
                         {{ field }}
                     {% endif %}
                     {% if field.help_text %}

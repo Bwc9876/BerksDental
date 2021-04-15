@@ -80,6 +80,11 @@ AUTH_PASSWORD_VALIDATORS = [{
         'edit.validators.RequiredCharactersValidator'
 }]
 
+IGNORED_VALIDATORS_FOR_NEW_PASSWORD = [{
+    'NAME':
+    'django_password_validators.password_history.password_validation.UniquePasswordsValidator'
+}]
+
 LOGIN_URL = "/admin/login/"
 LOGIN_REDIRECT_URL = "/admin/"
 LOGOUT_REDIRECT_URL = "/admin/login/?alert=You Have Been Logged Out&alertType=info"

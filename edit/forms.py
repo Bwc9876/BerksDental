@@ -3,9 +3,10 @@
     We can also call .save() on an instance of this class to save it to the database
 """
 from django.contrib.auth.password_validation import validate_password, ValidationError, \
-    password_validators_help_text_html
+    password_validators_help_text_html, get_password_validators
 from django.forms import Form, ModelForm, fields, PasswordInput
 from django.forms.widgets import DateInput, TimeInput, ClearableFileInput, TextInput
+from django.conf import settings
 
 from edit import models
 
@@ -116,6 +117,9 @@ class OfficerForm(ModelForm):
     class Meta:
         model = models.Officer
         exclude = ['id', 'sort_order']
+        widgets = {
+            "picture": PhotoField
+        }
 
     def __init__(self, *args, **kargs):
         super().__init__(*args, **kargs)
@@ -171,12 +175,17 @@ class UserCreateForm(ModelForm):
 
     def __init__(self, *args, **kargs):
         super().__init__(*args, **kargs)
+        validators = list(settings.AUTH_PASSWORD_VALIDATORS)
+        for ignored in settings.IGNORED_VALIDATORS_FOR_NEW_PASSWORD:
+            validators.remove(ignored)
+        new_config = get_password_validators(validators)
+        validator_help_list = password_validators_help_text_html(password_validators=new_config)
         self.fields['username'].help_text = None
         self.fields['first_name'].widget.attrs.update(required=True)
         self.fields['last_name'].widget.attrs.update(required=True)
         self.fields['email'].widget.attrs.update(required=True)
         self.fields["new_password"].widget.attrs.update(autocomplete="new-password")
-        self.fields["new_password"].help_text = password_validators_help_text_html
+        self.fields["new_password"].help_text = validator_help_list
         self.fields["confirm_new_password"].widget.attrs.update(autocomplete="new-password")
 
     def clean(self):

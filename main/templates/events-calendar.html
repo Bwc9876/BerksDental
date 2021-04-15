@@ -32,7 +32,7 @@
                     <p class="tile-content">{{ day }}</p>
                 {% endif %}
                 {% for event in eventsOnThisDate %}
-                    {{ event.as_json|safe }}
+                    {{ event.as_json_script|safe }}
                 {% endfor %}
             </div>
         {% endfor %}
