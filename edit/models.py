@@ -9,6 +9,7 @@ from django.conf import settings
 from django.contrib.auth.models import AbstractUser
 from django.db import models
 from django.forms import ValidationError
+from json import dumps
 
 
 class User(AbstractUser):
@@ -167,6 +168,23 @@ class Event(models.Model):
         """
 
         return self.name
+
+    def as_json_script(self):
+
+        raw_dict = {
+            "id": self.id,
+            "name": self.name,
+            "description": self.description,
+            "startDate": self.startDate,
+            "endDate": self.endDate,
+            "startTime": self.startTime,
+            "endTime": self.endTime,
+            "virtual": self.virtual,
+            "link": self.link,
+            "location": self.location
+        }
+
+        return f'<script type="text/javascript">dumps(raw_dict)</script>'
 
     class Meta:
         ordering = ["-startDate", "-endDate", ]

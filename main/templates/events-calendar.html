@@ -31,6 +31,9 @@
                 {% if day != 0 %}
                     <p class="tile-content">{{ day }}</p>
                 {% endif %}
+                {% for event in eventsOnThisDate %}
+                    {{ event.as_json|safe }}
+                {% endfor %}
             </div>
         {% endfor %}
     {% endfor %}
