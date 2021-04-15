@@ -68,3 +68,7 @@
     height: 4px;
     background-color: black;
 }
+
+.event {
+    display: none;
+}

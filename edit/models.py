@@ -4,12 +4,12 @@
 """
 
 import uuid
+from json import dumps
 
 from django.conf import settings
 from django.contrib.auth.models import AbstractUser
 from django.db import models
 from django.forms import ValidationError
-from json import dumps
 
 
 class User(AbstractUser):
@@ -184,7 +184,7 @@ class Event(models.Model):
             "location": self.location
         }
 
-        return f'<script type="text/javascript">{dumps(raw_dict)}</script>'
+        return dumps(raw_dict)
 
     class Meta:
         ordering = ["-startDate", "-endDate", ]

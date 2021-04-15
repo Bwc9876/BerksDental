@@ -23,19 +23,19 @@
     {% for day in weekdays %}
         <div class="calendar-tile calendar-weekday"><p class="tile-content">{{ day }}</p></div>
     {% endfor %}
-    {% for week in weeks %}
-        {% for day in week %}
-            {% makeDateObj as date  %}
-            {% getEventsOnDate as eventsOnThisDate  %}
-            <div class="calendar-tile {% if eventsOnThisDate|length > 0 %}calendar-event{% endif %} {% if date == today %}calendar-today focused-tile{% endif %} {% if day == 0 %}out-of-month{% endif %}">
-                {% if day != 0 %}
-                    <p class="tile-content">{{ day }}</p>
-                {% endif %}
-                {% for event in eventsOnThisDate %}
-                    {{ event.as_json_script|safe }}
-                {% endfor %}
-            </div>
+        {% for week in weeks %}
+            {% for day in week %}
+                {% makeDateObj as date %}
+                {% getEventsOnDate as eventsOnThisDate %}
+                <div class="calendar-tile {% if eventsOnThisDate|length > 0 %}calendar-event{% endif %} {% if date == today %}calendar-today focused-tile{% endif %} {% if day == 0 %}out-of-month{% endif %}">
+                    {% if day != 0 %}
+                        <p class="tile-content">{{ day }}</p>
+                    {% endif %}
+                    {% for event in eventsOnThisDate %}
+                        <p class="event">{{ event.as_json_script|safe }}</p>
+                    {% endfor %}
+                </div>
+            {% endfor %}
         {% endfor %}
-    {% endfor %}
     </div>
 {% endblock %}
