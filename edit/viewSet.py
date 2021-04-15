@@ -328,7 +328,7 @@ class EditViewSet:
                     form = self.get_form_object([], instance=get_object_or_404(self.model, id=target_id))
                 except ValidationError:
                     raise Http404()
-
+            print(form.media)
             return render(request, 'db/edit.html',
                           {'form': form, 'viewSet': self, 'new': new, "verb": "Add" if new else "Edit",
                            "back_link": self.overview_link()})

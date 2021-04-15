@@ -1,0 +1,7 @@
+.permLabel {
+    font-size: calc(var(--text-size) - 2px);
+}
+
+.permDropdown {
+    font-size: calc(var(--text-size) - 3px);
+}

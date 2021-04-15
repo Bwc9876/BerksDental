@@ -2,11 +2,11 @@
     This file contains forms, which perform validation and render to html automatically
     We can also call .save() on an instance of this class to save it to the database
 """
+from django.conf import settings
 from django.contrib.auth.password_validation import validate_password, ValidationError, \
     password_validators_help_text_html, get_password_validators
 from django.forms import Form, ModelForm, fields, PasswordInput
 from django.forms.widgets import DateInput, TimeInput, ClearableFileInput, TextInput
-from django.conf import settings
 
 from edit import models
 
@@ -37,6 +37,12 @@ class PermInput(TextInput):
         context = super().get_context(name, value, attrs)
         context['widget']['viewsets'] = self.viewsets
         return context
+
+    class Media:
+        css = {
+            "all": ("admin/permissionStyle.css",)
+        }
+        js = ("admin/permissionLogic.js",)
 
 
 class PermField(fields.CharField):
@@ -170,9 +176,6 @@ class UserCreateForm(ModelForm):
         model = models.User
         fields = ["username", "first_name", "last_name", "email"]
 
-    class Media:
-        js = ("admin/permissionLogic.js",)
-
     def __init__(self, *args, **kargs):
         super().__init__(*args, **kargs)
         validators = list(settings.AUTH_PASSWORD_VALIDATORS)
@@ -206,9 +209,6 @@ class UserEditForm(ModelForm):
     class Meta:
         model = models.User
         fields = ["username", "email", "first_name", "last_name"]
-
-    class Media:
-        js = ("admin/permissionLogic.js",)
 
     def __init__(self, *args, **kargs):
         super().__init__(*args, **kargs)

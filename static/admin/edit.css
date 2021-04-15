@@ -41,11 +41,7 @@ fieldset:last-of-type {
     border-bottom: solid 1px var(--ac-grey);
 }
 
-input {
-    display: inline-block;
-}
-
-input, textarea, .currentPhotoLink, .fieldLabel {
+input, textarea, .fieldLabel {
     font-size: var(--text-size);
 }
 
@@ -61,16 +57,4 @@ input[type="checkbox"] {
 
 .help-text {
     font-size: var(--help-error-text-size);
-}
-
-.permLabel {
-    font-size: calc(var(--text-size) - 2px);
-}
-
-select {
-    font-size: calc(var(--text-size) - 3px);
-}
-
-.requiredMarker {
-    color: var(--red-color);
 }
