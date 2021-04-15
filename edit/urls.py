@@ -14,7 +14,7 @@ urlpatterns = [
     views.help_page("edit", "Adding And Editing"),
     views.help_page("image", "Uploading Pictures"),
     views.help_page("password", "User Passwords"),
-    views.help_page("ordering", "Ordering")
+    views.help_page("ordering", "Ordering"),
 ]
 
 urlpatterns += views.setup_viewsets()

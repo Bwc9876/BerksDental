@@ -6,7 +6,6 @@
     We loop through every field in the form and render it
     We set the enctype to "multipart/form-data" so files can be uploaded
 {% endcomment %}
-
 {% block adminLinks %}
     {% load static %}
     <link rel="stylesheet" type="text/css" href="{% static "admin/edit.css" %}">
@@ -47,7 +46,7 @@
                         {{ field }}
                         <label for="{{ field.id_for_label }}" class="fieldLabel h4">{{ field.label|title }}</label>
                     {% else %}
-                    <label for="{{ field.id_for_label }}" class="fieldLabel h4">{{ field.label|title }}:</label>
+                        <label for="{{ field.id_for_label }}" class="fieldLabel h4">{{ field.label|title }}:</label>
                         {{ field }}
                     {% endif %}
                     {% if field.help_text %}

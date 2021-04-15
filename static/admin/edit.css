@@ -18,6 +18,10 @@
     display: none;
 }
 
+input, textarea, .fieldLabel {
+    font-size: var(--text-size);
+}
+
 .fieldLabel {
     margin-bottom: 20px;
     margin-right: 20px;
@@ -39,10 +43,6 @@ fieldset {
 fieldset:last-of-type {
     margin-bottom: 20px;
     border-bottom: solid 1px var(--ac-grey);
-}
-
-input, textarea, .fieldLabel {
-    font-size: var(--text-size);
 }
 
 input[type="checkbox"] {
