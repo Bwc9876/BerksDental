@@ -41,7 +41,7 @@ class EditViewSet:
     :type ordered: bool
     :attr displayFields: A list of fields we want to be shown in the overview view
     :type displayFields: list(str)
-    :attr labels: If there're any fields we want to be displayed differently,
+    :attr labels: If there's any fields we want to be displayed differently,
     we put the field name as the key, and the desired label as the value
     """
 

@@ -1,13 +1,9 @@
 function getEvents(calendar_tile) {
-
     let events = [];
     $(calendar_tile).children(".event").each((index, child) => {
-
         events.push(JSON.parse($(child).text()));
-
     });
     return events;
-
 }
 
 $(document).ready(function () {
