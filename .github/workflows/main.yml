@@ -36,6 +36,8 @@ jobs:
           python-version: 3.8.5
       - name: Install dependencies
         run: pip install -r requirements.txt
+      - name: Install psycopg2
+        run: pip install psycopg2
       - name: Run tests
         run: python manage.py test
         env:
