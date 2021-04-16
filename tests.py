@@ -244,12 +244,12 @@ class Template(TestCase):
         checkbox = forms.PhotoForm().fields["featured"]
         not_checkbox = forms.PhotoForm().fields["caption"]
 
-        class Dummyfieldobject:
+        class DummyFieldObject:
             def __init__(self, field):
                 self.field = field
 
-        self.assertTrue(adminTags.is_checkbox(Dummyfieldobject(checkbox)))
-        self.assertFalse(adminTags.is_checkbox(Dummyfieldobject(not_checkbox)))
+        self.assertTrue(adminTags.is_checkbox(DummyFieldObject(checkbox)))
+        self.assertFalse(adminTags.is_checkbox(DummyFieldObject(not_checkbox)))
 
     def test_get_primary_value(self):
         test_object = ["1", "2"]
