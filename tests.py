@@ -1,16 +1,22 @@
+import os
+from datetime import date, time
 from json import dumps
 
+from django.conf import settings
 from django.contrib.auth.models import AnonymousUser
 from django.shortcuts import redirect
 from django.test import TestCase, RequestFactory
 
-from edit import models, views
+from edit import models, views, forms
+from edit.templatetags import adminTags, eventTags, socialTags
+from main import contexts
 
 test_url = "https://example.org"
 test_email = "bwc9876@gmail.com"
+test_image_path = f"{settings.BASE_DIR}/static/tests/test.png"
 
 
-class BasicDBTest(TestCase):
+class BasicDBActions(TestCase):
     def setUp(self):
         self.factory = RequestFactory()
 
@@ -23,7 +29,9 @@ class BasicDBTest(TestCase):
         self.assertEqual(new_link.url, test_url)
 
     def test_editing(self):
-        self.test_adding()
+        request = self.factory.post("/admin/edit/link/", {'url': test_url, 'display_name': "Test Add Link"})
+        vs = views.LinkViewSet()
+        vs.obj_add(request)
         old_link = models.ExternalLink.objects.get(display_name="Test Add Link")
         request = self.factory.post(f"/admin/edit/link/?id={old_link.id}",
                                     {'url': test_url, 'display_name': "Test Edit Link"})
@@ -34,8 +42,10 @@ class BasicDBTest(TestCase):
         self.assertEqual(new_link.url, test_url)
 
     def test_deleting(self):
-        self.test_editing()
-        link_to_delete = models.ExternalLink.objects.get(display_name="Test Edit Link")
+        request = self.factory.post("/admin/edit/link/", {'url': test_url, 'display_name': "Test Add Link"})
+        vs = views.LinkViewSet()
+        vs.obj_add(request)
+        link_to_delete = models.ExternalLink.objects.get(display_name="Test Add Link")
         request = self.factory.post(f"/admin/delete/link/?id={link_to_delete.id}")
         vs = views.LinkViewSet()
         vs.obj_delete_view(request)
@@ -43,7 +53,7 @@ class BasicDBTest(TestCase):
         self.assertEqual(len(empty_links_list), 0)
 
 
-class OrderingTest(TestCase):
+class Ordering(TestCase):
 
     def setUp(self):
         link1 = models.ExternalLink.objects.create(url=test_url, display_name="Test 1", sort_order=0)
@@ -84,9 +94,45 @@ class OrderingTest(TestCase):
         self.assertEqual(link2_new.sort_order, 2)
 
 
-def gen_post_data_for_edit(user, permType="none"):
+def delete_image(image):
+    img_path = settings.MEDIA_ROOT + image.picture.name
+    if os.path.exists(img_path):
+        os.remove(img_path)
+
+
+class PictureUploads(TestCase):
+    def setUp(self):
+        self.factory = RequestFactory()
+        self.vs = views.GalleryPhotoViewSet()
+        with open(test_image_path, 'rb') as image:
+            request = self.factory.post("/admin/edit/photo/", {"picture": image, "caption": "Test Image Upload"})
+            self.vs.obj_add(request)
+            self.picture = models.GalleryPhoto.objects.get(caption="Test Image Upload")
+
+    def test_upload_on_creation(self):
+        self.assertTrue(os.path.exists(settings.MEDIA_ROOT + self.picture.picture.name))
+        self.assertEqual(self.picture.picture.name, f"gallery-photos/{self.picture.id}.{self.picture.get_extension()}")
+
+    def test_upload_on_edit(self):
+        with open(test_image_path, 'rb') as image:
+            request = self.factory.post(f"/admin/edit/photo/?id={self.picture.id}",
+                                        {'caption': self.picture.caption, 'image': image})
+            self.vs.obj_edit(request)
+        self.assertTrue(os.path.exists(settings.MEDIA_ROOT + self.picture.picture.name))
+        self.assertEqual(self.picture.picture.name, f"gallery-photos/{self.picture.id}.{self.picture.get_extension()}")
+
+    def test_removal_on_deletion(self):
+        request = self.factory.post(f"/admin/delete/photo/?id={self.picture.id}")
+        self.vs.obj_delete_view(request)
+        self.assertFalse(os.path.exists(settings.MEDIA_ROOT + self.picture.picture.name))
+
+    def tearDown(self):
+        delete_image(self.picture)
+
+
+def gen_post_data_for_edit(user, perm_type="none"):
     permissions = {
-        views.LinkViewSet().get_safe_name(): permType
+        views.LinkViewSet().get_safe_name(): perm_type
     }
     return {
         'username': user.username,
@@ -97,7 +143,7 @@ def gen_post_data_for_edit(user, permType="none"):
     }
 
 
-class UserTest(TestCase):
+class User(TestCase):
     def setUp(self):
         self.userVS = views.UserViewSet()
         self.vs = views.LinkViewSet()
@@ -114,9 +160,9 @@ class UserTest(TestCase):
 
     def test_edit_perms(self):
         view_user_request = self.factory.post(f"/admin/edit/user/?id={self.view_user.id}",
-                                              gen_post_data_for_edit(self.view_user, permType="view"))
+                                              gen_post_data_for_edit(self.view_user, perm_type="view"))
         edit_user_request = self.factory.post(f"/admin/edit/user/?id={self.edit_user.id}",
-                                              gen_post_data_for_edit(self.edit_user, permType="edit"))
+                                              gen_post_data_for_edit(self.edit_user, perm_type="edit"))
         self.userVS.obj_edit(view_user_request)
         self.userVS.obj_edit(edit_user_request)
         self.assertEqual(self.view_user.has_perms(self.vs.get_permissions_as_dict()["View"]), True)
@@ -153,3 +199,138 @@ class UserTest(TestCase):
                     self.assertNotEqual(result.get("Location"), access_denied.get("Location"))
                 else:
                     self.assertEqual(result.get("Location"), access_denied.get("Location"))
+
+
+class Template(TestCase):
+    def setUp(self):
+        self.factory = RequestFactory()
+        models.Social.objects.create(service=models.Social.Services.YOUTUBE, link=test_url, sort_order=0)
+        models.Social.objects.create(service=models.Social.Services.TWITTER, link=test_url, sort_order=1)
+        models.Event.objects.create(name="Good Event", startDate=date(2021, 3, 5), endDate=date(2021, 3, 5),
+                                    startTime=time(hour=5, minute=56), endTime=time(hour=5, minute=59),
+                                    description="Should be included")
+        models.Event.objects.create(name="Bad Event", startDate=date(2021, 4, 5), endDate=date(2021, 5, 5),
+                                    startTime=time(hour=5, minute=56), endTime=time(hour=5, minute=59),
+                                    description="Should not be included")
+
+    def test_get_socials(self):
+        socials = list(socialTags.get_socials())
+        self.assertEqual(len(socials), 2)
+        self.assertEqual(socials[0].sort_order, 0)
+
+    def test_make_date_obj(self):
+        context = {'day': 5, 'month': 3, 'year': 2021}
+        new_date = eventTags.make_date_obj(context)
+        self.assertEqual(new_date, date(2021, 3, 5))
+
+    def test_get_events_on_day(self):
+        context = {'events': models.Event.objects.all(), 'date': date(2021, 3, 5)}
+        events = eventTags.get_events_on_day(context)
+        self.assertIn(models.Event.objects.get(name="Good Event"), events)
+        self.assertNotEquals(models.Event.objects.get(name="Bad Event"), events)
+
+    def test_admin_alerts(self):
+        request = self.factory.get("/admin/?alert=Test&alertType=info")
+        request.user = AnonymousUser()
+        alert_text = adminTags.get_alert(request)
+        alert_type = adminTags.get_alert_type(request)
+        alert_icon = adminTags.get_alert_icon(request)
+        self.assertIsNotNone(alert_text)
+        self.assertEqual(alert_text, "Test")
+        self.assertEqual(alert_type, "info")
+        self.assertEqual(alert_icon, adminTags.alertIcons["info"])
+
+    def test_is_checkbox(self):
+        checkbox = forms.PhotoForm().fields["featured"]
+        not_checkbox = forms.PhotoForm().fields["caption"]
+
+        class Dummyfieldobject:
+            def __init__(self, field):
+                self.field = field
+
+        self.assertTrue(adminTags.is_checkbox(Dummyfieldobject(checkbox)))
+        self.assertFalse(adminTags.is_checkbox(Dummyfieldobject(not_checkbox)))
+
+    def test_get_primary_value(self):
+        test_object = ["1", "2"]
+        self.assertEqual(adminTags.get_primary_value(test_object), "1")
+
+    def test_base_data(self):
+        request = self.factory.get("/")
+
+        target_values = {'app_name': "main", "agent_type": "None",
+                         "debug": settings.DEBUG, 'protocol': "http" if settings.DEBUG else "https"}
+
+        self.assertEqual(target_values, contexts.base_data(request))
+
+
+class ModelStringFunctions(TestCase):
+
+    def test_user_string(self):
+        user = models.User.objects.create(username="admin")
+        self.assertEqual(str(user), "admin")
+        user.first_name = "First"
+        user.last_name = "Last"
+        self.assertEqual(str(user), "First Last")
+
+    def test_photo_string(self):
+        photo = models.GalleryPhoto.objects.create(caption="Test Photo")
+        self.assertEqual(str(photo), "Test Photo")
+
+    def test_link_string(self):
+        link = models.ExternalLink.objects.create(url=test_url, display_name="Test String Link")
+        self.assertEqual(str(link), "Link To Test String Link")
+
+    def test_event_string(self):
+        event = models.Event.objects.create(name="Test String Event", startDate=date(2021, 4, 5),
+                                            endDate=date(2021, 5, 5),
+                                            startTime=time(hour=5, minute=56), endTime=time(hour=5, minute=59),
+                                            description="__str__")
+        self.assertEqual(str(event), "Test String Event")
+
+    def test_officer_string(self):
+        officer = models.Officer(first_name="Test", last_name="Officer")
+        self.assertEqual(str(officer), "Test Officer")
+
+    def test_social_string(self):
+        social = models.Social.objects.create(service=models.Social.Services.YOUTUBE, link=test_url)
+        self.assertEqual(str(social), "Berks Dental Assistants' YouTube Page")
+
+
+class ModelUtilFunctions(TestCase):
+    def test_masked_links(self):
+        officer = models.Officer.objects.create(first_name="Test", last_name="Officer", email=test_email,
+                                                phone="(123)-456-789")
+        self.assertNotEqual(officer.masked_email_link(), officer.email)
+        self.assertNotEqual(officer.masked_phone_link(), officer.phone)
+
+    def test_service_label(self):
+        social = models.Social.objects.create(service=models.Social.Services.YOUTUBE, link=test_url)
+        self.assertEqual(social.service_label(), "YouTube")
+
+    def test_service_label_from_string(self):
+        self.assertEqual(models.Social.service_label_from_string("YT"), "YouTube")
+
+    def test_fa_icon_class(self):
+        social = models.Social.objects.create(service=models.Social.Services.YOUTUBE, link=test_url)
+        social2 = models.Social.objects.create(service=models.Social.Services.LINKEDIN, link=test_url)
+        self.assertEqual(social.fa_icon_class(), "fa-youtube-square")
+        self.assertEqual(social2.fa_icon_class(), "fa-linkedin")
+
+
+class PhotoModelUtilFunctions(TestCase):
+    def setUp(self):
+        self.factory = RequestFactory()
+        with open(test_image_path, 'rb') as image:
+            request = self.factory.post("/admin/edit/photo/", {"picture": image, "caption": "Test Photo"})
+            views.GalleryPhotoViewSet().obj_add(request)
+            self.picture = models.GalleryPhoto.objects.get(caption="Test Photo")
+
+    def test_get_extension(self):
+        self.assertEqual(self.picture.get_extension(), "png")
+
+    def test_photo_link(self):
+        self.assertEqual(self.picture.photo_link(), f"/media/gallery-photos/{self.picture.id}.png")
+
+    def tearDown(self):
+        delete_image(self.picture)
