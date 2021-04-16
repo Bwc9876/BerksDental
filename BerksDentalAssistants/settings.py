@@ -10,9 +10,12 @@ from pathlib import Path
 BASE_DIR = Path(__file__).resolve().parent.parent
 STAGE = os.getenv("STAGE", "DEBUG")
 
-SECRET_KEY = "a^0$j#*i7x-0=zpg1=vmti*9zhh2i!oi$kx$#bq&7)1jvl%ne&3z"
+if STAGE == "PRODUCTION":
+    SECRET_KEY = os.getenv("SECRET_KEY")
+else:
+    SECRET_KEY = "a^0$j#*i7x-0=zpg1=vmti*9zhh2i!oi$kx$#bq&7)1jvl%ne&3z"
 
-DEBUG = True
+DEBUG = STAGE != "PRODUCTION"
 
 if STAGE == "PRODUCTION":
     # Will be changed to the domain we want to host the site on in production
