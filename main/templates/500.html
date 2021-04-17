@@ -3,7 +3,13 @@
     This html file defines what the user will see in case the server encounters an error
     The file will only be displayed if DEBUG = False in settings, otherwise a stack trace will be shown
 {% endcomment %}
-
+{% block meta %}
+    <title>Berks Dental Assistants: Internal Server Error</title>
+    <meta name="description" content="Berks Dental Assistants' 500 Page.">
+{% endblock %}
+{% block links %}
+    <style>.main-content{display: flex;flex-direction: column;align-items: center;justify-content: center;}.main-content * {text-align: center}</style>
+{% endblock %}
 {% block content %}
 
     <h1> Internal Server Error </h1>

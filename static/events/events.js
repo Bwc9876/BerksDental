@@ -36,7 +36,7 @@ $(document).ready(function () {
             let sameDay = (event["startDate"] === event["endDate"]);
             let endsToday = (event["endDate"] === date);
             let titleSuffix = sameDay?"":endsToday?" Ends":" Starts";
-            let timeString = (sameDay)?`${event["startDate"]} - ${event["endDate"]}`:endsToday?event["endDate"]:event["startDate"];
+            let timeString = (sameDay)?`${event["startTime"]} - ${event["endTime"]}`:endsToday?event["endTime"]:event["startTime"];
             let eventCard = `<div class="front-event-card">
         <h2>${event["name"]}${titleSuffix}</h2>
         <p class="h4">${timeString}</p>
