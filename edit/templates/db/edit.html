@@ -50,7 +50,7 @@
                         {{ field }}
                     {% endif %}
                     {% if field.help_text %}
-                        <p id="{{ field.label }}_help-text" class="help-text">{{ field.help_text }}</p>
+                        <p id="{{ field.label }}_help-text" class="help-text">{{ field.help_text|safe }}</p>
                     {% endif %}
                 </fieldset>
             {% endfor %}

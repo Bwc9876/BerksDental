@@ -70,7 +70,11 @@
     background-color: black;
 }
 
-.event {
+.eventJSON {
+    display: none;
+}
+
+.dateText {
     display: none;
 }
 

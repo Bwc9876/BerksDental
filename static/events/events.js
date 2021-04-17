@@ -6,6 +6,14 @@ function getEvents(calendar_tile) {
     return events;
 }
 
+function getDate(calendar_tile) {
+    let date = undefined;
+    $(calendar_tile).children(".dateText").each((index, child) => {
+        date =  $(child).text();
+    });
+    return date;
+}
+
 $(document).ready(function () {
     $(".calendar-tile").click(function () {
         if ($(this).hasClass("out-of-month") || $(this).hasClass("calendar-weekday")) {

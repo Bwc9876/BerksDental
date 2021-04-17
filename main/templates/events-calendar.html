@@ -32,8 +32,9 @@
                     {% if day != 0 %}
                         <p class="tile-content">{{ day }}</p>
                     {% endif %}
+                    <p class="dateText">{{ date|date:"m/d/y" }}</p>
                     {% for event in eventsOnThisDate %}
-                        <p class="event">{{ event.as_json_script|safe }}</p>
+                        <p class="eventJSON">{{ event.as_json_script|safe }}</p>
                     {% endfor %}
                 </div>
             {% endfor %}

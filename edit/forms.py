@@ -4,7 +4,7 @@
 """
 from django.conf import settings
 from django.contrib.auth.password_validation import validate_password, ValidationError, \
-    password_validators_help_text_html, get_password_validators
+    get_password_validators, password_validators_help_texts
 from django.forms import Form, ModelForm, fields, PasswordInput
 from django.forms.widgets import DateInput, TimeInput, ClearableFileInput, TextInput
 
@@ -176,13 +176,18 @@ class UserCreateForm(ModelForm):
         model = models.User
         fields = ["username", "first_name", "last_name", "email"]
 
+    class Media:
+        css = {"all": ("admin/helpTextStyle.css",)}
+
     def __init__(self, *args, **kargs):
         super().__init__(*args, **kargs)
         validators = list(settings.AUTH_PASSWORD_VALIDATORS)
         for ignored in settings.IGNORED_VALIDATORS_FOR_NEW_PASSWORD:
             validators.remove(ignored)
         new_config = get_password_validators(validators)
-        validator_help_list = password_validators_help_text_html(password_validators=new_config)
+        rule_list = password_validators_help_texts(password_validators=new_config)
+        rule_lis = "".join([f"<li>{rule}</li>" for rule in rule_list])
+        validator_help_list = f'<ul class="passwordHelp">{rule_lis}</ul>'
         self.fields['username'].help_text = None
         self.fields['first_name'].widget.attrs.update(required=True)
         self.fields['last_name'].widget.attrs.update(required=True)
@@ -226,10 +231,16 @@ class SetUserPasswordForm(Form):
     def __init__(self, *args, **kargs):
         super().__init__(*args, **kargs)
         self.fields["new_password"].label = "New Password"
-        self.fields["new_password"].help_text = password_validators_help_text_html
+        rule_list = password_validators_help_texts()
+        rule_lis = "".join([f"<li>{rule}</li>" for rule in rule_list])
+        validator_help_list = f'<ul class="passwordHelp">{rule_lis}</ul>'
+        self.fields["new_password"].help_text = validator_help_list
         self.fields["confirm_new_password"].label = "Confirm New Password"
         self.fields["new_password"].widget.attrs.update(autocomplete="new-password")
         self.fields["confirm_new_password"].widget.attrs.update(autocomplete="new-password")
+
+    class Media:
+        css = {"all": ("admin/helpTextStyle.css",)}
 
     def set_user(self, user):
         self.user = user

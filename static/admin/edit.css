@@ -57,4 +57,5 @@ input[type="checkbox"] {
 
 .help-text {
     font-size: var(--help-error-text-size);
+    margin-bottom: 0;
 }
