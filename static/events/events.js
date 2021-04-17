@@ -1,6 +1,6 @@
 function getEvents(calendar_tile) {
     let events = [];
-    calendar_tile.children(".event").each((index, child) => {
+    calendar_tile.children(".eventJSON").each((index, child) => {
         events.push(JSON.parse($(child).text()));
     });
     return events;
@@ -16,7 +16,7 @@ function getDate(calendar_tile) {
 
 $(document).ready(function () {
     $(".calendar-tile").click(function () {
-        console.log(getDate(this));
+        console.log(getEvents($(this)));
         if ($(this).hasClass("out-of-month") || $(this).hasClass("calendar-weekday")) {
             return;
         }
