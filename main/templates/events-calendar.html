@@ -14,7 +14,7 @@
     <div>
         <h1>{{ month_name }}</h1>
         <h2>{{ year }}</h2>
-        <a href="{% url "main:events" %}">Today</a>
+        <a href="{% url "main:events" %}">Today<br/></a>
     </div>
     <a href="{{ next_link }}"><i class="h3 fas fa-arrow-alt-circle-right"></i></a>
 {% endblock %}
@@ -40,6 +40,7 @@
             {% endfor %}
         {% endfor %}
     </div>
+    <div style="display: flex;justify-content: center;"><a href="{% url "main:events" %}?view=list">(View as list)</a></div>
     <div class="event-cards-calendar">
         <div class="front-event-card first">
             <h2 id="event-list-title">Events on Day</h2>

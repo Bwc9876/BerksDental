@@ -30,7 +30,7 @@ $(document).ready(function () {
             if (index === 0) { return; }
             $(value).detach();
         });
-        $("#event-list-title").text(eventsToday? "Events on " + events[0]["startDate"] : "There are no events that day.");
+        $("#event-list-title").text(eventsToday? "Events on " + date : "There are no events that day.");
         for (let i = events.length-1; i >= 0; i--) {
             let event = events[i];
             let sameDay = (event["startDate"] === event["endDate"]);

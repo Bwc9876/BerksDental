@@ -15,7 +15,10 @@
 }
 
 .calendar {
+    max-width: 550px;
+    max-height: 550px;
     display: grid;
+    margin: auto;
     grid-template-columns: repeat(7, 1fr);
     background: var(--ac-light);
     box-shadow: 0 0 8px 0;
@@ -82,15 +85,21 @@
     width: auto;
     border: none;
     overflow: auto;
-    z-index: -1;
 }
+
+.front-event-card:hover {
+    bottom: 0;
+    box-shadow: none;
+}
+
 
 .front-event-card:nth-of-type(odd) {
     background-color: transparent;
 }
 
 .event-front-description {
-    display: initial;
+    margin-top: 0;
+    display: inline-block;
 }
 
 .footer-main {
