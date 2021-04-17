@@ -4,11 +4,12 @@ from datetime import date
 from django.core.paginator import Paginator
 from django.db.models import Q
 from django.http import Http404, JsonResponse
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 from django.template.exceptions import TemplateDoesNotExist
 from django.urls import reverse
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_safe, require_http_methods
+from django.forms import ValidationError
 
 from edit import models
 
@@ -63,6 +64,37 @@ def gallery(request):
     photo_paginator = Paginator(photo_objects, MAX_IMAGES_PER_PAGE, allow_empty_first_page=True)
     first_list = models.GalleryPhoto.objects.all()[0:photo_paginator.get_page(1).end_index()]
     return render(request, "gallery.html", {"photos": first_list})
+
+
+def get_next_photo(photo):
+    try:
+        return models.GalleryPhoto.objects.exclude(date_posted=photo.date_posted).filter(
+            date_posted__gte=photo.date_posted).order_by("date_posted")[0]
+    except IndexError:
+        return None
+
+
+def get_last_photo(photo):
+    try:
+        return models.GalleryPhoto.objects.exclude(date_posted=photo.date_posted).filter(
+            date_posted__lte=photo.date_posted).order_by("-date_posted")[0]
+    except IndexError:
+        return None
+
+
+@require_safe
+def view_photo(request):
+    target_id = request.GET.get("id", "")
+    try:
+        target_photo = get_object_or_404(models.GalleryPhoto, id=target_id)
+        next_photo = get_next_photo(target_photo)
+        last_photo = get_last_photo(target_photo)
+        next_link = None if next_photo is None else f"{reverse('main:view_photo')}?id={next_photo.id}"
+        last_link = None if last_photo is None else f"{reverse('main:view_photo')}?id={last_photo.id}"
+        return render(request, "photo_view.html",
+                      {"photo": target_photo, "next_link": next_link, "last_link": last_link})
+    except ValidationError:
+        raise Http404()
 
 
 @require_safe

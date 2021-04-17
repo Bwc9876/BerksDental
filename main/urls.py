@@ -14,6 +14,7 @@ urlpatterns = [
     path('', views.home, name="home"),
     path('gallery/', views.gallery, name="gallery"),
     path('gallery-page/', views.get_gallery_page, name="gallery_page"),
+    path('gallery/view/', views.view_photo, name="view_photo"),
     path('officers/', views.officers, name="officers"),
     path('events/', views.events, name="events"),
     path('about/', views.safe_render("about.html"), name="about"),

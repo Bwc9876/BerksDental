@@ -1,0 +1,9 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+    {% if last_link %}<a href="{{ last_link }}">Previous</a>{% endif %}
+    <img alt="{{ photo.caption }}" width="{{ photo.width }}px" height="{{ photo.height }}px" src="{{ photo.photo_link }}"/>
+    {% if next_link %}<a href="{{ next_link }}">Next</a>{% endif %}
+
+{% endblock %}
