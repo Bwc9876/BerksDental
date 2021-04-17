@@ -64,6 +64,8 @@ class EditViewSet:
         for field in self.displayFields:
             field_object = self.model._meta.get_field(field)
             self.format_list.append(formatters.get(type(field_object), lambda input_val: str(input_val)))
+        if self.model is None:
+            raise ValueError("No Model Set")
 
     def format_value_list(self, value_list):
         """ This function is used as a way to format any values we read from the database, like dates and links

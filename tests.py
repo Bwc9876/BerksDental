@@ -130,7 +130,7 @@ class PictureUploads(TestCase):
         delete_image(self.picture)
 
 
-def gen_post_data_for_edit(user, perm_type="none"):
+def gen_post_data_for_user_edit(user, perm_type="none"):
     permissions = {
         views.LinkViewSet().get_safe_name(): perm_type
     }
@@ -160,9 +160,9 @@ class User(TestCase):
 
     def test_edit_perms(self):
         view_user_request = self.factory.post(f"/admin/edit/user/?id={self.view_user.id}",
-                                              gen_post_data_for_edit(self.view_user, perm_type="view"))
+                                              gen_post_data_for_user_edit(self.view_user, perm_type="view"))
         edit_user_request = self.factory.post(f"/admin/edit/user/?id={self.edit_user.id}",
-                                              gen_post_data_for_edit(self.edit_user, perm_type="edit"))
+                                              gen_post_data_for_user_edit(self.edit_user, perm_type="edit"))
         self.userVS.obj_edit(view_user_request)
         self.userVS.obj_edit(edit_user_request)
         self.assertEqual(self.view_user.has_perms(self.vs.get_permissions_as_dict()["View"]), True)
@@ -334,3 +334,87 @@ class PhotoModelUtilFunctions(TestCase):
 
     def tearDown(self):
         delete_image(self.picture)
+
+
+def gen_post_data_for_event_edit(startDate, startTime, endDate, endTime):
+    return RequestFactory().post("/admin/edit/event/", {
+        "name": "Test Event",
+        "description": "Test Event",
+        "virtual": True,
+        "link": test_url,
+        "startDate": startDate,
+        "endDate": endDate,
+        "startTime": startTime,
+        "endTime": endTime
+    }).POST
+
+
+def gen_post_data_for_user_creation_password(password, confirm_matches=True):
+    post_obj = {'username': "test", 'email': test_email, 'first_name': "First", 'last_name': "Last",
+                'permissions': "{}", 'new_password': password,
+                "confirm_new_password": password if confirm_matches else "Stupid Password"}
+    return RequestFactory().post("/admin/edit/user/", post_obj).POST
+
+
+def gen_post_for_location_and_link_check(virtual, loc):
+    post_obj = {
+        "name": "Test Event",
+        "description": "Test Event",
+        "virtual": virtual,
+        "startDate": date(2021, 5, 3),
+        "endDate": date(2021, 5, 3),
+        "startTime": time(5, 50),
+        "endTime": time(5, 54)
+    }
+    if virtual:
+        post_obj["link"] = loc
+        post_obj["location"] = ""
+    else:
+        post_obj["link"] = ""
+        post_obj["location"] = loc
+    return RequestFactory().post("/admin/edit/event/", post_obj).POST
+
+
+class FormValidation(TestCase):
+    def setUp(self):
+        self.factory = RequestFactory()
+
+    def test_date_validation(self):
+        good_date = gen_post_data_for_event_edit(date(2021, 5, 3), time(5, 50), date(2021, 6, 3), time(5, 50))
+        bad_date = gen_post_data_for_event_edit(date(2021, 5, 3), time(5, 50), date(2021, 4, 3), time(5, 50))
+        self.assertTrue(forms.EventForm(good_date).is_valid())
+        self.assertFalse(forms.EventForm(bad_date).is_valid())
+
+    def test_time_validation(self):
+        good_date = gen_post_data_for_event_edit(date(2021, 5, 3), time(5, 50), date(2021, 5, 3), time(5, 56))
+        bad_date = gen_post_data_for_event_edit(date(2021, 5, 3), time(5, 50), date(2021, 5, 3), time(5, 40))
+        ignored_date = gen_post_data_for_event_edit(date(2021, 5, 3), time(5, 50), date(2021, 6, 3), time(5, 40))
+        self.assertTrue(forms.EventForm(good_date).is_valid())
+        self.assertFalse(forms.EventForm(bad_date).is_valid())
+        self.assertTrue(forms.EventForm(ignored_date).is_valid())
+
+    def test_link_and_location_validation(self):
+        good_virtual_event = gen_post_for_location_and_link_check(True, test_url)
+        bad_virtual_event = gen_post_for_location_and_link_check(True, "")
+        good_physical_event = gen_post_for_location_and_link_check(False, "Test Location")
+        bad_physical_event = gen_post_for_location_and_link_check(False, "")
+        self.assertTrue(forms.EventForm(good_virtual_event).is_valid())
+        self.assertFalse(forms.EventForm(bad_virtual_event).is_valid())
+        self.assertTrue(forms.EventForm(good_physical_event).is_valid())
+        self.assertFalse(forms.EventForm(bad_physical_event).is_valid())
+
+    def test_password_match_validation(self):
+        good_password = gen_post_data_for_user_creation_password("Testing123")
+        bad_password = gen_post_data_for_user_creation_password("Testing123", confirm_matches=False)
+        self.assertTrue(forms.UserCreateForm(good_password).is_valid())
+        self.assertFalse(forms.UserCreateForm(bad_password).is_valid())
+
+    def test_password_format_validation(self):
+        too_short = gen_post_data_for_user_creation_password("Ta123")
+        no_upper = gen_post_data_for_user_creation_password("bad_pass123")
+        no_lower = gen_post_data_for_user_creation_password("BAD_PASS123")
+        no_number = gen_post_data_for_user_creation_password("Bad_Pass")
+        self.assertFalse(forms.UserCreateForm(too_short).is_valid())
+        self.assertFalse(forms.UserCreateForm(no_upper).is_valid())
+        self.assertFalse(forms.UserCreateForm(no_lower).is_valid())
+        self.assertFalse(forms.UserCreateForm(no_number).is_valid())
