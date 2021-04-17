@@ -153,7 +153,7 @@ class OfficerForm(ModelForm):
 
     class Meta:
         model = models.Officer
-        exclude = ['id', 'sort_order']
+        exclude = ['id', 'sort_order', "width", "height"]
         widgets = {
             "picture": PhotoField
         }

@@ -41,7 +41,9 @@ class GalleryPhoto(models.Model):
     """
 
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    picture = models.ImageField(upload_to="gallery-photos")
+    width = models.IntegerField()
+    height = models.IntegerField()
+    picture = models.ImageField(upload_to="gallery-photos", width_field='width', height_field='height')
     caption = models.CharField(max_length=1000)
     date_posted = models.DateTimeField(auto_now_add=True)
     featured = models.BooleanField(default=False,
@@ -215,7 +217,9 @@ class Officer(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     first_name = models.CharField(max_length=100)
     last_name = models.CharField(max_length=100)
-    picture = models.ImageField(upload_to="officer-photos")
+    width = models.IntegerField()
+    height = models.IntegerField()
+    picture = models.ImageField(upload_to="officer-photos", width_field='width', height_field='height')
     biography = models.TextField(max_length=2000)
     phone = models.CharField(max_length=50, blank=True, null=True)
     email = models.EmailField(max_length=50, blank=True, null=True)
