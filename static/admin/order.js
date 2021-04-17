@@ -6,7 +6,7 @@ $(document).ready(() => {
      * 3. If there's no items in the database, we disable the save button
      */
 
-    $("#sort_list").sortable({
+    $(".sort_list").sortable({
         'animation': 150,
         'ghostClass': "ghostSortTarget",
         'filter': ".emptyNotification",
@@ -15,8 +15,7 @@ $(document).ready(() => {
 
     if ($(".emptyNotification").length === 0) {
 
-        $("#order_form").submit(() => {
-
+        $(".form").submit(() => {
             let new_order = [];
             $(".sortTarget").each((index, list_item) => {
 
@@ -24,12 +23,14 @@ $(document).ready(() => {
 
             });
 
-            $("#new_order").val(new_order.join(","));
+            $("#id_new_order").val(new_order.join(","));
+            console.log(new_order);
 
         });
+
     } else {
 
-        $("#submit").prop("disabled", true);
+        $(".submitButton").prop("disabled", true);
 
     }
 

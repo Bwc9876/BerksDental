@@ -1,4 +1,4 @@
-#sort_list {
+.sort_list {
     list-style: none;
     margin-bottom: 20px;
     padding: 0;
@@ -23,8 +23,4 @@
 
 .handle:hover {
     cursor: grab;
-}
-
-.submit {
-    width: 100%;
 }

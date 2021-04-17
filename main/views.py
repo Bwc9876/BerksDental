@@ -93,11 +93,11 @@ def get_next_month_and_year(month, year):
         return month + 1, year
 
 
-def get_next_and_previous_links(month, year):
+def get_next_and_previous_links(month, year, view_type):
     next_month, next_year = get_next_month_and_year(month, year)
-    next_link = f"{reverse('main:events')}?month={next_month}&year={next_year}"
+    next_link = f"{reverse('main:events')}?month={next_month}&year={next_year}&view={view_type}"
     last_month, last_year = get_last_month_and_year(month, year)
-    previous_link = f"{reverse('main:events')}?month={last_month}&year={last_year}"
+    previous_link = f"{reverse('main:events')}?month={last_month}&year={last_year}&view={view_type}"
     return next_link, previous_link
 
 
@@ -113,7 +113,7 @@ def events(request):
     """
     view_type = request.GET.get("view", "calendar")
 
-    if view_type == "calendar":
+    if view_type == "calendar" or view_type == "list":
         try:
             calendar.setfirstweekday(calendar.SUNDAY)
             today = date.today()
@@ -124,22 +124,18 @@ def events(request):
             matching_events = models.Event.objects.filter(
                 (Q(startDate__month=month) & Q(startDate__year=year)) | (
                         Q(endDate__month=month) & Q(endDate__year=year)))
-            next_link, previous_link = get_next_and_previous_links(month, year)
-            return render(request, "events-calendar.html",
+            next_link, previous_link = get_next_and_previous_links(month, year, view_type)
+            return render(request, f"events-{view_type}.html",
                           {"events": matching_events, "weeks": month_calendar, 'today': today, "month": month,
                            "month_name": month_name, "year": year,
                            "next_link": next_link, "previous_link": previous_link,
                            "weekdays": ["SUN", "MON", "TUE", "WED", "THU", "FRI", "SAT"]})
         except calendar.IllegalMonthError:
             raise Http404("Invalid Month")
-        # except ValueError:
-        #     raise Http404("Invalid Month/Year")
-    elif view_type == "list":
-        upcoming_events = models.Event.objects.filter(startDate__gte=date.today()).order_by("startDate")
-        past_events = models.Event.objects.filter(startDate__lt=date.today()).order_by("-startDate")
-        return render(request, "events-list.html", {"upcoming": upcoming_events, "past": past_events})
+        except ValueError:
+            raise Http404("Invalid Month/Year")
     else:
-        raise Http404("Invalid view type")
+        raise Http404("Invalid View Type")
 
 
 def safe_render(template_name, ctx=None):

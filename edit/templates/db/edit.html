@@ -9,6 +9,7 @@
 {% block adminLinks %}
     {% load static %}
     <link rel="stylesheet" type="text/css" href="{% static "admin/edit.css" %}">
+    <script type="text/javascript" src="{% static "admin/edit.js" %}"></script>
 
     {{ form.media }}
 
@@ -29,8 +30,8 @@
             </ul>
 
         {% endif %}
-
-        <form class="form" method="POST" enctype="multipart/form-data">
+        {% needsMultiPart form as needs_multipart %}
+        <form class="form" method="POST" {% if needs_multipart %}enctype="multipart/form-data"{% endif %}>
 
             {% csrf_token %}
             {% for field in form %}
@@ -55,7 +56,7 @@
                 </fieldset>
             {% endfor %}
 
-            <button class="submitButton" type="submit">{% block submitWord %}Save{% endblock %}</button>
+            <button class="submitButton" type="submit"><span class="submitWord">{% block submitWord %}Save{% endblock %}</span>&nbsp;<i class="loading hidden fas fa-circle-notch"></i></button>
 
         </form>
 

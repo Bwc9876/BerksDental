@@ -2,6 +2,9 @@
     This file contains forms, which perform validation and render to html automatically
     We can also call .save() on an instance of this class to save it to the database
 """
+from collections import Counter
+from uuid import UUID
+
 from django.conf import settings
 from django.contrib.auth.password_validation import validate_password, ValidationError, \
     get_password_validators, password_validators_help_texts
@@ -25,6 +28,34 @@ class DateSelectorField(DateInput):
     """
 
     input_type = 'date'
+
+
+class OrderInput(TextInput):
+    input_type = "hidden"
+    template_name = "custom_widgets/OrderWidget.html"
+
+    def get_context(self, name, value, attrs):
+        context = super().get_context(name, value, attrs)
+        context['widget']['objects'] = self.objects
+        context['widget']['currentOrder'] = ",".join(self.get_current_order())
+        return context
+
+    def get_current_order(self):
+        return [str(obj.id) for obj in self.objects]
+
+    class Media:
+        css = {
+            "all": ("admin/order.css",)
+        }
+        js = ("https://cdn.jsdelivr.net/npm/sortablejs@latest/Sortable.min.js",
+              "https://cdn.jsdelivr.net/npm/jquery-sortablejs@latest/jquery-sortable.js", "admin/order.js")
+
+
+class OrderField(fields.CharField):
+    widget = OrderInput()
+
+    def set_objects(self, objects):
+        self.widget.objects = objects
 
 
 class PermInput(TextInput):
@@ -165,6 +196,22 @@ class EventForm(ModelForm):
         self.fields['endDate'].label = "End Date"
         self.fields['startTime'].label = "Start Time"
         self.fields['endTime'].label = "End Time"
+
+
+class OrderForm(Form):
+    new_order = OrderField()
+
+    def clean(self):
+        cleaned_data = super().clean()
+        new_order_raw = cleaned_data.get("new_order")
+        if new_order_raw:
+            try:
+                new_order = [UUID(raw_id) for raw_id in new_order_raw]
+                current_order = self.fields["new_order"].get_current_order()
+                if Counter(new_order) != Counter(current_order):
+                    self.add_error("new_order", "Error Setting New Order")
+            except ValueError:
+                self.add_error("new_order", "Error Setting New Order")
 
 
 class UserCreateForm(ModelForm):

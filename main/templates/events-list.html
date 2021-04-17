@@ -110,110 +110,22 @@
 
 {% block content %}
 
-    <h1>Upcoming</h1>
+    {% load eventTags %}
 
-    <div class="events">
+    <a href="{{ previous_link }}">Previous</a><h1>{{ month_name }} {{ year }}</h1><a href="{{ next_link }}">Next</a>
 
-        {% for event in upcoming %}
-
-            <div class="eventContainer">
-                <div class="top">
-                    <div class="dateTimeInfo">
-                        <div class="dateTime start">
-                            <div class="date">
-                                <p class="month">
-                                    {{ event.startDate|date:"b"|upper }}
-                                </p>
-                                <p class="day">
-                                    {{ event.startDate|date:"d" }}
-                                </p>
-                            </div>
-                            <p class="time">{{ event.startTime }}</p>
-                        </div>
-                        <p class="separator"> - </p>
-                        <div class="dateTime end">
-                            <div class="date">
-                                <p class="month">
-                                    {{ event.endDate|date:"b"|upper }}
-                                </p>
-                                <p class="day">
-                                    {{ event.endDate|date:"d" }}
-                                </p>
-                            </div>
-                            <p class="time">{{ event.endTime }}</p>
-                        </div>
-                    </div>
-                    <div class="name">
-                        <p class="eventName">{{ event.name }}</p>
-                    </div>
-                </div>
-                <div class="details">
-                    <div class="eventLocation">
-                        {% if event.virtual %}
-                            <a class="eventLoc" href="{{ event.link }}">Link</a>
-                        {% else %}
-                            <p class="eventLoc">{{ event.location }}</p>
-                        {% endif %}
-                    </div>
-                    <p class="eventDescription">{{ event.description }}</p>
-                </div>
-            </div>
-
+    {% for week in weeks %}
+        {% for day in week %}
+            {% if day != 0 %}
+                <h1>{{ day }}</h1>
+                {% makeDateObj as date %}
+                {% getEventsOnDate as eventsOnThisDate %}
+                {% for event in eventsOnThisDate %}
+                    <p>{{ event }}</p>
+                {% endfor %}
+            {% endif %}
         {% endfor %}
-
-    </div>
-
-    <h1>Previous</h1>
-
-    <div class="events">
-
-        {% for event in past %}
-
-            <div class="eventContainer">
-                <div class="top">
-                    <div class="dateTimeInfo">
-                        <div class="dateTime start">
-                            <div class="date">
-                                <p class="month">
-                                    {{ event.startDate|date:"b"|upper }}
-                                </p>
-                                <p class="day">
-                                    {{ event.startDate|date:"d" }}
-                                </p>
-                            </div>
-                            <p class="time">{{ event.startTime }}</p>
-                        </div>
-                        <p class="separator"> - </p>
-                        <div class="dateTime end">
-                            <div class="date">
-                                <p class="month">
-                                    {{ event.endDate|date:"b"|upper }}
-                                </p>
-                                <p class="day">
-                                    {{ event.endDate|date:"d" }}
-                                </p>
-                            </div>
-                            <p class="time">{{ event.endTime }}</p>
-                        </div>
-                    </div>
-                    <div class="name">
-                        <p class="eventName">{{ event.name }}</p>
-                    </div>
-                </div>
-                <div class="details">
-                    <div class="eventLocation">
-                        {% if event.virtual %}
-                            <a class="eventLoc" href="{{ event.link }}">Link</a>
-                        {% else %}
-                            <p class="eventLoc">{{ event.location }}</p>
-                        {% endif %}
-                    </div>
-                    <p class="eventDescription">{{ event.description }}</p>
-                </div>
-            </div>
-
-        {% endfor %}
-    </div>
+    {% endfor %}
 
     <a href="{% url "main:events" %}?view=calendar">View As Calendar</a>
 

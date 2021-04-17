@@ -53,6 +53,27 @@ input[type="checkbox"] {
 
 .submitButton {
     width: 100%;
+    background-color: var(--ac-light-grey);
+    border: solid var(--ac-grey);
+    font-size: var(--h2);
+}
+
+@keyframes loadSpin {
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+.loading {
+    animation: loadSpin 2s 0s linear infinite;
+    font-size: var(--h3);
+}
+
+.hidden {
+    display: none;
 }
 
 .help-text {

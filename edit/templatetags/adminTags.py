@@ -6,6 +6,8 @@ from django import template
 from django.forms.fields import CheckboxInput
 from django.template.defaultfilters import safe, title
 
+from edit.forms import PhotoField
+
 register = template.Library()
 
 alertIcons = {
@@ -49,3 +51,11 @@ def get_primary_value(target_object):
 @register.filter(name='is_checkbox')
 def is_checkbox(field):
     return field.field.widget.__class__.__name__ == CheckboxInput().__class__.__name__
+
+
+@register.simple_tag(name="needsMultiPart")
+def needs_multipart(form):
+    for field in form.fields.values():
+        if field.widget.__class__.__name__ == PhotoField().__class__.__name__:
+            return True
+    return False

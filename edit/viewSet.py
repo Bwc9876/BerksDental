@@ -1,4 +1,3 @@
-from collections import Counter
 from uuid import UUID
 
 from django.conf import settings
@@ -12,6 +11,8 @@ from django.template.defaultfilters import slugify, escape
 from django.template.loader import render_to_string
 from django.urls import reverse
 from django.views.decorators.http import require_safe, require_http_methods
+
+from edit import forms
 
 formatters = {
     model_fields.URLField: lambda
@@ -345,27 +346,26 @@ class EditViewSet:
         :returns: Either a page where the user can edit the order of links, or a redirect back to the overview page
         :rtype: :class:`django.http.HttpResponse`
         """
-
         if request.method == "POST":
-            new_order_raw = request.POST.get("new_order", "").split(",")
-            try:
-                new_order = [UUID(raw_id) for raw_id in new_order_raw]
-            except ValueError:
-                new_order = []
-            current_order = list(self.model.objects.values_list("id", flat=True).order_by("sort_order"))
-            if Counter(new_order) == Counter(current_order):
+            form = forms.OrderForm(request.POST)
+            form.fields["new_order"].set_objects(self.model.objects.all())
+            if form.is_valid():
+                new_order = [UUID(raw_id) for raw_id in form.cleaned_data.get("new_order").split(",")]
+                current_order = list(self.model.objects.values_list("id", flat=True).order_by("sort_order"))
                 for target_id in current_order:
                     object_to_be_sorted = self.model.objects.get(id=target_id)
                     object_to_be_sorted.sort_order = new_order.index(target_id)
                     object_to_be_sorted.save()
                 return redirect(f'{self.overview_link()}?alert=New Order Saved&alertType=success')
             else:
-                return render(request, 'db/order.html',
-                              {'error': 'Invalid List!', 'objects': self.model.objects.all, 'viewSet': self})
+                return render(request, "db/edit.html", {'viewSet': self, 'back_link': self.overview_link(),
+                                                        'verb': "Re-Order", 'plural': True, "form": form})
         else:
-            return render(request, "db/order.html",
-                          {'objects': self.model.objects.all(), 'viewSet': self, 'back_link': self.overview_link(),
-                           'verb': "Re-Order", 'plural': True})
+            form = forms.OrderForm()
+            form.fields["new_order"].set_objects(self.model.objects.all())
+            return render(request, "db/edit.html",
+                          {'viewSet': self, 'back_link': self.overview_link(),
+                           'verb': "Re-Order", 'plural': True, "form": form})
 
     def obj_overview_view(self, request):
         """ A django view function, this will add the model to the database given form data
