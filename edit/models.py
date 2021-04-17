@@ -10,6 +10,7 @@ from django.conf import settings
 from django.contrib.auth.models import AbstractUser
 from django.db import models
 from django.forms import ValidationError
+from django.template.defaultfilters import escape
 
 
 class User(AbstractUser):
@@ -184,7 +185,7 @@ class Event(models.Model):
             "location": self.location
         }
 
-        return dumps(raw_dict)
+        return escape(dumps(raw_dict))
 
     class Meta:
         ordering = ["-startDate", "-endDate", ]

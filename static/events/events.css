@@ -89,6 +89,10 @@
     background-color: transparent;
 }
 
+.event-front-description {
+    display: initial;
+}
+
 .footer-main {
     z-index: -2;
 }
