@@ -132,8 +132,8 @@ def events(request):
                            "weekdays": ["SUN", "MON", "TUE", "WED", "THU", "FRI", "SAT"]})
         except calendar.IllegalMonthError:
             raise Http404("Invalid Month")
-        except ValueError:
-            raise Http404("Invalid Month/Year")
+        # except ValueError:
+        #     raise Http404("Invalid Month/Year")
     elif view_type == "list":
         upcoming_events = models.Event.objects.filter(startDate__gte=date.today()).order_by("startDate")
         past_events = models.Event.objects.filter(startDate__lt=date.today()).order_by("-startDate")

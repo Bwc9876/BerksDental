@@ -16,6 +16,7 @@ function getDate(calendar_tile) {
 
 $(document).ready(function () {
     $(".calendar-tile").click(function () {
+        console.log(getDate(this));
         if ($(this).hasClass("out-of-month") || $(this).hasClass("calendar-weekday")) {
             return;
         }
