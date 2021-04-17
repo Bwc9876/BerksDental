@@ -274,7 +274,7 @@ class ModelStringFunctions(TestCase):
         self.assertEqual(str(user), "First Last")
 
     def test_photo_string(self):
-        photo = models.GalleryPhoto.objects.create(caption="Test Photo")
+        photo = models.GalleryPhoto.objects.create(caption="Test Photo", width=100, height=100)
         self.assertEqual(str(photo), "Test Photo")
 
     def test_link_string(self):
@@ -300,7 +300,7 @@ class ModelStringFunctions(TestCase):
 class ModelUtilFunctions(TestCase):
     def test_masked_links(self):
         officer = models.Officer.objects.create(first_name="Test", last_name="Officer", email=test_email,
-                                                phone="(123)-456-789")
+                                                phone="(123)-456-789", width=100, height=100)
         self.assertNotEqual(officer.masked_email_link(), officer.email)
         self.assertNotEqual(officer.masked_phone_link(), officer.phone)
 

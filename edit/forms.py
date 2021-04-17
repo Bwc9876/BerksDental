@@ -203,15 +203,15 @@ class OrderForm(Form):
 
     def clean(self):
         cleaned_data = super().clean()
-        new_order_raw = cleaned_data.get("new_order")
+        new_order_raw = cleaned_data.get("new_order").split(",")
         if new_order_raw:
             try:
                 new_order = [UUID(raw_id) for raw_id in new_order_raw]
-                current_order = self.fields["new_order"].get_current_order()
+                current_order = [UUID(raw_id) for raw_id in self.fields["new_order"].widget.get_current_order()]
                 if Counter(new_order) != Counter(current_order):
-                    self.add_error("new_order", "Error Setting New Order")
+                    self.add_error("new_order", "Error Setting New Order (Counter)")
             except ValueError:
-                self.add_error("new_order", "Error Setting New Order")
+                self.add_error("new_order", "Error Setting New Order (ValueError)")
 
 
 class UserCreateForm(ModelForm):

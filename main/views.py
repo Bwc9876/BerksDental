@@ -43,7 +43,8 @@ def get_gallery_page(request):
     if start < 0:
         start = 0
     target_list = list(photo_objects[start:target_page.end_index()])
-    photos = [{'link': photo.photo_link(), 'alt': photo.caption} for photo in target_list]
+    photos = [{'link': photo.photo_link(), 'alt': photo.caption, 'height': photo.height, 'width': photo.width}
+              for photo in target_list]
     return JsonResponse({'photos': photos, 'hasNext': target_page.has_next()})
 
 
