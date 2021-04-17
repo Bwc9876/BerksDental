@@ -50,7 +50,6 @@
     <link crossorigin="anonymous" rel="preconnect" href="https://fonts.gstatic.com">
     <link href="{% static "/base/text-sizing.css" %}" type="text/css" rel="stylesheet">
     <link href="{% static "/base/base.css" %}" type="text/css" rel="stylesheet">
-    <link href="{% static "/base/menu-icon.css" %}" type="text/css" rel="stylesheet">
     {% comment %}
     Javascript
   {% endcomment %}
@@ -76,7 +75,7 @@
             <a href="{% url "main:events" %}" class="nav-link">Events</a>
             <a href="{% url "main:about" %}" class="nav-link">About</a>
         </nav>
-        <button class="nav-button">{% include "menu-icon.html" %}</button>
+        <button class="nav-button">Menu</button>
     </div>
     <div class="nav-placeholder"></div>
     <div class="header-content">{% block header %}{% endblock %}</div>
