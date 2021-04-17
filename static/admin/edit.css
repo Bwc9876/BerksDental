@@ -53,9 +53,15 @@ input[type="checkbox"] {
 
 .submitButton {
     width: 100%;
-    background-color: var(--ac-light-grey);
-    border: solid var(--ac-grey);
+    transition: var(--hover-bg-transition);
+    background-color: var(--ac-light);
+    border: solid 2px var(--ac-grey);
+    border-radius: 7px;
     font-size: var(--h2);
+}
+
+.submitButton:hover {
+    background-color: var(--ac-light-grey);
 }
 
 @keyframes loadSpin {

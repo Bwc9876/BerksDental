@@ -35,7 +35,7 @@
     <h1 class="adminHeader">{% if back_link %}{% action "back" back_link "fa-arrow-left" "h2" %}{% endif %}
         {% block adminHeader %}
             {{ verb }} {{ viewSet.displayName|title }}{% if plural %}s{% endif %}
-            <div class="additionalNavigation">{{ additionalNavigationButtons }}</div>{% endblock %}
+            <span class="additionalNavigation">{{ additionalNavigationButtons }}</span>{% endblock %}
     </h1>
 
 

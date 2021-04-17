@@ -1,11 +1,14 @@
-{% extends "admin_home.html" %}
+{% extends "admin_base.html" %}
 {% load adminTags %}
 {% block meta %}
     <title>Berks Dental Assistants: Help</title>
     <meta name="description" content="Berks Dental Assistants' Help Section.">
 {% endblock %}
 {% block adminHeader %}Help{% endblock %}
-
+{% block adminLinks %}
+    {% load static %}
+    <link rel="stylesheet" type="text/css" href="{% static "admin/home.css" %}">
+{% endblock %}
 {% block adminContent %}
     <div class="actions">
         <a href="{% url "edit:help_navigation" %}" class="action">

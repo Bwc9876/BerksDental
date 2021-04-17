@@ -132,6 +132,18 @@ header {
     color: var(--clr-dark);
 }
 
+.nav-button {
+    width: 50px;
+    height: 50px;
+    border: none;
+    background-color: rgba(0, 0, 0, 0);
+}
+
+.menu-icon {
+    width: 50px;
+    height: 50px;
+}
+
 .main-content {
     flex-grow: 1;
 }

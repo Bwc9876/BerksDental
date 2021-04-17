@@ -7,6 +7,7 @@ $(document).ready(function () {
     });
     $(".nav-button").click(function () {
         $("body").toggleClass("menu-shown");
+        $(".menu-icon").toggleClass("active");
         let navLinkContainer = $(".nav-link-container");
         navLinkContainer.scrollTop(0);
         navLinkContainer.toggleClass("menu-shown");

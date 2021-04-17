@@ -24,6 +24,7 @@ body {
 
 .additionalNavigation {
     float: right;
+    vertical-align: bottom;
 }
 
 .navigationAction {
@@ -70,11 +71,6 @@ body {
     padding: 1vh 2vw 1vh 1vw;
     display: flex;
     align-items: center;
-}
-
-.navigationAction.labeled {
-    padding: 0 2vw;
-    border-radius: 15px;
 }
 
 .alert .alert-icon {
