@@ -42,7 +42,7 @@
                     </div>
                 </div>
             {% empty %}
-                <p class="no-upcoming-events">No upcoming events, check back soon!</p>
+                <p class="no-upcoming-events">No upcoming events, check back soon! For more information on events go to the <a href="{% url "main:events" %}">events page</a>.</p>
             {% endfor %}
             {% if upcomingEvents|length >= 1 %}
                 <div class="event-card last-event-card">

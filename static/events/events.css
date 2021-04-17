@@ -11,13 +11,14 @@
 }
 
 .main-content {
-    padding: 10px 0;
+    padding-top: 2.5vw;
 }
 
 .calendar {
     display: grid;
     grid-template-columns: repeat(7, 1fr);
     background: var(--ac-light);
+    box-shadow: 0 0 8px 0;
 }
 
 .calendar-tile {
@@ -71,4 +72,19 @@
 
 .event {
     display: none;
+}
+
+.front-event-card {
+    width: auto;
+    border: none;
+    overflow: auto;
+    z-index: -1;
+}
+
+.front-event-card:nth-of-type(odd) {
+    background-color: transparent;
+}
+
+.footer-main {
+    z-index: -2;
 }

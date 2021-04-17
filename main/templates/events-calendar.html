@@ -5,6 +5,7 @@
 {% endblock %}
 {% block links %}
     {% load static %}
+    <link href="{% static "/home/home.css" %}" type="text/css" rel="stylesheet">
     <link href="{% static "/events/events.css" %}" type="text/css" rel="stylesheet">
     <script src="{% static "/events/events.js" %}" type="text/javascript"></script>
 {% endblock %}
@@ -37,5 +38,10 @@
                 </div>
             {% endfor %}
         {% endfor %}
+    </div>
+    <div class="event-cards-calendar">
+        <div class="front-event-card first">
+            <h2 id="event-list-title">Events on Day</h2>
+        </div>
     </div>
 {% endblock %}
