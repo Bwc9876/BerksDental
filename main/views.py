@@ -3,13 +3,13 @@ from datetime import date
 
 from django.core.paginator import Paginator
 from django.db.models import Q
+from django.forms import ValidationError
 from django.http import Http404, JsonResponse
 from django.shortcuts import render, get_object_or_404
 from django.template.exceptions import TemplateDoesNotExist
 from django.urls import reverse
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_safe, require_http_methods
-from django.forms import ValidationError
 
 from edit import models
 
@@ -30,7 +30,7 @@ def home(request):
     return render(request, 'home.html', {'featuredPhotos': featured_photos, 'upcomingEvents': upcoming_events})
 
 
-MAX_IMAGES_PER_PAGE = 20
+MAX_IMAGES_PER_PAGE = 12
 
 
 @csrf_exempt
@@ -44,8 +44,11 @@ def get_gallery_page(request):
     if start < 0:
         start = 0
     target_list = list(photo_objects[start:target_page.end_index()])
-    photos = [{'link': photo.photo_link(), 'alt': photo.caption, 'height': photo.height, 'width': photo.width}
-              for photo in target_list]
+    view_link_base = reverse("main:view_photo")
+    photos = [
+        {'id': photo.id, 'src': photo.photo_link(), 'link': f"{view_link_base}?id={photo.id}", 'alt': photo.caption,
+         'height': photo.height, 'width': photo.width}
+        for photo in target_list]
     return JsonResponse({'photos': photos, 'hasNext': target_page.has_next()})
 
 
