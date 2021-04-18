@@ -10,13 +10,13 @@
     <script src="{% static "/events/events.js" %}" type="text/javascript"></script>
 {% endblock %}
 {% block header %}
-    <a href="{{ previous_link }}"><i class="h3 fas fa-arrow-alt-circle-left"></i></a>
+    <a aria-label="Last Month" href="{{ previous_link }}"><i class="h3 fas fa-arrow-alt-circle-left"></i></a>
     <div>
         <h1>{{ month_name }}</h1>
         <h2>{{ year }}</h2>
         <a href="{% url "main:events" %}">Today<br/></a>
     </div>
-    <a href="{{ next_link }}"><i class="h3 fas fa-arrow-alt-circle-right"></i></a>
+    <a aria-label="Next Month" href="{{ next_link }}"><i class="h3 fas fa-arrow-alt-circle-right"></i></a>
 {% endblock %}
 {% block content %}
     {% load eventTags %}

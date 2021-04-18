@@ -12,27 +12,28 @@ body {
     background-color: white;
 }
 
-.adminHeader {
+.admin-header {
     margin: var(--all-margin);
     user-select: none;
     border-bottom: solid var(--clr-header) 3px;
+    font-family: unset;
 }
 
-.adminContent {
+.admin-content {
     margin: var(--all-margin);
 }
 
-.additionalNavigation {
+.additional-navigation {
     float: right;
     vertical-align: bottom;
 }
 
-.navigationAction {
+.navigation-action {
     color: var(--clr-header);
     transition: var(--hover-transition);
 }
 
-.navigationAction:hover {
+.navigation-action:hover {
     color: var(--defualt-hover-color);
     filter: none;
 }

@@ -2,9 +2,9 @@
        value="{{ widget.value|default_if_none:"{}" }}" {% include "custom_widgets/attrs.html" %}/>
 <br>
 {% for viewset in widget.viewsets %}
-    <label class="permLabel" for="{{ viewset.get_safe_name }}-dropdown">Select Permissions
+    <label class="perm-label" for="{{ viewset.get_safe_name }}-dropdown">Select Permissions
         For {{ viewset.displayName|title }}s:</label>
-    <select autocomplete="off" class="permDropdown" id="{{ viewset.get_safe_name }}-dropdown">
+    <select autocomplete="off" class="perm-dropdown" id="{{ viewset.get_safe_name }}-dropdown">
         <option>None</option>
         <option>View</option>
         <option>Edit & View</option>

@@ -1,5 +1,23 @@
 {% extends "help/help_base.html" %}
 
-{% block article %}
+{% load static %}
 
+{% block article %}
+    <h2 class="article-section-header">Section 1</h2>
+    <div class="article-section">
+        <p>{% lorem %}</p>
+    </div>
+    <h2 class="article-section-header">Section 2</h2>
+    <div class="article-section with-image">
+        <p>{% lorem %}</p>
+        <img alt="Test Image" width="480px" height="480px" src="{% static "tests/test.png" %}"/>
+    </div>
+    <h2 class="article-section-header">Section 3</h2>
+    <div class="article-section">
+        <p>{% lorem %}</p>
+    </div>
+    <div class="article-section with-image">
+        <img alt="Test Image" width="480px" height="480px" src="{% static "tests/test.png" %}"/>
+        <p>{% lorem %}</p>
+    </div>
 {% endblock %}

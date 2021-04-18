@@ -21,7 +21,7 @@ alertIcons = {
 @register.simple_tag(name="action")
 def action(name, url, icon, size="h4", show_name=False):
     return safe(
-        f'<a aria-label="{title(name)}" class="{name} {"labeled" if show_name else ""} navigationAction" href="{url}">'
+        f'<a aria-label="{title(name)}" class="{name} {"labeled" if show_name else ""} navigation-action" href="{url}">'
         f'<i class="fas {name}-icon {icon} {size}">{title(name) if show_name else ""}'
         f'</i>'
         f'</a>')

@@ -23,7 +23,7 @@ formatters = {
                    f'>Click To View Image</a> ',
     model_fields.BooleanField: lambda input_val: f'<i class="fas '
                                                  f'{"fa-check-circle" if input_val is True else "fa-times-circle"}'
-                                                 f' fa-lg boolIcon"></i>',
+                                                 f' fa-lg bool-icon"></i>',
     model_fields.TimeField: lambda input_val: input_val.strftime("%I:%M %p"),
     model_fields.DateTimeField: lambda input_val: input_val.strftime("%d-%m-%y at %I:%M %p")
 }
@@ -281,9 +281,10 @@ class EditViewSet:
         :returns: An HttpResponse containing the rendered html file
         :rtype: class:`django.http.HttpResponse`
         """
-
+        form = forms.ConfirmDeleteForm()
         if request.method == "POST":
             target_obj = get_object_or_404(self.model, id=request.GET.get('id', ''))
+            form.fields["confirm"].set_object_name(str(target_obj))
             self.pre_del(target_obj)
             target_obj.delete()
             if self.ordered:
@@ -295,9 +296,10 @@ class EditViewSet:
             return redirect(f'{self.overview_link()}?alert={self.displayName} Deleted&alertType=success')
         else:
             target_obj = get_object_or_404(self.model, id=request.GET.get('id', ''))
+            form.fields["confirm"].set_object_name(str(target_obj))
             return render(request, "db/delete.html",
-                          {'viewSet': self, 'objectName': target_obj, "verb": "Delete",
-                           "back_link": self.overview_link()})
+                          {'viewSet': self, "verb": "Delete",
+                           "back_link": self.overview_link(), "form": form})
 
     def obj_edit_or_add_view(self, request):
         """ A django view function, this will add the model to the database given form data

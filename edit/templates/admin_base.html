@@ -32,14 +32,14 @@
 
 
 
-    <h1 class="adminHeader">{% if back_link %}{% action "back" back_link "fa-arrow-left" "h2" %}{% endif %}
+    <h1 class="admin-header">{% if back_link %}{% action "back" back_link "fa-arrow-left" "h2" %}{% endif %}
         {% block adminHeader %}
             {{ verb }} {{ viewSet.displayName|title }}{% if plural %}s{% endif %}
-            <span class="additionalNavigation">{{ additionalNavigationButtons }}</span>{% endblock %}
+            <span class="additional-navigation">{{ additionalNavigationButtons }}</span>{% endblock %}
     </h1>
 
 
-    <div class="adminContent">
+    <div class="admin-content">
         {% block adminContent %}
             <h1>This html file is meant to be inherited, please don't render the base version!</h1>
         {% endblock %}

@@ -41,7 +41,7 @@
     justify-content: center;
     align-items: center;
     font-weight: lighter;
-    color: var(--clr-dark);
+    color: var(--clr-darker);
     transition: background-color 350ms linear;
 }
 

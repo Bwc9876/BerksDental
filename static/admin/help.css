@@ -1,0 +1,29 @@
+.article {
+    display: flex;
+    margin: var(--all-margin);
+    flex-direction: column;
+}
+
+.article-section {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-evenly;
+}
+
+.article-section p {
+    margin: 20px 0;
+}
+
+.article-section.with-image p {
+    width: 50%;
+    flex-grow: 1;
+}
+
+.article-section.with-image img {
+    margin: auto;
+}
+
+.article-section-header {
+    text-align: center;
+    margin: 0;
+}

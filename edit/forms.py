@@ -101,6 +101,23 @@ class PermField(fields.CharField):
         self.widget.viewsets = viewsets
 
 
+class ConfirmWidget(TextInput):
+    input_type = "hidden"
+    template_name = "custom_widgets/ConfirmTextWidget.html"
+
+    def get_context(self, name, value, attrs):
+        context = super().get_context(name, value, attrs)
+        context['widget']['object_name'] = self.object_name
+        return context
+
+
+class ConfirmField(fields.CharField):
+    widget = ConfirmWidget
+
+    def set_object_name(self, object_name):
+        self.widget.object_name = object_name
+
+
 class PhotoField(ClearableFileInput):
     template_name = "custom_widgets/PhotoInput.html"
 
@@ -324,3 +341,7 @@ class SetUserPasswordForm(Form):
             validate_password(new_password, user=self.user)
         except ValidationError as ve:
             [self.add_error("new_password", error) for error in list(ve)]
+
+
+class ConfirmDeleteForm(Form):
+    confirm = ConfirmField()

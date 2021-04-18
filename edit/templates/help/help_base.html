@@ -5,12 +5,23 @@
     <meta name="description" content="Berks Dental Assistants' Help Section.">
 {% endblock %}
 
+{% block adminLinks %}
+
+    {% load static %}
+    <link rel="stylesheet" type="text/css" href="{% static "admin/help.css" %}">
+
+{% endblock %}
+
 {% block adminHeader %}Help - {{ article_name }}{% endblock %}
 
 {% block adminContent %}
 
-    {% block article %}
+    <div class="article">
 
-    {% endblock %}
+        {% block article %}
+
+        {% endblock %}
+
+    </div>
 
 {% endblock %}

@@ -19,51 +19,51 @@
 
     {% load adminTags %}
 
-    <div class="tableContainer">
-        <table class="modelTable">
+    <div class="table-container">
+        <table class="model-table">
             <thead>
-                <tr class="shaded">
-                    {% if objects|length > 0 %}
-                        {% for header in headers %}
-                            <th>{{ header|title }}</th>
-                        {% endfor %}
-                        {% if canEdit %}
-                            <th colspan="{{ viewSet.additionalActions|length|add:2 }}">Actions</th>
-                        {% endif %}
+            <tr class="shaded">
+                {% if objects|length > 0 %}
+                    {% for header in headers %}
+                        <th>{{ header|title }}</th>
+                    {% endfor %}
+                    {% if canEdit %}
+                        <th colspan="{{ viewSet.additionalActions|length|add:2 }}">Actions</th>
                     {% endif %}
-                </tr>
+                {% endif %}
+            </tr>
             </thead>
             <tbody>
-                {% for object in objects %}
-                    <tr class="{% cycle "normal" "shaded" %}">
-                        {% for value in object %}
-                            {% if forloop.first %}
-                                <td><b>{{ value|safe|default:"Not Entered" }}</b></td>
-                            {% elif forloop.last %}
-                                {% if canEdit %}
-                                    <td><a aria-label="Edit {% getPrimaryValue object %}" class="action edit"
-                                           href="{{ viewSet.edit_link }}?id={{ value }}"><i
-                                            class="fas fa-edit"></i></a></td>
-                                    {% for action in viewSet.additionalActions %}
-                                        <td><a aria-label="{{ action.name }} {% getPrimaryValue object %}"
-                                               class="action action-{{ action.icon }}"
-                                               href="{{ action.link }}?id={{ value }}"><i
-                                                class="fas {{ action.icon }}"></i></a></td>
-                                    {% endfor %}
-                                    <td><a aria-label="Delete {% getPrimaryValue object %}" class="action delete"
-                                           href="{{ viewSet.delete_link }}?id={{ value }}"><i
-                                            class="fas fa-trash"></i></a></td>
-                                {% endif %}
-                            {% else %}
-                                <td>{{ value|safe|default:"Not Entered" }}</td>
+            {% for object in objects %}
+                <tr class="{% cycle "normal" "shaded" %}">
+                    {% for value in object %}
+                        {% if forloop.first %}
+                            <td><b>{{ value|safe|default:"Not Entered" }}</b></td>
+                        {% elif forloop.last %}
+                            {% if canEdit %}
+                                <td><a aria-label="Edit {% getPrimaryValue object %}" class="action edit"
+                                       href="{{ viewSet.edit_link }}?id={{ value }}"><i
+                                        class="fas fa-edit"></i></a></td>
+                                {% for action in viewSet.additionalActions %}
+                                    <td><a aria-label="{{ action.name }} {% getPrimaryValue object %}"
+                                           class="action action-{{ action.icon }}"
+                                           href="{{ action.link }}?id={{ value }}"><i
+                                            class="fas {{ action.icon }}"></i></a></td>
+                                {% endfor %}
+                                <td><a aria-label="Delete {% getPrimaryValue object %}" class="action delete"
+                                       href="{{ viewSet.delete_link }}?id={{ value }}"><i
+                                        class="fas fa-trash"></i></a></td>
                             {% endif %}
-                        {% endfor %}
-                    </tr>
-                {% empty %}
-                    <tr>
-                        <td>No {{ viewSet.displayName|title }}s In The Database</td>
-                    </tr>
-                {% endfor %}
+                        {% else %}
+                            <td>{{ value|safe|default:"Not Entered" }}</td>
+                        {% endif %}
+                    {% endfor %}
+                </tr>
+            {% empty %}
+                <tr class="empty-notification-row">
+                    <td class="empty-notification">No {{ viewSet.displayName|title }}s In The Database</td>
+                </tr>
+            {% endfor %}
             </tbody>
         </table>
     </div>

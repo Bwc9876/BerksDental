@@ -3,6 +3,7 @@ from datetime import date, time
 from json import dumps
 
 from django.conf import settings
+from django.contrib.auth import authenticate
 from django.contrib.auth.models import AnonymousUser
 from django.shortcuts import redirect
 from django.test import TestCase, RequestFactory
@@ -150,13 +151,14 @@ class User(TestCase):
         self.factory = RequestFactory()
         self.bad_user = AnonymousUser()
         self.test_link = models.ExternalLink.objects.create(display_name="Perm Test Link", url=test_url)
-        self.none_user = models.User.objects.create(username="None", email=test_email, first_name="Test",
-                                                    last_name="Test", password="TestingTesting123")
-        self.view_user = models.User.objects.create(username="View", email=test_email, first_name="Test",
-                                                    last_name="Test", password="TestingTesting123")
-        self.edit_user = models.User.objects.create(username="Edit", email=test_email, first_name="Test",
-                                                    last_name="Test", password="TestingTesting123")
-        self.admin_user = models.User.objects.create(username="Admin", is_superuser=True, password="TestingTesting123")
+        self.none_user = models.User.objects.create_user(username="None", email=test_email, first_name="Test",
+                                                         last_name="Test", password="TestingTesting123")
+        self.view_user = models.User.objects.create_user(username="View", email=test_email, first_name="Test",
+                                                         last_name="Test", password="TestingTesting123")
+        self.edit_user = models.User.objects.create_user(username="Edit", email=test_email, first_name="Test",
+                                                         last_name="Test", password="TestingTesting123")
+        self.admin_user = models.User.objects.create_superuser(username="Admin", is_superuser=True,
+                                                               password="TestingTesting123")
 
     def test_edit_perms(self):
         view_user_request = self.factory.post(f"/admin/edit/user/?id={self.view_user.id}",
@@ -199,6 +201,15 @@ class User(TestCase):
                     self.assertNotEqual(result.get("Location"), access_denied.get("Location"))
                 else:
                     self.assertEqual(result.get("Location"), access_denied.get("Location"))
+
+    def test_password_set(self):
+        user = self.view_user
+        new_password = "WayBetterPassword432!"
+        request = self.factory.post(f"/admin/password/user/?id={user.id}",
+                                    {"new_password": new_password, "confirm_new_password": new_password})
+        self.userVS.change_password_view(request)
+        attempted_login = authenticate(request, username=user.username, password=new_password)
+        self.assertIsNotNone(attempted_login)
 
 
 class Template(TestCase):
@@ -275,7 +286,7 @@ class ModelStringFunctions(TestCase):
 
     def test_photo_string(self):
         photo = models.GalleryPhoto.objects.create(caption="Test Photo", width=100, height=100)
-        self.assertEqual(str(photo), "Test Photo")
+        self.assertEqual(str(photo), 'Photo Captioned: "Test Photo"')
 
     def test_link_string(self):
         link = models.ExternalLink.objects.create(url=test_url, display_name="Test String Link")
@@ -375,6 +386,16 @@ def gen_post_for_location_and_link_check(virtual, loc):
     return RequestFactory().post("/admin/edit/event/", post_obj).POST
 
 
+def gen_post_data_for_order_validation_check(uuid_list):
+    return RequestFactory().post("/admin/order/link/", {"new_order": ",".join(uuid_list)}).POST
+
+
+def gen_form_for_order_validation_check(post_data, obj_list):
+    form = forms.OrderForm(post_data)
+    form.fields["new_order"].set_objects(obj_list)
+    return form
+
+
 class FormValidation(TestCase):
     def setUp(self):
         self.factory = RequestFactory()
@@ -418,3 +439,14 @@ class FormValidation(TestCase):
         self.assertFalse(forms.UserCreateForm(no_upper).is_valid())
         self.assertFalse(forms.UserCreateForm(no_lower).is_valid())
         self.assertFalse(forms.UserCreateForm(no_number).is_valid())
+
+    def test_order_uuid_validation(self):
+        link1 = models.ExternalLink.objects.create(display_name="1", url=test_url)
+        link2 = models.ExternalLink.objects.create(display_name="2", url=test_url, sort_order=1)
+        invalid_uuids = gen_post_data_for_order_validation_check(["bad string", "bad string 2"])
+        unequal_lists = gen_post_data_for_order_validation_check([str(link1.id)])
+        good_list = gen_post_data_for_order_validation_check([str(link2.id), str(link1.id)])
+        objs = [link1, link2]
+        self.assertFalse(gen_form_for_order_validation_check(invalid_uuids, objs).is_valid())
+        self.assertFalse(gen_form_for_order_validation_check(unequal_lists, objs).is_valid())
+        self.assertTrue(gen_form_for_order_validation_check(good_list, objs).is_valid())

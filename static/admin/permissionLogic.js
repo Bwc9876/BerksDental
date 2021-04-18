@@ -12,7 +12,7 @@ const jsonConverter = {
 
 function load_from_json(json) {
     let permissionObj = JSON.parse(json);
-    $(".permDropdown").each(function (index, dropdown) {
+    $(".perm-dropdown").each(function (index, dropdown) {
         const viewset_name = dropdown.id.split("-")[0];
         if (viewset_name in permissionObj) {
             dropdown.value = jsonConverter[permissionObj[viewset_name]];
@@ -26,7 +26,7 @@ $(document).ready(() => {
     load_from_json(perms_input.val());
     $(".form").submit(function () {
         let permissions = {};
-        $(".permDropdown").each((index, dropdown) => {
+        $(".perm-dropdown").each((index, dropdown) => {
             const viewset_name = dropdown.id.split("-")[0];
             permissions[viewset_name] = dropDownConverter[$(dropdown).find("option:selected").text()];
         });

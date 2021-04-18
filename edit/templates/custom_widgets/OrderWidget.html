@@ -1,8 +1,9 @@
-<input type="hidden" name="{{ widget.name }}" id="{{ widget.attrs.id }}" value="{{ widget.currentOrder }}" {% include "custom_widgets/attrs.html" %}/>
+<input type="hidden" name="{{ widget.name }}" id="{{ widget.attrs.id }}"
+       value="{{ widget.currentOrder }}" {% include "custom_widgets/attrs.html" %}/>
 <ul class="sort_list">
-     {% for object in widget.objects %}
+    {% for object in widget.objects %}
         <li id="{{ object.id }}" class="sortTarget"><i class="handle fas fa-grip-lines"></i>{{ object }}</li>
-     {% empty %}
+    {% empty %}
         <li class="sortTarget emptyNotification">No {{ viewSet.displayName|title }}s in the database</li>
-     {% endfor %}
+    {% endfor %}
 </ul>

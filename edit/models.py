@@ -75,7 +75,7 @@ class GalleryPhoto(models.Model):
         :rtype: str
         """
 
-        return self.caption
+        return f"Photo Captioned: \"{self.caption}\""
 
     class Meta:
         ordering = ['-date_posted']

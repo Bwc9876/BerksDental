@@ -9,6 +9,7 @@ function requestPage(number) {
 $(document).ready(function () {
     let current = 1;
     let load_images_button = $("#load-images-button");
+    let grid = $(".grid");
     load_images_button.click(function () {
         current++;
         requestPage(current).then(results => {
@@ -21,7 +22,7 @@ $(document).ready(function () {
                             <p class="h3">Click To View</p>
                         </div>
                     </a>`;
-                $(".grid").append(photoPreview);
+                grid.append(photoPreview);
             }
             if (results["hasNext"] === false) {
                 load_images_button.prop("disabled", true);

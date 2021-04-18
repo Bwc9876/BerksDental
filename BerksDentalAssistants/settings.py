@@ -33,7 +33,7 @@ if STAGE == "PRODUCTION":
         'edit'
     ]
 else:
-    ALLOWED_HOSTS = ['berksdental.benjamincrocker.repl.co', '127.0.0.1', 'localhost', '192.168.86.29', '71.225.44.187']
+    ALLOWED_HOSTS = ['127.0.0.1', 'localhost', '192.168.86.29', '71.225.44.187']
     INSTALLED_APPS = [
         'django.contrib.admin', 'django.contrib.auth',
         'django.contrib.contenttypes',

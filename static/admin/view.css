@@ -1,9 +1,9 @@
-.tableContainer {
+.table-container {
     width: 100%;
     overflow-x: auto;
 }
 
-.modelTable {
+.model-table {
     --normal-color: white;
     --shaded-color: var(--ac-light-grey);
     --row-border-color: grey;
@@ -13,32 +13,36 @@
     width: 100%;
 }
 
-.modelTable > thead {
+.model-table > thead {
     background-color: var(--shaded-color);
     user-select: none;
 }
 
-.modelTable > tbody .shaded {
+.model-table > tbody .shaded {
     background-color: var(--shaded-color);
 }
 
-.modelTable > tbody .normal {
+.model-table > tbody .normal {
     background-color: var(--normal-color);
 }
 
-.modelTable td, .modelTable th {
+.model-table td, .model-table th {
     font-size: var(--h5);
     color: var(--text-color);
     padding: 1vh 2vw;
 }
 
-.modelTable > thead > tr {
+.model-table > thead > tr {
     border-bottom: solid 2px var(--row-border-color);
     border-top: solid 2px var(--row-border-color);
 }
 
-.modelTable > tbody > tr {
+.model-table > tbody > tr {
     border-bottom: solid 1px var(--row-border-color);
+}
+
+.empty-notification-row {
+    background-color: var(--shaded-color);
 }
 
 .link-value {
@@ -79,7 +83,7 @@
     color: var(--red-color);
 }
 
-.boolIcon {
+.bool-icon {
     background-color: white;
     border-radius: 100%;
 }

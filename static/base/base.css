@@ -2,6 +2,7 @@
     --clr-light: #C3D9A3;
     --clr: #8CBF3F;
     --clr-dark: #197F00;
+    --clr-darker: #215200;
 
     --ac-light: #C4E5F2;
     --ac: #23B7D9;
@@ -51,7 +52,7 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 a {
-    color: var(--clr-dark);
+    color: var(--clr-darker);
     text-decoration: none;
 }
 

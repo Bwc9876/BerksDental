@@ -1,14 +1,8 @@
-{% extends 'admin_base.html' %}
+{% extends 'db/edit.html' %}
 {% comment %}
     This file is used as a confirmation screen to make sure the user wants to delete an object from the database
     We also use the {% csrf_token %} to ensure the deletion was invoked by the user, and not a malicous third-party
 {% endcomment %}
 
 
-{% block adminContent %}
-    <form method="POST">
-        {% csrf_token %}
-        <h2> Are you sure you want to delete {{ objectName|title }}?</h2>
-        <button type="submit">Confirm</button>
-    </form>
-{% endblock %}
+{% block submitWord %}Confirm{% endblock %}
