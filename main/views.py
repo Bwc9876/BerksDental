@@ -30,7 +30,7 @@ def home(request):
     return render(request, 'home.html', {'featuredPhotos': featured_photos, 'upcomingEvents': upcoming_events})
 
 
-MAX_IMAGES_PER_PAGE = 12
+MAX_IMAGES_PER_PAGE = 3
 
 
 @csrf_exempt
@@ -65,8 +65,9 @@ def gallery(request):
 
     photo_objects = models.GalleryPhoto.objects.all()
     photo_paginator = Paginator(photo_objects, MAX_IMAGES_PER_PAGE, allow_empty_first_page=True)
-    first_list = models.GalleryPhoto.objects.all()[0:photo_paginator.get_page(1).end_index()]
-    return render(request, "gallery.html", {"photos": first_list})
+    first_page = photo_paginator.get_page(1)
+    first_list = models.GalleryPhoto.objects.all()[0:first_page.end_index()]
+    return render(request, "gallery.html", {"photos": first_list, 'hasNext': first_page.has_next()})
 
 
 def get_next_photo(photo):

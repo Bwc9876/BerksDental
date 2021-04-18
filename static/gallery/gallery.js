@@ -29,7 +29,8 @@ $(document).ready(function () {
             }
         });
     });
-    if ($(".grid-item").length === 0) {
+    let grid_items = $(".grid-item");
+    if (grid_items.length === 0) {
         load_images_button.prop("disabled", true);
         load_images_button.text("There Are No Images");
     }

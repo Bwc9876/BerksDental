@@ -21,5 +21,9 @@
         </a>
     {% endfor %}
     </div>
-    <button id="load-images-button">Load More Images</button>
+    {% if hasNext %}
+        <button id="load-images-button">Load More Images</button>
+    {% else %}
+        <button disabled id="load-images-button">There Are No More Images</button>
+    {% endif %}
 {% endblock %}
