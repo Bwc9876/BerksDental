@@ -4,76 +4,22 @@
     <meta name="description" content="Berks Dental Assistants' Gallery Page.">
 {% endblock %}
 {% block links %}
-
-    <style>
-
-        div.imgContainer {
-            display: flex;
-            flex-wrap: wrap;
-            margin: auto;
-            width: calc(100% - 100px);
-        }
-
-        div.galleryPhoto {
-            position: relative;
-            width: 500px;
-            height: 500px;
-            margin-right: 10px;
-            margin-bottom: 10px;
-        }
-
-        img.image {
-            position: absolute;
-            margin: 0;
-            top: 0;
-        }
-
-        div.caption {
-            background-color: black;
-            position: relative;
-            bottom: 1px;
-            z-index: 1;
-            opacity: 0;
-            transition: opacity 0.3s 0s linear;
-        }
-
-        div.galleryPhoto:hover div.caption {
-            opacity: 0.75;
-        }
-
-        p.captionText {
-            color: white;
-            margin: 0;
-        }
-
-    </style>
     {% load static %}
     <script src="{% static '/gallery/gallery.js' %}" defer type="text/javascript"></script>
-
+    <link href="{% static "/gallery/gallery.css" %}" type="text/css" rel="stylesheet">
 {% endblock %}
-
+{% block header %}
+    <h1>Gallery</h1>
+{% endblock %}
 {% block content %}
-
-    <h1> Our Pictures </h1>
-
-    <div class="imgContainer">
-
-        {% for photo in photos %}
-
-            <div class="galleryPhoto">
-
-                <img class="image" height="500px" width="500px" src="{{ photo.photo_link }}" alt="{{ photo.caption }}"/>
-
-                <div class="caption">
-
-                    <p class="captionText">{{ photo.caption }}</p>
-
-                </div>
-
+    <div class="grid">
+    {% for photo in photos %}
+        <a class="grid-item" href="{% url "main:view_photo" %}?id={{ photo.id }}" aria-label="{{ photo.caption }}" style="background-image: url('{{ photo.photo_link }}')">
+            <div class="image-clicker">
+                <p class="h3">Click To View</p>
             </div>
-
-        {% endfor %}
-
+        </a>
+    {% endfor %}
     </div>
-
+    <button id="load-images-button">Load More Images</button>
 {% endblock %}

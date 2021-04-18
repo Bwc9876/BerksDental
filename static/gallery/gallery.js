@@ -1,32 +1,25 @@
-
-
 function requestPage(number) {
-    /**
-     * This function queries the backend for a page of image objects
-     * args:
-     *  number: A *one* based index of what page you want
-     * returns:
-     *  a dictionary with the following values:
-     *   photos:
-     *    link: link to the picture
-     *    alt: the caption for the image
-     *   hasNext: whether or not there is a next page
-     */
-
     return new Promise((resolve) => {
-
         $.post("/gallery-page/", {'page': number}, (data) => {
-
             resolve(data);
-
         });
-
     });
-
 }
-
-$(document).ready(() => {
-
-
-
+$(document).ready(function() {
+    let current = 0;
+    $("#load-images-button").click(function() {
+        current++;
+        requestPage(current).then(results => {
+            let photos = results["photos"];
+            for (let i = 0; i < photos.length;i++) {
+                let photoPreview = `
+ <a class="grid-item" href="${VIEW PHOTO LINK}" aria-label="${PHOTO CAPTION}" style="background-image: url('${PHOTO SOURCE}')">
+     <div class="image-clicker">
+         <p class="h3">Click To View</p>
+     </div>
+ </a>`;
+                $(".grid").append(photoPreview);
+            }
+        });
+    });
 });
