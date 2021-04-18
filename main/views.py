@@ -30,7 +30,7 @@ def home(request):
     return render(request, 'home.html', {'featuredPhotos': featured_photos, 'upcomingEvents': upcoming_events})
 
 
-MAX_IMAGES_PER_PAGE = 3
+MAX_IMAGES_PER_PAGE = 12
 
 
 @csrf_exempt
