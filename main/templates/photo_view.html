@@ -1,9 +1,16 @@
 {% extends "base.html" %}
-
+{% block meta %}
+    <title>Berks Dental Assistants: View Photo</title>
+    <meta name="description" content="Berks Dental Assistants' View Photo Page.">
+{% endblock %}
+{% block links %}
+    {% load static %}
+    <link href="{% static "/gallery/view_photo.css" %}" type="text/css" rel="stylesheet">
+{% endblock %}
 {% block content %}
-
-    {% if last_link %}<a href="{{ last_link }}">Previous</a>{% endif %}
     <img alt="{{ photo.caption }}" width="{{ photo.width }}px" height="{{ photo.height }}px" src="{{ photo.photo_link }}"/>
-    {% if next_link %}<a href="{{ next_link }}">Next</a>{% endif %}
-
+    <div class="info-box">
+    {% if next_link %}<a href="{{ next_link }}">Previous</a>{% endif %}
+    {% if last_link %}<a style="margin-left: auto;" href="{{ last_link }}">Next</a>{% endif %}
+    </div>
 {% endblock %}
