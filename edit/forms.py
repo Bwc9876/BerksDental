@@ -2,6 +2,7 @@
     This file contains forms, which perform validation and render to html automatically
     We can also call .save() on an instance of this class to save it to the database
 """
+import os
 from collections import Counter
 from uuid import UUID
 
@@ -12,6 +13,23 @@ from django.forms import Form, ModelForm, fields, PasswordInput
 from django.forms.widgets import DateInput, TimeInput, ClearableFileInput, TextInput
 
 from edit import models
+
+
+def get_size_of_folder(folder_path):
+    total_size = 0
+    for dir_path, dir_names, filenames in os.walk(folder_path):
+        for f in filenames:
+            fp = os.path.join(dir_path, f)
+            if not os.path.islink(fp):
+                total_size += os.path.getsize(fp)
+    return total_size
+
+
+MAX_BYTES = 900000000
+
+
+def check_media_quota():
+    return get_size_of_folder(settings.MEDIA_ROOT) <= MAX_BYTES
 
 
 class TimeSelectorField(TimeInput):
@@ -138,6 +156,10 @@ class PhotoForm(ModelForm):
         max_featured_photos = 6
         cleaned_data = super().clean()
         featured = cleaned_data.get("featured")
+
+        if not check_media_quota():
+            self.add_error("picture", "There is not enough space to upload this picture,"
+                                      " please delete some older pictures to free up space")
 
         if featured is not None:
             currently_featured = len(list(models.GalleryPhoto.objects.filter(featured=True)))
