@@ -2,7 +2,7 @@ $(document).ready(() => {
 
     $(".form").submit(() => {
 
-        $(".submitWord").addClass("hidden");
+        $(".submit-word").addClass("hidden");
         $(".loading").removeClass("hidden");
 
     });

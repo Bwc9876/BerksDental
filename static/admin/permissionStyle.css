@@ -1,5 +1,6 @@
 .perm-label {
     font-size: calc(var(--text-size) - 2px);
+    user-select: none;
 }
 
 .perm-dropdown {

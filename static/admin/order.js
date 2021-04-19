@@ -30,7 +30,7 @@ $(document).ready(() => {
 
     } else {
 
-        $(".submitButton").prop("disabled", true);
+        $(".submit-button").prop("disabled", true);
 
     }
 

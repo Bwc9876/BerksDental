@@ -6,7 +6,7 @@
 .errorList {
     list-style: none;
     padding-left: 0;
-    margin-bottom: 0;
+    margin: 0;
     font-size: var(--help-error-text-size);
 }
 
@@ -18,16 +18,48 @@
     display: none;
 }
 
-input, textarea, .fieldLabel {
+input, textarea {
+    padding: 6px 8px;
+}
+
+input[type="file"] {
+    padding: 0;
+}
+
+@media only screen and (max-width: 700px) {
+
+    input, textarea {
+        width: 100%;
+        box-sizing: border-box;
+    }
+
+    .field-label {
+        margin-bottom: 5px;
+    }
+
+}
+
+input, textarea, .field-label {
     font-size: var(--text-size);
 }
 
-.fieldLabel {
-    margin-bottom: 20px;
-    margin-right: 20px;
+.field-label {
+    display: inline-block;
     user-select: none;
     font-weight: bold;
     vertical-align: top;
+    width: 250px;
+    padding-top: 6px;
+}
+
+.field-label.checkbox-label {
+    display: inline;
+    width: unset;
+    padding-top: 0;
+}
+
+.passwordHelp {
+    padding-left: 0;
 }
 
 textarea {
@@ -51,7 +83,7 @@ input[type="checkbox"] {
     vertical-align: center;
 }
 
-.submitButton {
+.submit-button {
     width: 100%;
     transition: var(--hover-bg-transition);
     background-color: var(--ac-light);
@@ -60,11 +92,11 @@ input[type="checkbox"] {
     font-size: var(--h2);
 }
 
-.submitButton:hover {
+.submit-button:hover {
     background-color: var(--ac-light-grey);
 }
 
-@keyframes loadSpin {
+@keyframes load-spin {
     from {
         transform: rotate(0deg);
     }
@@ -74,7 +106,7 @@ input[type="checkbox"] {
 }
 
 .loading {
-    animation: loadSpin 2s 0s linear infinite;
+    animation: load-spin 2s 0s linear infinite;
     font-size: var(--h3);
 }
 

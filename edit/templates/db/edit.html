@@ -45,9 +45,9 @@
                     {% endif %}
                     {% if field|is_checkbox %}
                         {{ field }}
-                        <label for="{{ field.id_for_label }}" class="fieldLabel h4">{{ field.label|title }}</label>
+                        <label for="{{ field.id_for_label }}" class="field-label h4 checkbox-label">{{ field.label|title }}</label>
                     {% else %}
-                        <label for="{{ field.id_for_label }}" class="fieldLabel h4">{{ field.label|title }}:</label>
+                        <label for="{{ field.id_for_label }}" class="field-label h4">{{ field.label|title }}:</label>
                         {{ field }}
                     {% endif %}
                     {% if field.help_text %}
@@ -56,7 +56,7 @@
                 </fieldset>
             {% endfor %}
 
-            <button class="submitButton" type="submit"><span class="submitWord">{% block submitWord %}
+            <button class="submit-button" type="submit"><span class="submit-word">{% block submitWord %}
                 Save{% endblock %}</span>&nbsp;<i class="loading hidden fas fa-circle-notch"></i></button>
 
         </form>
