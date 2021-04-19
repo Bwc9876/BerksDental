@@ -68,7 +68,7 @@ class Ordering(TestCase):
         vs = views.LinkViewSet()
         vs.obj_add(request)
         new_link = models.ExternalLink.objects.get(display_name="Test 4")
-        self.assertEqual(new_link.sort_order, 3, msg="Objects Don't Get Proper Sort Order On Creation!")
+        self.assertEqual(new_link.sort_order, 3)
 
     def test_ordering_on_deletion(self):
         target_link = models.ExternalLink.objects.get(display_name="Test 2")
@@ -77,8 +77,8 @@ class Ordering(TestCase):
         vs.obj_delete_view(request)
         link1 = models.ExternalLink.objects.get(display_name="Test 1")
         link2 = models.ExternalLink.objects.get(display_name="Test 3")
-        self.assertEqual(link1.sort_order, 0, msg="Objects Before Deleted Object Sort Order Invalid!")
-        self.assertEqual(link2.sort_order, 1, msg="Objects After Deleted Object Sort Order Invalid!")
+        self.assertEqual(link1.sort_order, 0)
+        self.assertEqual(link2.sort_order, 1)
 
     def test_order_editing(self):
         link1, link2, link3 = self.test_links
@@ -347,16 +347,16 @@ class PhotoModelUtilFunctions(TestCase):
         delete_image(self.picture)
 
 
-def gen_post_data_for_event_edit(startDate, startTime, endDate, endTime):
+def gen_post_data_for_event_edit(start_date, start_time, end_date, end_time):
     return RequestFactory().post("/admin/edit/event/", {
         "name": "Test Event",
         "description": "Test Event",
         "virtual": True,
         "link": test_url,
-        "startDate": startDate,
-        "endDate": endDate,
-        "startTime": startTime,
-        "endTime": endTime
+        "startDate": start_date,
+        "endDate": end_date,
+        "startTime": start_time,
+        "endTime": end_time
     }).POST
 
 
