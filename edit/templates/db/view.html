@@ -14,6 +14,26 @@
     <link rel="stylesheet" type="text/css" href="{% static "admin/view.css" %}">
 
 {% endblock %}
+{% load adminTags %}
+{% block additionalNavigation %}
+    {% if page.has_other_pages %}
+        {% if page.has_previous %}
+            {% action "previous" previous_link "fa-arrow-alt-circle-left" "h2" %}
+        {% endif %}
+        Page {{ page.number }}/{{ max_pages }}
+        {% if page.has_next %}
+            {% action "next" next_link "fa-arrow-alt-circle-right" "h2" %}
+        {% endif %}
+    {% endif %} &nbsp;
+    {% if canEdit %}
+        {% if viewSet.ordered %}
+            {% action "add" viewSet.edit_link "fa-plus" "h2" show_name=True %}
+            {% action "order" viewSet.order_link "fa-sort" "h2" show_name=True %}
+        {% else %}
+            {% action "add" viewSet.edit_link "fa-plus" "h2" show_name=True %}
+        {% endif %}
+    {% endif %}
+{% endblock %}
 
 {% block adminContent %}
 

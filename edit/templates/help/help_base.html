@@ -6,22 +6,15 @@
 {% endblock %}
 
 {% block adminLinks %}
-
     {% load static %}
     <link rel="stylesheet" type="text/css" href="{% static "admin/help.css" %}">
-
 {% endblock %}
 
 {% block adminHeader %}Help - {{ article_name }}{% endblock %}
 
 {% block adminContent %}
-
     <div class="article">
-
         {% block article %}
-
-        {% endblock %}
-
+            <h1>This html file is meant to be inherited! Please don't render the base version!</h1>{% endblock %}
     </div>
-
 {% endblock %}

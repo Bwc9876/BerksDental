@@ -10,15 +10,11 @@
 {% block links %}
     {% load static %}
     <link type="text/css" rel="stylesheet" href="{% static "admin/base.css" %}">
-    {% block adminLinks %}
-
-
-    {% endblock %}
+    {% block adminLinks %}{% endblock %}
 {% endblock %}
 
 {% block content %}
 
-    {% load adminTags %}
     {% getAlert request as alert %}
     {% if alert %}
         <script type="text/javascript" defer="defer">
@@ -34,8 +30,9 @@
 
     <h1 class="admin-header">{% if back_link %}{% action "back" back_link "fa-arrow-left" "h2" %}{% endif %}
         {% block adminHeader %}
-            {{ verb }} {{ viewSet.displayName|title }}{% if plural %}s{% endif %}
-            <span class="additional-navigation">{{ additionalNavigationButtons }}</span>{% endblock %}
+            {{ verb }} {{ viewSet.displayName|title }}{% if plural %}s{% endif %}{% endblock %}
+        <span class="additional-navigation">{% block additionalNavigation %}{% endblock %}{% if help_link %}&nbsp;
+            {% action "Help" help_link "fa-question-circle" "h2" False True %}{% endif %}</span>
     </h1>
 
 

@@ -8,7 +8,6 @@ from django.forms import ValidationError
 from django.http import Http404
 from django.shortcuts import render, redirect, get_object_or_404
 from django.template.defaultfilters import slugify, escape
-from django.template.loader import render_to_string
 from django.urls import reverse
 from django.views.decorators.http import require_safe, require_http_methods
 
@@ -245,7 +244,8 @@ class EditViewSet:
             return redirect(f'{self.overview_link()}?alert=New {self.displayName} Saved&alertType=success')
         else:
             return render(request, "db/edit.html", {'form': form, 'viewSet': self, 'new': True, "verb": "Add",
-                                                    "back_link": self.overview_link()})
+                                                    "back_link": self.overview_link(),
+                                                    'help_link': reverse("edit:help_edit")})
 
     def obj_edit(self, request):
         """ A django view function, this will edit the model on the database given form data
@@ -269,7 +269,7 @@ class EditViewSet:
         else:
             return render(request, "db/edit.html",
                           {'form': form, 'viewSet': self, 'new': False, "verb": "Edit",
-                           "back_link": self.overview_link()})
+                           "back_link": self.overview_link(), 'help_link': reverse("edit:help_edit")})
 
     def obj_delete_view(self, request):
         """ A django view function, this will delete the model from the database given form data
@@ -336,7 +336,7 @@ class EditViewSet:
             print(form.media)
             return render(request, 'db/edit.html',
                           {'form': form, 'viewSet': self, 'new': new, "verb": "Add" if new else "Edit",
-                           "back_link": self.overview_link()})
+                           "back_link": self.overview_link(), 'help_link': reverse("edit:help_edit")})
 
     def object_order_view(self, request):
         """ This function allows the user to edit the order external links will appear with drag-and-drop
@@ -361,13 +361,15 @@ class EditViewSet:
                 return redirect(f'{self.overview_link()}?alert=New Order Saved&alertType=success')
             else:
                 return render(request, "db/edit.html", {'viewSet': self, 'back_link': self.overview_link(),
-                                                        'verb': "Re-Order", 'plural': True, "form": form})
+                                                        'verb': "Re-Order", 'plural': True, "form": form,
+                                                        'help_link': reverse("edit:help_ordering")})
         else:
             form = forms.OrderForm()
             form.fields["new_order"].set_objects(self.model.objects.all())
             return render(request, "db/edit.html",
                           {'viewSet': self, 'back_link': self.overview_link(),
-                           'verb': "Re-Order", 'plural': True, "form": form})
+                           'verb': "Re-Order", 'plural': True, "form": form,
+                           'help_link': reverse("edit:help_ordering")})
 
     def obj_overview_view(self, request):
         """ A django view function, this will add the model to the database given form data
@@ -397,18 +399,12 @@ class EditViewSet:
         for target in self.labels.keys():
             if target in headers:
                 headers[headers.index(target)] = self.labels[target]
-        additional_navigation_buttons = render_to_string("db/overview_navigation_buttons.html",
-                                                         context={'viewSet': self, 'page': page,
-                                                                  'max_pages': model_paginator.num_pages,
-                                                                  "next_link": next_link,
-                                                                  "previous_link": previous_link,
-                                                                  "can_edit": request.user.has_perms(
-                                                                      self.get_permissions_as_dict()["Edit"])})
         return render(request, 'db/view.html',
                       {'headers': headers, 'objects': self.format_value_list(objects), 'viewSet': self,
                        'canEdit': request.user.has_perms(self.get_permissions_as_dict()["Edit"]),
                        'back_link': reverse("edit:admin_home"), 'verb': "View/Edit",
-                       'additionalNavigationButtons': additional_navigation_buttons, 'plural': True})
+                       'page': page, 'next_link': next_link, 'previous_link': previous_link, 'plural': True,
+                       'max_pages': model_paginator.num_pages, 'help_link': reverse("edit:help_navigation")})
 
     @staticmethod
     def missing_permissions_link():

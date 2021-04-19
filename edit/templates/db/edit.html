@@ -45,9 +45,11 @@
                     {% endif %}
                     {% if field|is_checkbox %}
                         {{ field }}
-                        <label for="{{ field.id_for_label }}" class="field-label h4 checkbox-label">{{ field.label|title }}</label>
+                        <label id="{{ field.label }}_label" for="{{ field.id_for_label }}"
+                               class="field-label h4 checkbox-label">{{ field.label|title }}</label>
                     {% else %}
-                        <label for="{{ field.id_for_label }}" class="field-label h4">{{ field.label|title }}:</label>
+                        <label id="{{ field.label }}_label" for="{{ field.id_for_label }}"
+                               class="field-label h4">{{ field.label|title }}:</label>
                         {{ field }}
                     {% endif %}
                     {% if field.help_text %}

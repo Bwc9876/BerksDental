@@ -97,7 +97,7 @@ class GalleryPhotoViewSet(EditViewSet):
     modelForm = forms.PhotoForm
     # The photo-folder attribute tells the model where to store pictures
     photoFolder = "gallery-photos"
-    displayFields = ["picture", "caption", "featured"]
+    displayFields = ["caption", "picture", "featured"]
 
     def rename_photo_file(self, photo_object):
         """ This function is used to rename the picture uploaded by the user to the photo's id
@@ -265,13 +265,15 @@ class UserViewSet(EditViewSet):
             else:
                 return render(request, "db/change_password.html",
                               {"form": form, "viewSet": self, "new": False,
-                               'back_link': self.overview_link(), "targetUser": str(target_user)})
+                               'back_link': self.overview_link(), "targetUser": str(target_user),
+                               'help_link': reverse("edit:help_password")})
         else:
             form = forms.SetUserPasswordForm()
             form.set_user(target_user)
             return render(request, "db/change_password.html",
                           {"form": form, "viewSet": self, "new": False,
-                           'back_link': self.overview_link(), "targetUser": str(target_user)})
+                           'back_link': self.overview_link(), "targetUser": str(target_user),
+                           'help_link': reverse("edit:help_password")})
 
     def get_password_view_function(self):
 
@@ -353,7 +355,8 @@ def admin_home(request):
     if request.user.has_perms(UserViewSet().get_permissions_as_dict()["View"]):
         accessible_viewsets.append(UserViewSet())
 
-    return render(request, 'admin_home.html', {"viewsets": accessible_viewsets})
+    return render(request, 'admin_home.html', {"viewsets": accessible_viewsets,
+                                               'help_link': reverse("edit:help_navigation")})
 
 
 def help_page(name, display_name):
