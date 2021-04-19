@@ -1,10 +1,10 @@
 function evaluateVirtual() {
     if ($("#id_virtual")[0].checked === true) {
-        $("#Location_fieldset").toggleClass("hiddenField", true);
-        $("#Link_fieldset").toggleClass("hiddenField", false);
+        $("#Location_fieldset").toggleClass("hidden", true);
+        $("#Link_fieldset").toggleClass("hidden", false);
     } else {
-        $("#Location_fieldset").toggleClass("hiddenField", false);
-        $("#Link_fieldset").toggleClass("hiddenField", true);
+        $("#Location_fieldset").toggleClass("hidden", false);
+        $("#Link_fieldset").toggleClass("hidden", true);
     }
 }
 

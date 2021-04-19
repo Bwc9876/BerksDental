@@ -3,7 +3,7 @@
     --help-error-text-size: calc(var(--text-size) - 5px);
 }
 
-.errorList {
+.error-list {
     list-style: none;
     padding-left: 0;
     margin: 0;
@@ -12,10 +12,6 @@
 
 .error {
     color: #ff0000;
-}
-
-.hiddenField {
-    display: none;
 }
 
 input, textarea {

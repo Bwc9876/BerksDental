@@ -4,7 +4,7 @@
 
 from django import template
 from django.forms.fields import CheckboxInput
-from django.template.defaultfilters import safe, title
+from django.template.defaultfilters import safe, title, slugify
 
 from edit.forms import PhotoField
 
@@ -19,11 +19,12 @@ alertIcons = {
 
 
 @register.simple_tag(name="action")
-def action(name, url, icon, size="h4", show_name=False, new_tab=False):
+def action(name, url, icon, size="h4", show_name=False, new_tab=False, enabled=True):
     tab_target = "target=\"_blank\""
     return safe(
-        f'<a aria-label="{title(name)}" {tab_target if new_tab else ""} class="{name} {"labeled" if show_name else ""} navigation-action" href="{url}">'
-        f'<i class="fas {name}-icon {icon} {size}">{title(name) if show_name else ""}'
+        f'<a aria-label="{title(name)}" {tab_target if new_tab else ""} class="{"" if enabled else "disabled"}'
+        f' {slugify(name)} {"labeled" if show_name else ""} navigation-action" href="{url}">'
+        f'<i class="fas {icon} {slugify(name)}-icon {size}">{title(name) if show_name else ""}'
         f'</i>'
         f'</a>')
 

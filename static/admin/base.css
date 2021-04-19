@@ -15,7 +15,6 @@ body {
 .admin-header {
     margin: var(--all-margin);
     user-select: none;
-    border-bottom: solid var(--clr-header) 3px;
     font-family: unset;
 }
 
@@ -33,9 +32,18 @@ body {
     transition: var(--hover-transition);
 }
 
+.navigation-action.disabled {
+    color: var(--ac-grey);
+    cursor: default;
+}
+
 .navigation-action:hover {
     color: var(--defualt-hover-color);
     filter: none;
+}
+
+.navigation-action.disabled:hover {
+    color: var(--ac-grey);
 }
 
 .alert {
@@ -70,12 +78,22 @@ body {
     color: var(--clr-header);
     margin: 1vh var(--all-margin);
     padding: 1vh 2vw 1vh 1vw;
-    display: flex;
-    align-items: center;
+    font-family: unset;
+    user-select: none;
 }
 
 .alert .alert-icon {
     color: var(--border-color);
     font-size: var(--h2);
     margin-right: 10px;
+}
+
+.alert .close-alert {
+    float: right;
+    vertical-align: middle;
+    color: var(--clr-header);
+}
+
+.alert .close-alert-button {
+    color: var(--clr-header);
 }

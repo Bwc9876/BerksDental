@@ -17,12 +17,18 @@
 
     {% getAlert request as alert %}
     {% if alert %}
-        <script type="text/javascript" defer="defer">
-            history.pushState({'alert': true}, document.title, window.location.pathname);
+        <script type="text/javascript" defer>
+            $(document).ready(() => {
+                history.pushState({'alert': true}, document.title, window.location.pathname);
+                $(".close-alert-button").click(() => {
+                    $(".alert").remove();
+                });
+            });
         </script>
         <h3 class="alert alert-{% getAlertType request %}">
             <i class="fas alert-icon fa-{% getAlertIcon request %}"></i>
             {{ alert }}
+            <span class="close-alert"><a class="close-alert-button"><i class="fas fa-times"></i></a></span>
         </h3>
     {% endif %}
 
@@ -32,7 +38,7 @@
         {% block adminHeader %}
             {{ verb }} {{ viewSet.displayName|title }}{% if plural %}s{% endif %}{% endblock %}
         <span class="additional-navigation">{% block additionalNavigation %}{% endblock %}{% if help_link %}&nbsp;
-            {% action "Help" help_link "fa-question-circle" "h2" False True %}{% endif %}</span>
+            {% action "Help" help_link "fa-question-circle" "h2" new_tab=True%}{% endif %}</span>
     </h1>
 
 

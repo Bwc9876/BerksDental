@@ -180,8 +180,8 @@ class Event(models.Model):
             "description": self.description,
             "startDate": self.startDate.strftime("%x"),
             "endDate": self.endDate.strftime("%x"),
-            "startTime": self.startTime.strftime("%I:%m %p"),
-            "endTime": self.endTime.strftime("%I:%m %p"),
+            "startTime": self.startTime.strftime("%I:%M %p"),
+            "endTime": self.endTime.strftime("%I:%M %p"),
             "virtual": self.virtual,
             "link": self.link,
             "location": self.location

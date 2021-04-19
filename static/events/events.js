@@ -38,11 +38,11 @@ $(document).ready(function () {
             let titleSuffix = sameDay?"":endsToday?" Ends":" Starts";
             let timeString = (sameDay)?`${event["startTime"]} - ${event["endTime"]}`:endsToday?event["endTime"]:event["startTime"];
             let eventCard = `<div class="front-event-card">
-        <h2>${event["name"]}${titleSuffix}</h2>
-        <p class="h4">${timeString}</p>
-        <p class="h4">${event["virtual"]?`<a href="${event["link"]}">${event["link"]}</a>`:event["location"]}</p>
-        <p class="event-front-description h4">${event["description"]}</p>
-    </div>`;
+                                <h2>${event["name"]}${titleSuffix}</h2>
+                                <p class="h4">${timeString}</p>
+                                <p class="h4">${event["virtual"]?`<a target="_blank" rel="noopener" href="${event["link"]}">${event["link"]}</a>`:event["location"]}</p>
+                                <p class="event-front-description h4">${event["description"]}</p>
+                            </div>`;
             $(".event-cards-calendar").append(eventCard);
         }
     });

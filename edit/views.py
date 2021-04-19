@@ -18,7 +18,8 @@ from django.urls import path, reverse
 from django.views.decorators.http import require_safe, require_http_methods
 
 from edit import forms, models
-from edit.viewSet import EditViewSet, formatters
+from edit.view_set import ViewSet, formatters
+from edit.exceptions import ImproperlyConfiguredViewSetError
 
 
 class Action:
@@ -31,7 +32,7 @@ class Action:
 # The following classes inherit from EditViewSet class, and are used to add functionality to the models we want
 
 
-class EventViewSet(EditViewSet):
+class EventViewSet(ViewSet):
     displayName = "Event"
     pictureClass = "fa-calendar-alt"
     model = models.Event
@@ -52,7 +53,7 @@ class EventViewSet(EditViewSet):
         return new_value_list
 
 
-class SocialViewSet(EditViewSet):
+class SocialViewSet(ViewSet):
     displayName = "Social Media Page"
     pictureClass = "fa-share-alt"
     model = models.Social
@@ -80,7 +81,7 @@ class SocialViewSet(EditViewSet):
         return new_value_list
 
 
-class LinkViewSet(EditViewSet):
+class LinkViewSet(ViewSet):
     displayName = "Link"
     pictureClass = "fa-link"
     model = models.ExternalLink
@@ -90,7 +91,7 @@ class LinkViewSet(EditViewSet):
     labels = {'display_name': "Name"}
 
 
-class GalleryPhotoViewSet(EditViewSet):
+class GalleryPhotoViewSet(ViewSet):
     displayName = "Photo"
     pictureClass = "fa-images"
     model = models.GalleryPhoto
@@ -157,6 +158,14 @@ class OfficerViewSet(GalleryPhotoViewSet):
 
 REGISTERED_VIEWSETS = [EventViewSet, LinkViewSet, GalleryPhotoViewSet, OfficerViewSet, SocialViewSet]
 
+for view_set in REGISTERED_VIEWSETS:
+    try:
+        view_set()
+    except ImproperlyConfiguredViewSetError as config_error:
+        REGISTERED_VIEWSETS.remove(view_set)
+        print(f"View Set: {view_set.displayName} Is Not Configured Correctly, And Will Be Removed")
+        print(f"Error: {config_error}")
+
 
 def gen_name_dict():
     names = {}
@@ -184,7 +193,7 @@ def view_set_to_permission_pair(user, viewset):
     return viewset_name, permission_level
 
 
-class UserViewSet(EditViewSet):
+class UserViewSet(ViewSet):
     displayName = "User"
     pictureClass = "fa-users-cog"
     additionalActions = [Action("Change Password For", "fa-key", "/admin/password/user/")]
@@ -194,7 +203,6 @@ class UserViewSet(EditViewSet):
     labels = {
         "is_staff": "Manager",
         "first_name": "Name",
-        "last_login": "Last Login"
     }
 
     PERMISSION_JSON_TO_VIEWSET = {
@@ -296,7 +304,7 @@ def generate_paths_from_view_set(view_set):
     """
 
     view_set_instance = view_set()
-    if issubclass(view_set, EditViewSet):
+    if issubclass(view_set, ViewSet):
         url_name = view_set_instance.get_safe_name()
 
         overview, add_or_edit, delete = view_set_instance.get_view_functions()

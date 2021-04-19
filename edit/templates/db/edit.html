@@ -23,7 +23,7 @@
 
         {% if form.non_field_errors %}
 
-            <ul id="nonfield_errors" class="errorList">
+            <ul id="nonfield_errors" class="error-list">
                 {% for error in form.non_field_errors %}
                     <li class="error">{{ error }}</li>
                 {% endfor %}
@@ -37,7 +37,7 @@
             {% for field in form %}
                 <fieldset id="{{ field.label }}_fieldset">
                     {% if field.errors %}
-                        <ul class="errorList" id="{{ field.label }}_errors">
+                        <ul class="error-list" id="{{ field.label }}_errors">
                             {% for error in field.errors %}
                                 <li class="error">{{ error }}</li>
                             {% endfor %}

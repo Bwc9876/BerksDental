@@ -13,16 +13,16 @@
     width: 100%;
 }
 
-.model-table > thead {
+.model-table thead {
     background-color: var(--shaded-color);
     user-select: none;
 }
 
-.model-table > tbody .shaded {
+.model-table .shaded {
     background-color: var(--shaded-color);
 }
 
-.model-table > tbody .normal {
+.model-table .normal {
     background-color: var(--normal-color);
 }
 
@@ -32,12 +32,12 @@
     padding: 1vh 2vw;
 }
 
-.model-table > thead > tr {
+.model-table thead tr {
     border-bottom: solid 2px var(--row-border-color);
     border-top: solid 2px var(--row-border-color);
 }
 
-.model-table > tbody > tr {
+.model-table tbody tr {
     border-bottom: solid 1px var(--row-border-color);
 }
 
@@ -59,7 +59,7 @@
     font-size: var(--size);
 }
 
-.action > .fas {
+.action .fas {
     font-size: var(--size);
 }
 
@@ -87,4 +87,8 @@
 .bool-icon {
     background-color: white;
     border-radius: 100%;
+}
+
+.bottom-bar {
+    text-align: right;
 }

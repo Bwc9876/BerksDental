@@ -16,23 +16,14 @@
 {% endblock %}
 {% load adminTags %}
 {% block additionalNavigation %}
-    {% if page.has_other_pages %}
-        {% if page.has_previous %}
-            {% action "previous" previous_link "fa-arrow-alt-circle-left" "h2" %}
+        {% if canEdit %}
+            {% if viewSet.ordered %}
+                {% action "add" viewSet.edit_link "fa-plus" "h2" show_name=True %}&nbsp;
+                {% action "order" viewSet.order_link "fa-sort" "h2" show_name=True %}
+            {% else %}
+                {% action "add" viewSet.edit_link "fa-plus" "h2" show_name=True %}
+            {% endif %}
         {% endif %}
-        Page {{ page.number }}/{{ max_pages }}
-        {% if page.has_next %}
-            {% action "next" next_link "fa-arrow-alt-circle-right" "h2" %}
-        {% endif %}
-    {% endif %} &nbsp;
-    {% if canEdit %}
-        {% if viewSet.ordered %}
-            {% action "add" viewSet.edit_link "fa-plus" "h2" show_name=True %}
-            {% action "order" viewSet.order_link "fa-sort" "h2" show_name=True %}
-        {% else %}
-            {% action "add" viewSet.edit_link "fa-plus" "h2" show_name=True %}
-        {% endif %}
-    {% endif %}
 {% endblock %}
 
 {% block adminContent %}
@@ -87,5 +78,14 @@
             </tbody>
         </table>
     </div>
+    {% if page.has_other_pages %}
+        <h1 class="bottom-bar">
+            {% action "First Page" first_link "fa-fast-backward" "h2" enabled=page.has_previous %}
+            {% action "Previous Page" previous_link "fa-step-backward" "h2" enabled=page.has_previous %}
+            Page {{ page.number }}/{{ max_pages }}
+            {% action "Next Page" next_link "fa-step-forward" "h2" enabled=page.has_next %}
+            {% action "Last Page" last_link "fa-fast-forward" "h2" enabled=page.has_next %}
+        </h1>
+    {% endif %}
 
 {% endblock %}

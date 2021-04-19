@@ -3,6 +3,7 @@ User-agent: *
 Disallow: /admin/
 Disallow: /debug_admin/
 Disallow: /static/admin/
+Disallow: /static/tests/
 
 #Sitemaps
 Sitemap: https://{{ request.get_host }}/sitemap.xml

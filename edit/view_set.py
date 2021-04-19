@@ -2,6 +2,7 @@ from uuid import UUID
 
 from django.conf import settings
 from django.contrib.auth.decorators import login_required
+from django.core.exceptions import FieldDoesNotExist
 from django.core.paginator import Paginator
 from django.db import models as model_fields
 from django.forms import ValidationError
@@ -11,7 +12,7 @@ from django.template.defaultfilters import slugify, escape
 from django.urls import reverse
 from django.views.decorators.http import require_safe, require_http_methods
 
-from edit import forms
+from edit import forms, exceptions
 
 formatters = {
     model_fields.URLField: lambda
@@ -28,7 +29,7 @@ formatters = {
 }
 
 
-class EditViewSet:
+class ViewSet:
     """ A class used to manage and render models easily, this class is meant to be inherited
 
     :attr displayName: The name to display on html forms and certain links
@@ -59,13 +60,40 @@ class EditViewSet:
         """ This function is run when the ViewSet is instantiated
         It sets up a format list, which essentially tells us how each field of the object should be formatted
         """
+        if self.model is None:
+            raise exceptions.ImproperlyConfiguredViewSetError("No Model Set")
+        if self.modelForm is None:
+            raise exceptions.ImproperlyConfiguredViewSetError("No Model Form Set")
 
         self.format_list = []
+
         for field in self.displayFields:
-            field_object = self.model._meta.get_field(field)
-            self.format_list.append(formatters.get(type(field_object), lambda input_val: str(input_val)))
-        if self.model is None:
-            raise ValueError("No Model Set")
+            try:
+                field_object = self.model._meta.get_field(field)
+                self.format_list.append(formatters.get(type(field_object), lambda input_val: str(input_val)))
+            except FieldDoesNotExist:
+                raise exceptions.ImproperlyConfiguredViewSetError(f"No Field Named: {field} "
+                                                                  f"(double-check displayFields)")
+
+        if self.ordered:
+            try:
+                self.model._meta.get_field("sort_order")
+            except FieldDoesNotExist:
+                raise exceptions.ImproperlyConfiguredViewSetError("Ordered Is True,"
+                                                                  " but Model Doesnt Have sort_order Field")
+
+        if self.per_page <= 0:
+            raise exceptions.ImproperlyConfiguredViewSetError("per_page Must Be Over 0")
+
+        for field in self.labels.keys():
+            try:
+                self.model._meta.get_field(field)
+                if field not in self.displayFields:
+                    raise exceptions.ImproperlyConfiguredViewSetError(f"{field} is a field, on the model,"
+                                                                      f" but it is not included in displayFields"
+                                                                      f" (labels)")
+            except FieldDoesNotExist:
+                raise exceptions.ImproperlyConfiguredViewSetError(f"Labels Contains Unknown Field: {field}")
 
     def format_value_list(self, value_list):
         """ This function is used as a way to format any values we read from the database, like dates and links
@@ -385,12 +413,16 @@ class EditViewSet:
         page = model_paginator.get_page(page_number)
         start = page.start_index() - 1
         end = page.end_index()
-        next_link = "#"
-        previous_link = "#"
+        next_link = "javascript:void"
+        last_link = "javascript:void"
+        previous_link = "javascript:void"
+        first_link = "javascript:void"
         if page.has_next():
             next_link = f"{self.overview_link()}?page={page.next_page_number()}"
+            last_link = f"{self.overview_link()}?page={model_paginator.num_pages}"
         if page.has_previous():
             previous_link = f"{self.overview_link()}?page={page.previous_page_number()}"
+            first_link = f"{self.overview_link()}?page=1"
         headers = self.displayFields.copy()
         if start >= 0:
             objects = self.model.objects.all()[start:end].values_list(*self.displayFields, 'id')
@@ -404,7 +436,8 @@ class EditViewSet:
                        'canEdit': request.user.has_perms(self.get_permissions_as_dict()["Edit"]),
                        'back_link': reverse("edit:admin_home"), 'verb': "View/Edit",
                        'page': page, 'next_link': next_link, 'previous_link': previous_link, 'plural': True,
-                       'max_pages': model_paginator.num_pages, 'help_link': reverse("edit:help_navigation")})
+                       'max_pages': model_paginator.num_pages, 'help_link': reverse("edit:help_navigation"),
+                       'first_link': first_link, 'last_link': last_link})
 
     @staticmethod
     def missing_permissions_link():
