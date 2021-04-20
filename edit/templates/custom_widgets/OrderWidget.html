@@ -2,8 +2,8 @@
        value="{{ widget.currentOrder }}" {% include "custom_widgets/attrs.html" %}/>
 <ul class="sort_list">
     {% for object in widget.objects %}
-        <li id="{{ object.id }}" class="sortTarget"><i class="handle fas fa-grip-lines"></i>{{ object }}</li>
+        <li id="{{ object.id }}" class="sort-target"><i class="handle fas fa-grip-lines"></i>{{ object }}</li>
     {% empty %}
-        <li class="sortTarget emptyNotification">No {{ viewSet.displayName|title }}s in the database</li>
+        <li class="sort-target empty-notification">No {{ widget.viewset_display_name }}s in the database</li>
     {% endfor %}
 </ul>

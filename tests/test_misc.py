@@ -32,13 +32,13 @@ class User(TestCase):
 
     def test_edit_perms(self):
         view_user_request = self.factory.post(f"/admin/edit/user/?id={self.view_user.id}",
-                                              utils.gen_post_data_for_user_edit(self.view_user, perm_type="view"))
+                                              utils.gen_post_data_for_user_edit(self.view_user, perm_type="View"))
         edit_user_request = self.factory.post(f"/admin/edit/user/?id={self.edit_user.id}",
-                                              utils.gen_post_data_for_user_edit(self.edit_user, perm_type="edit"))
+                                              utils.gen_post_data_for_user_edit(self.edit_user, perm_type="*"))
         self.userVS.obj_edit(view_user_request)
         self.userVS.obj_edit(edit_user_request)
-        self.assertEqual(self.view_user.has_perms(self.vs.get_permissions_as_dict()["View"]), True)
-        self.assertEqual(self.edit_user.has_perms(self.vs.get_permissions_as_dict()["*"]), True)
+        self.assertTrue(self.view_user.has_perms(self.vs.get_permissions_as_dict()["View"]))
+        self.assertTrue(self.edit_user.has_perms(self.vs.get_permissions_as_dict()["*"]))
 
     def gen_user_requests_for_perm_check(self, user):
         requests = [self.factory.get("/admin/overview/link/"), self.factory.get("/admin/edit/link/"),

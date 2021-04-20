@@ -6,7 +6,9 @@ $(document).ready(function () {
         }
     });
     $(".nav-button").click(function () {
-        $("body").toggleClass("menu-shown");
+        const body = $("body");
+        body.toggleClass("menu-shown");
+        $(".nav-button").text(body.hasClass("menu-shown")? "Close": "Menu")
         let navLinkContainer = $(".nav-link-container");
         navLinkContainer.scrollTop(0);
         navLinkContainer.toggleClass("menu-shown");

@@ -271,9 +271,9 @@ class ViewSet:
             self.post_save(new_obj, form.cleaned_data, True)
             return redirect(f'{self.overview_link()}?alert=New {self.displayName} Saved&alertType=success')
         else:
-            return render(request, "db/edit.html", {'form': form, 'viewSet': self, 'new': True, "verb": "Add",
-                                                    "back_link": self.overview_link(),
-                                                    'help_link': reverse("edit:help_edit")})
+            return render(request, "db/form_base.html", {'form': form, 'viewSet': self, 'new': True, "verb": "Add",
+                                                         "back_link": self.overview_link(),
+                                                         'help_link': reverse("edit:help_edit")})
 
     def obj_edit(self, request):
         """ A django view function, this will edit the model on the database given form data
@@ -295,7 +295,7 @@ class ViewSet:
             self.post_save(edited_obj, form.cleaned_data, False)
             return redirect(f'{self.overview_link()}?alert={self.displayName} Saved&alertType=success')
         else:
-            return render(request, "db/edit.html",
+            return render(request, "db/form_base.html",
                           {'form': form, 'viewSet': self, 'new': False, "verb": "Edit",
                            "back_link": self.overview_link(), 'help_link': reverse("edit:help_edit")})
 
@@ -362,7 +362,7 @@ class ViewSet:
                 except ValidationError:
                     raise Http404()
             print(form.media)
-            return render(request, 'db/edit.html',
+            return render(request, 'db/form_base.html',
                           {'form': form, 'viewSet': self, 'new': new, "verb": "Add" if new else "Edit",
                            "back_link": self.overview_link(), 'help_link': reverse("edit:help_edit")})
 
@@ -379,6 +379,7 @@ class ViewSet:
         if request.method == "POST":
             form = forms.OrderForm(request.POST)
             form.fields["new_order"].set_objects(self.model.objects.all())
+            form.fields["new_order"].set_name(self.displayName)
             if form.is_valid():
                 new_order = [UUID(raw_id) for raw_id in form.cleaned_data.get("new_order").split(",")]
                 current_order = list(self.model.objects.values_list("id", flat=True).order_by("sort_order"))
@@ -388,13 +389,14 @@ class ViewSet:
                     object_to_be_sorted.save()
                 return redirect(f'{self.overview_link()}?alert=New Order Saved&alertType=success')
             else:
-                return render(request, "db/edit.html", {'viewSet': self, 'back_link': self.overview_link(),
-                                                        'verb': "Re-Order", 'plural': True, "form": form,
-                                                        'help_link': reverse("edit:help_ordering")})
+                return render(request, "db/form_base.html", {'viewSet': self, 'back_link': self.overview_link(),
+                                                             'verb': "Re-Order", 'plural': True, "form": form,
+                                                             'help_link': reverse("edit:help_ordering")})
         else:
             form = forms.OrderForm()
             form.fields["new_order"].set_objects(self.model.objects.all())
-            return render(request, "db/edit.html",
+            form.fields["new_order"].set_name(self.displayName)
+            return render(request, "db/form_base.html",
                           {'viewSet': self, 'back_link': self.overview_link(),
                            'verb': "Re-Order", 'plural': True, "form": form,
                            'help_link': reverse("edit:help_ordering")})

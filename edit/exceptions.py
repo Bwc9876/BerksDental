@@ -1,4 +1,3 @@
-
 class ViewSetError(Exception):
     pass
 

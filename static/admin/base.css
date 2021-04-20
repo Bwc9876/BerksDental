@@ -96,4 +96,5 @@ body {
 
 .alert .close-alert-button {
     color: var(--clr-header);
+    cursor: pointer;
 }

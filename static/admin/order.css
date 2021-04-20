@@ -4,7 +4,7 @@
     padding: 0;
 }
 
-.sortTarget {
+.sort-target {
     border: grey 2px solid;
     margin: 10px 5px;
     padding: 0;
@@ -12,15 +12,12 @@
     user-select: none;
 }
 
-.ghostSortTarget {
-    background-color: var(--ac-light);
-}
-
 .handle {
     margin: 0 10px;
     color: grey;
+    cursor: grab;
 }
 
-.handle:hover {
-    cursor: grab;
+.ghost-sort-target {
+    background-color: var(--ac-light);
 }

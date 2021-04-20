@@ -6,18 +6,19 @@ $(document).ready(() => {
      * 3. If there's no items in the database, we disable the save button
      */
 
+    // noinspection JSUnresolvedFunction
     $(".sort_list").sortable({
         'animation': 150,
-        'ghostClass': "ghostSortTarget",
-        'filter': ".emptyNotification",
+        'ghostClass': "ghost-sort-target",
+        'filter': ".empty-notification",
         'handle': ".handle"
     });
 
-    if ($(".emptyNotification").length === 0) {
+    if ($(".empty-notification").length === 0) {
 
         $(".form").submit(() => {
             let new_order = [];
-            $(".sortTarget").each((index, list_item) => {
+            $(".sort-target").each((index, list_item) => {
 
                 new_order.push($(list_item).attr("id"));
 

@@ -18,7 +18,7 @@ def delete_image(image):
         os.remove(img_path)
 
 
-def gen_post_data_for_user_edit(user, perm_type="none"):
+def gen_post_data_for_user_edit(user, perm_type="None"):
     permissions = {
         views.LinkViewSet().get_safe_name(): perm_type
     }

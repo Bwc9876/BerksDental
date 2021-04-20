@@ -51,10 +51,13 @@ class DateSelectorField(DateInput):
 class OrderInput(TextInput):
     input_type = "hidden"
     template_name = "custom_widgets/OrderWidget.html"
+    objects = []
+    display_name = ""
 
     def get_context(self, name, value, attrs):
         context = super().get_context(name, value, attrs)
         context['widget']['objects'] = self.objects
+        context['widget']['viewset_display_name'] = self.display_name
         context['widget']['currentOrder'] = ",".join(self.get_current_order())
         return context
 
@@ -74,6 +77,9 @@ class OrderField(fields.CharField):
 
     def set_objects(self, objects):
         self.widget.objects = objects
+
+    def set_name(self, name):
+        self.widget.display_name = name
 
 
 class PermInput(TextInput):
@@ -277,14 +283,12 @@ class UserCreateForm(ModelForm):
             validators.remove(ignored)
         new_config = get_password_validators(validators)
         rule_list = password_validators_help_texts(password_validators=new_config)
-        rule_lis = "".join([f"<li>{rule}</li>" for rule in rule_list])
-        validator_help_list = f'<ul class="passwordHelp">{rule_lis}</ul>'
         self.fields['username'].help_text = None
         self.fields['first_name'].widget.attrs.update(required=True)
         self.fields['last_name'].widget.attrs.update(required=True)
         self.fields['email'].widget.attrs.update(required=True)
         self.fields["new_password"].widget.attrs.update(autocomplete="new-password")
-        self.fields["new_password"].help_text = validator_help_list
+        self.fields["new_password"].help_text = "<br/>".join(rule_list)
         self.fields["confirm_new_password"].widget.attrs.update(autocomplete="new-password")
 
     def clean(self):
@@ -323,9 +327,7 @@ class SetUserPasswordForm(Form):
         super().__init__(*args, **kargs)
         self.fields["new_password"].label = "New Password"
         rule_list = password_validators_help_texts()
-        rule_lis = "".join([f"<li>{rule}</li>" for rule in rule_list])
-        validator_help_list = f'<ul class="passwordHelp">{rule_lis}</ul>'
-        self.fields["new_password"].help_text = validator_help_list
+        self.fields["new_password"].help_text = "<br/>".join(rule_list)
         self.fields["confirm_new_password"].label = "Confirm New Password"
         self.fields["new_password"].widget.attrs.update(autocomplete="new-password")
         self.fields["confirm_new_password"].widget.attrs.update(autocomplete="new-password")

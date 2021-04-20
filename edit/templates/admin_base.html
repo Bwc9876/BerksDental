@@ -28,17 +28,18 @@
         <h3 class="alert alert-{% getAlertType request %}">
             <i class="fas alert-icon fa-{% getAlertIcon request %}"></i>
             {{ alert }}
-            <span class="close-alert"><a class="close-alert-button"><i class="fas fa-times"></i></a></span>
+            <span class="close-alert"><a class="close-alert-button"><i class="fas fa-times h4"></i></a></span>
         </h3>
     {% endif %}
 
 
-
-    <h1 class="admin-header">{% if back_link %}{% action "back" back_link "fa-arrow-left" "h2" %}{% endif %}
+    {% url "edit:admin_home" as home_link %}
+    <h1 class="admin-header">{% if back_link %}{% action "back" back_link "fa-arrow-left" "h2" %}&nbsp;{% endif %}
         {% block adminHeader %}
             {{ verb }} {{ viewSet.displayName|title }}{% if plural %}s{% endif %}{% endblock %}
         <span class="additional-navigation">{% block additionalNavigation %}{% endblock %}{% if help_link %}&nbsp;
-            {% action "Help" help_link "fa-question-circle" "h2" new_tab=True%}{% endif %}</span>
+            {% action "Help" help_link "fa-question-circle" "h2" new_tab=True %}{% endif %}{% if not hide_home %}&nbsp;
+            {% action "home" home_link "fa-home" "h2" %}{% endif %}</span>
     </h1>
 
 

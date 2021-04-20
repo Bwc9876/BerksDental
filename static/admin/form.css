@@ -14,7 +14,7 @@
     color: #ff0000;
 }
 
-input, textarea {
+input, textarea, select {
     padding: 6px 8px;
 }
 
@@ -88,7 +88,7 @@ input[type="checkbox"] {
     font-size: var(--h2);
 }
 
-.submit-button:hover {
+.submit-button:hover:not(:disabled) {
     background-color: var(--ac-light-grey);
 }
 

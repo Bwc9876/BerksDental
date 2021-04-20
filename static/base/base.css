@@ -92,6 +92,19 @@ header {
     max-height: calc(var(--nav-height) - 30px);
 }
 
+.nav-button {
+    vertical-align: middle;
+    border: solid 1px var(--ac-grey);
+    transition: color 100ms linear, background-color 100ms linear;
+    padding: 5px;
+    font-family: var(--header-font);
+}
+
+.nav-button:hover {
+    color: var(--ac-dark);
+    background-color: var(--ac-grey);
+}
+
 .nav-link-container {
     position: fixed;
     top: var(--nav-height);

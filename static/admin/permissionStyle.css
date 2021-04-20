@@ -1,8 +1,34 @@
 .perm-label {
+    display: inline-block;
     font-size: calc(var(--text-size) - 2px);
     user-select: none;
+    width: 300px;
+}
+
+.perm-entry {
+    padding: 10px 0;
 }
 
 .perm-dropdown {
     font-size: calc(var(--text-size) - 3px);
+    /*float: right;*/
+    min-inline-size: min-content;
+    width: 20%;
+}
+
+@media only screen and (max-width: 700px) {
+    .perm-dropdown {
+        width: 100%;
+        box-sizing: border-box;
+    }
+
+    .perm-label {
+        margin-bottom: 4px;
+    }
+
+    .perm-entry {
+        padding: 0;
+        flex-direction: column;
+        margin-bottom: 6px;
+    }
 }

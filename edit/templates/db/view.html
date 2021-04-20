@@ -16,14 +16,14 @@
 {% endblock %}
 {% load adminTags %}
 {% block additionalNavigation %}
-        {% if canEdit %}
-            {% if viewSet.ordered %}
-                {% action "add" viewSet.edit_link "fa-plus" "h2" show_name=True %}&nbsp;
-                {% action "order" viewSet.order_link "fa-sort" "h2" show_name=True %}
-            {% else %}
-                {% action "add" viewSet.edit_link "fa-plus" "h2" show_name=True %}
-            {% endif %}
+    {% if canEdit %}
+        {% if viewSet.ordered %}
+            {% action "add" viewSet.edit_link "fa-plus" "h2" show_name=True %}&nbsp;
+            {% action "order" viewSet.order_link "fa-sort" "h2" show_name=True %}
+        {% else %}
+            {% action "add" viewSet.edit_link "fa-plus" "h2" show_name=True %}
         {% endif %}
+    {% endif %}
 {% endblock %}
 
 {% block adminContent %}

@@ -18,8 +18,8 @@ from django.urls import path, reverse
 from django.views.decorators.http import require_safe, require_http_methods
 
 from edit import forms, models
-from edit.view_set import ViewSet, formatters
 from edit.exceptions import ImproperlyConfiguredViewSetError
+from edit.view_set import ViewSet, formatters
 
 
 class Action:
@@ -184,11 +184,11 @@ def get_viewset_by_safename(name):
 def view_set_to_permission_pair(user, viewset):
     vs = viewset()
     viewset_name = vs.get_safe_name()
-    permission_level = "none"
+    permission_level = "None"
     if user.has_perms(vs.get_permissions_as_dict()["*"]):
-        permission_level = "edit"
+        permission_level = "*"
     elif user.has_perms(vs.get_permissions_as_dict()["View"]):
-        permission_level = "view"
+        permission_level = "View"
 
     return viewset_name, permission_level
 
@@ -203,12 +203,6 @@ class UserViewSet(ViewSet):
     labels = {
         "is_staff": "Manager",
         "first_name": "Name",
-    }
-
-    PERMISSION_JSON_TO_VIEWSET = {
-        "edit": "*",
-        "view": "View",
-        "none": "None"
     }
 
     def format_value_list(self, value_list):
@@ -239,12 +233,12 @@ class UserViewSet(ViewSet):
             new_password = form_data.get("new_password", "")
             user.set_password(new_password)
         raw_dict = loads(form_data.get("permissions", "{}"))
+        print(raw_dict)
         target_perms = []
         for vs_name in raw_dict.keys():
             vs = get_viewset_by_safename(vs_name)
             if vs is not None:
-                perms_to_add = vs().get_permissions_as_dict(include_app_name=False)[
-                    self.PERMISSION_JSON_TO_VIEWSET.get(raw_dict[vs_name], "None")]
+                perms_to_add = vs().get_permissions_as_dict(include_app_name=False).get(raw_dict[vs_name], [])
                 target_perms += [Permission.objects.get(codename=perm) for perm in perms_to_add]
         user.user_permissions.set(target_perms)
         user.save()
@@ -295,16 +289,16 @@ class UserViewSet(ViewSet):
         return change_password
 
 
-def generate_paths_from_view_set(view_set):
+def generate_paths_from_view_set(source_view_set):
     """ This function will add give the url patterns for a given :class:`EditViewSet` class
 
-    :param view_set: The :class:`EditViewSet` class to generate the url patterns for
+    :param source_view_set: The :class:`EditViewSet` class to generate the url patterns for
     :returns: A list of paths with the :class:`EditViewSet`'s url patterns
     :rtype: list(:class:`django.urls.path`)
     """
 
-    view_set_instance = view_set()
-    if issubclass(view_set, ViewSet):
+    view_set_instance = source_view_set()
+    if issubclass(source_view_set, ViewSet):
         url_name = view_set_instance.get_safe_name()
 
         overview, add_or_edit, delete = view_set_instance.get_view_functions()
@@ -321,7 +315,7 @@ def generate_paths_from_view_set(view_set):
 
         return patterns_to_return
     else:
-        raise ValueError(f"{view_set.__name__} Won't Work! Please pass a class that *inherits* EditViewSet!")
+        raise ValueError(f"{source_view_set.__name__} Won't Work! Please pass a class that *inherits* EditViewSet!")
 
 
 def setup_viewsets():
@@ -364,7 +358,7 @@ def admin_home(request):
         accessible_viewsets.append(UserViewSet())
 
     return render(request, 'admin_home.html', {"viewsets": accessible_viewsets,
-                                               'help_link': reverse("edit:help_navigation")})
+                                               'hide_home': True})
 
 
 def help_page(name, display_name):
