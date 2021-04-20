@@ -233,7 +233,6 @@ class UserViewSet(ViewSet):
             new_password = form_data.get("new_password", "")
             user.set_password(new_password)
         raw_dict = loads(form_data.get("permissions", "{}"))
-        print(raw_dict)
         target_perms = []
         for vs_name in raw_dict.keys():
             vs = get_viewset_by_safename(vs_name)
