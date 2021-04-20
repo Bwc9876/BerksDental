@@ -11,7 +11,7 @@ urlpatterns = [
     path('logout/', LogoutView.as_view(), name="logout"),
     path('help/', safe_render("help/home.html", ctx={"back_link": "/admin/"}), name="help"),
     views.help_page("navigation", "Navigation"),
-    views.help_page("edit", "Adding And Editing"),
+    views.help_page("edit", "Editing And Adding"),
     views.help_page("image", "Uploading Pictures"),
     views.help_page("password", "User Passwords"),
     views.help_page("ordering", "Ordering"),
