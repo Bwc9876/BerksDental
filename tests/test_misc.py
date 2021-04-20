@@ -1,4 +1,3 @@
-import os
 from datetime import date, time
 
 from django.conf import settings
@@ -12,115 +11,7 @@ from edit.templatetags import adminTags, eventTags, socialTags
 from edit.view_set import ViewSet
 from main import contexts
 from tests import utils
-from tests.utils import test_url, test_email, test_image_path
-
-
-class BasicDBActions(TestCase):
-    def setUp(self):
-        self.factory = RequestFactory()
-
-    def test_adding(self):
-        request = self.factory.post("/admin/edit/link/", {'url': test_url, 'display_name': "Test Add Link"})
-        vs = views.LinkViewSet()
-        vs.obj_add(request)
-        new_link = models.ExternalLink.objects.get(display_name="Test Add Link")
-        self.assertEqual(new_link.display_name, "Test Add Link")
-        self.assertEqual(new_link.url, test_url)
-
-    def test_editing(self):
-        request = self.factory.post("/admin/edit/link/", {'url': test_url, 'display_name': "Test Add Link"})
-        vs = views.LinkViewSet()
-        vs.obj_add(request)
-        old_link = models.ExternalLink.objects.get(display_name="Test Add Link")
-        request = self.factory.post(f"/admin/edit/link/?id={old_link.id}",
-                                    {'url': test_url, 'display_name': "Test Edit Link"})
-        vs = views.LinkViewSet()
-        vs.obj_edit(request)
-        new_link = models.ExternalLink.objects.get(id=old_link.id)
-        self.assertEqual(new_link.display_name, "Test Edit Link")
-        self.assertEqual(new_link.url, test_url)
-
-    def test_deleting(self):
-        request = self.factory.post("/admin/edit/link/", {'url': test_url, 'display_name': "Test Add Link"})
-        vs = views.LinkViewSet()
-        vs.obj_add(request)
-        link_to_delete = models.ExternalLink.objects.get(display_name="Test Add Link")
-        request = self.factory.post(f"/admin/delete/link/?id={link_to_delete.id}")
-        vs = views.LinkViewSet()
-        vs.obj_delete_view(request)
-        empty_links_list = list(models.ExternalLink.objects.filter(id=link_to_delete.id))
-        self.assertEqual(len(empty_links_list), 0)
-
-
-class Ordering(TestCase):
-
-    def setUp(self):
-        link1 = models.ExternalLink.objects.create(url=test_url, display_name="Test 1", sort_order=0)
-        link2 = models.ExternalLink.objects.create(url=test_url, display_name="Test 2", sort_order=1)
-        link3 = models.ExternalLink.objects.create(url=test_url, display_name="Test 3", sort_order=2)
-        self.factory = RequestFactory()
-        self.test_links = [link1, link2, link3]
-
-    def test_ordering_on_creation(self):
-        request = self.factory.post("/admin/edit/link/", {'url': test_url, 'display_name': "Test 4"})
-        vs = views.LinkViewSet()
-        vs.obj_add(request)
-        new_link = models.ExternalLink.objects.get(display_name="Test 4")
-        self.assertEqual(new_link.sort_order, 3)
-
-    def test_ordering_on_deletion(self):
-        target_link = models.ExternalLink.objects.get(display_name="Test 2")
-        request = self.factory.post(f"/admin/delete/link/?id={target_link.id}")
-        vs = views.LinkViewSet()
-        vs.obj_delete_view(request)
-        link1 = models.ExternalLink.objects.get(display_name="Test 1")
-        link2 = models.ExternalLink.objects.get(display_name="Test 3")
-        self.assertEqual(link1.sort_order, 0)
-        self.assertEqual(link2.sort_order, 1)
-
-    def test_order_editing(self):
-        link1, link2, link3 = self.test_links
-        source_list = [str(link1.id), str(link3.id), str(link2.id)]
-        new_order = ",".join(source_list)
-        request = self.factory.post("/admin/order/link/", {'new_order': new_order})
-        vs = views.LinkViewSet()
-        vs.object_order_view(request)
-        link1_new = models.ExternalLink.objects.get(display_name="Test 1")
-        link2_new = models.ExternalLink.objects.get(display_name="Test 2")
-        link3_new = models.ExternalLink.objects.get(display_name="Test 3")
-        self.assertEqual(link1_new.sort_order, 0)
-        self.assertEqual(link3_new.sort_order, 1)
-        self.assertEqual(link2_new.sort_order, 2)
-
-
-class PictureUploads(TestCase):
-    def setUp(self):
-        self.factory = RequestFactory()
-        self.vs = views.GalleryPhotoViewSet()
-        with open(test_image_path, 'rb') as image:
-            request = self.factory.post("/admin/edit/photo/", {"picture": image, "caption": "Test Image Upload"})
-            self.vs.obj_add(request)
-            self.picture = models.GalleryPhoto.objects.get(caption="Test Image Upload")
-
-    def test_upload_on_creation(self):
-        self.assertTrue(os.path.exists(settings.MEDIA_ROOT + self.picture.picture.name))
-        self.assertEqual(self.picture.picture.name, f"gallery-photos/{self.picture.id}.{self.picture.get_extension()}")
-
-    def test_upload_on_edit(self):
-        with open(test_image_path, 'rb') as image:
-            request = self.factory.post(f"/admin/edit/photo/?id={self.picture.id}",
-                                        {'caption': self.picture.caption, 'image': image})
-            self.vs.obj_edit(request)
-        self.assertTrue(os.path.exists(settings.MEDIA_ROOT + self.picture.picture.name))
-        self.assertEqual(self.picture.picture.name, f"gallery-photos/{self.picture.id}.{self.picture.get_extension()}")
-
-    def test_removal_on_deletion(self):
-        request = self.factory.post(f"/admin/delete/photo/?id={self.picture.id}")
-        self.vs.obj_delete_view(request)
-        self.assertFalse(os.path.exists(settings.MEDIA_ROOT + self.picture.picture.name))
-
-    def tearDown(self):
-        utils.delete_image(self.picture)
+from tests.utils import test_url, test_email
 
 
 class User(TestCase):
@@ -256,78 +147,6 @@ class Template(TestCase):
     def test_needs_multipart(self):
         self.assertTrue(adminTags.needs_multipart(forms.PhotoForm()))
         self.assertFalse(adminTags.needs_multipart(forms.LinkForm()))
-
-
-class ModelStringFunctions(TestCase):
-
-    def test_user_string(self):
-        user = models.User.objects.create(username="admin")
-        self.assertEqual(str(user), "admin")
-        user.first_name = "First"
-        user.last_name = "Last"
-        self.assertEqual(str(user), "First Last")
-
-    def test_photo_string(self):
-        photo = models.GalleryPhoto.objects.create(caption="Test Photo", width=100, height=100)
-        self.assertEqual(str(photo), 'Photo Captioned: "Test Photo"')
-
-    def test_link_string(self):
-        link = models.ExternalLink.objects.create(url=test_url, display_name="Test String Link")
-        self.assertEqual(str(link), "Link To Test String Link")
-
-    def test_event_string(self):
-        event = models.Event.objects.create(name="Test String Event", startDate=date(2021, 4, 5),
-                                            endDate=date(2021, 5, 5),
-                                            startTime=time(hour=5, minute=56), endTime=time(hour=5, minute=59),
-                                            description="__str__")
-        self.assertEqual(str(event), "Test String Event")
-
-    def test_officer_string(self):
-        officer = models.Officer(first_name="Test", last_name="Officer")
-        self.assertEqual(str(officer), "Test Officer")
-
-    def test_social_string(self):
-        social = models.Social.objects.create(service=models.Social.Services.YOUTUBE, link=test_url)
-        self.assertEqual(str(social), "Berks Dental Assistants' YouTube Page")
-
-
-class ModelUtilFunctions(TestCase):
-    def test_masked_links(self):
-        officer = models.Officer.objects.create(first_name="Test", last_name="Officer", email=test_email,
-                                                phone="(123)-456-789", width=100, height=100)
-        self.assertNotEqual(officer.masked_email_link(), officer.email)
-        self.assertNotEqual(officer.masked_phone_link(), officer.phone)
-
-    def test_service_label(self):
-        social = models.Social.objects.create(service=models.Social.Services.YOUTUBE, link=test_url)
-        self.assertEqual(social.service_label(), "YouTube")
-
-    def test_service_label_from_string(self):
-        self.assertEqual(models.Social.service_label_from_string("YT"), "YouTube")
-
-    def test_fa_icon_class(self):
-        social = models.Social.objects.create(service=models.Social.Services.YOUTUBE, link=test_url)
-        social2 = models.Social.objects.create(service=models.Social.Services.LINKEDIN, link=test_url)
-        self.assertEqual(social.fa_icon_class(), "fa-youtube-square")
-        self.assertEqual(social2.fa_icon_class(), "fa-linkedin")
-
-
-class PhotoModelUtilFunctions(TestCase):
-    def setUp(self):
-        self.factory = RequestFactory()
-        with open(test_image_path, 'rb') as image:
-            request = self.factory.post("/admin/edit/photo/", {"picture": image, "caption": "Test Photo"})
-            views.GalleryPhotoViewSet().obj_add(request)
-            self.picture = models.GalleryPhoto.objects.get(caption="Test Photo")
-
-    def test_get_extension(self):
-        self.assertEqual(self.picture.get_extension(), "png")
-
-    def test_photo_link(self):
-        self.assertEqual(self.picture.photo_link(), f"/media/gallery-photos/{self.picture.id}.png")
-
-    def tearDown(self):
-        utils.delete_image(self.picture)
 
 
 class FormValidation(TestCase):
@@ -480,28 +299,3 @@ class ViewSetConfigurations(TestCase):
             views.UserViewSet()
         except exceptions.ImproperlyConfiguredViewSetError:
             self.fail()
-
-
-class Pagination(TestCase):
-    def setUp(self):
-        self.factory = RequestFactory()
-        self.vs = views.LinkViewSet()
-        self.vs.per_page = 2
-        self.admin = models.User.objects.create_superuser(username="admin", password="Testing123")
-        self.link1 = models.ExternalLink.objects.create(url=test_url, display_name="Test1")
-        self.link2 = models.ExternalLink.objects.create(url=test_url, display_name="Test2")
-        self.link3 = models.ExternalLink.objects.create(url=test_url, display_name="Test3")
-        self.link4 = models.ExternalLink.objects.create(url=test_url, display_name="Test4")
-        self.test_links = [self.link1, self.link2, self.link3, self.link4]
-
-    def test_page_separation(self):
-        page_1_request = self.factory.get("/admin/overview/link/")
-        page_1_request.user = self.admin
-        page_2_request = self.factory.get("/admin/overview/link/?page=2")
-        page_2_request.user = self.admin
-        page_1_response = self.vs.obj_overview_view(page_1_request)
-        page_2_response = self.vs.obj_overview_view(page_2_request)
-        self.assertIn(self.test_links[0].display_name, str(page_1_response.content))
-        self.assertNotIn(self.test_links[2].display_name, str(page_1_response.content))
-        self.assertIn(self.test_links[2].display_name, str(page_2_response.content))
-        self.assertNotIn(self.test_links[0].display_name, str(page_2_response.content))
