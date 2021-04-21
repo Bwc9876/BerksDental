@@ -9,16 +9,12 @@ function evaluateVirtual() {
 }
 
 $(document).ready(() => {
-
     evaluateVirtual();
     $("#id_virtual").change(evaluateVirtual);
     $("#id_startDate").change(() => {
-
         let endDate = $("#id_endDate");
         if (endDate.val() === "") {
             endDate.val($("#id_startDate").val());
         }
-
     });
-
 });

@@ -18,13 +18,17 @@ input, textarea, select {
     padding: 6px 8px;
 }
 
+select {
+    width: 260px;
+}
+
 input[type="file"] {
     padding: 0;
 }
 
 @media only screen and (max-width: 700px) {
 
-    input, textarea {
+    input, textarea, select {
         width: 100%;
         box-sizing: border-box;
     }
@@ -35,7 +39,7 @@ input[type="file"] {
 
 }
 
-input, textarea, .field-label {
+input, textarea, .field-label, select {
     font-size: var(--text-size);
 }
 
@@ -104,6 +108,7 @@ input[type="checkbox"] {
 .loading {
     animation: load-spin 2s 0s linear infinite;
     font-size: var(--h3);
+    color: var(--clr-header);
 }
 
 .hidden {

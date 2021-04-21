@@ -1,5 +1,4 @@
 from django.core.exceptions import ValidationError
-from django.utils.translation import gettext as _
 
 
 class RequiredCharactersValidator:
@@ -38,7 +37,7 @@ class RequiredCharactersValidator:
                     number_of_characters['lower'] += 1
             else:
                 if not self.allow_other_characters:
-                    raise ValidationError(_(f"{character} is not allowed"))
+                    raise ValidationError(f"{character} is not allowed")
 
         errors = []
 
@@ -64,8 +63,8 @@ class RequiredCharactersValidator:
 
         if len(errors) > 0:
             raise ValidationError(
-                _("This password doesn't contain at least " +
-                  self.print_list_as_sentence(errors)))
+                "This password doesn't contain at least " +
+                  self.print_list_as_sentence(errors))
 
     def get_requirements(self):
         needed_characters = []
@@ -118,5 +117,4 @@ class RequiredCharactersValidator:
         return result
 
     def get_help_text(self):
-        return _(
-            f"Your password must contain at least {self.get_requirements()}")
+        return f"Your password must contain at least {self.get_requirements()}"

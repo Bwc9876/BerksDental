@@ -273,9 +273,6 @@ class UserCreateForm(ModelForm):
         model = models.User
         fields = ["username", "first_name", "last_name", "email"]
 
-    class Media:
-        css = {"all": ("admin/helpTextStyle.css",)}
-
     def __init__(self, *args, **kargs):
         super().__init__(*args, **kargs)
         validators = list(settings.AUTH_PASSWORD_VALIDATORS)
@@ -331,9 +328,6 @@ class SetUserPasswordForm(Form):
         self.fields["confirm_new_password"].label = "Confirm New Password"
         self.fields["new_password"].widget.attrs.update(autocomplete="new-password")
         self.fields["confirm_new_password"].widget.attrs.update(autocomplete="new-password")
-
-    class Media:
-        css = {"all": ("admin/helpTextStyle.css",)}
 
     def set_user(self, user):
         self.user = user
