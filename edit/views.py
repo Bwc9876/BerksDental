@@ -19,14 +19,7 @@ from django.views.decorators.http import require_safe, require_http_methods
 
 from edit import forms, models
 from edit.exceptions import ImproperlyConfiguredViewSetError
-from edit.view_set import ViewSet, formatters
-
-
-class Action:
-    def __init__(self, name, icon, link):
-        self.name = name
-        self.icon = icon
-        self.link = link
+from edit.view_set import ViewSet, formatters, Action
 
 
 # The following classes inherit from EditViewSet class, and are used to add functionality to the models we want

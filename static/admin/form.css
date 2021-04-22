@@ -58,10 +58,6 @@ input, textarea, .field-label, select {
     padding-top: 0;
 }
 
-.passwordHelp {
-    padding-left: 0;
-}
-
 textarea {
     resize: none;
 }
@@ -118,4 +114,5 @@ input[type="checkbox"] {
 .help-text {
     font-size: var(--help-error-text-size);
     margin-bottom: 0;
+    user-select: none;
 }

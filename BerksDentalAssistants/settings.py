@@ -125,7 +125,7 @@ AUTH_PASSWORD_VALIDATORS = [{
 
 IGNORED_VALIDATORS_FOR_NEW_PASSWORD = [{
     'NAME':
-    'django_password_validators.password_history.password_validation.UniquePasswordsValidator'
+        'django_password_validators.password_history.password_validation.UniquePasswordsValidator'
 }]
 
 LOGIN_URL = "/admin/login/"
@@ -144,9 +144,11 @@ USE_TZ = True
 
 if STAGE == "PRODUCTION":
     """
-        These settings tell the browser to cache whether the site is secure, and will make the browser redirect to the https
+        These settings tell the browser to cache whether the site is secure,
+        and will make the browser redirect to the https
         version of the site, however, if the site isn't secure, the browser will keep redirecting to https anyway, even
-        though it has no effect.  So, we'll only enable these settings if we're certain that we can host the site via https
+        though it has no effect.
+        So, we'll only enable these settings if we're certain that we can host the site via https
     """
 
     # SECURE_HSTS_SECONDS = 604800

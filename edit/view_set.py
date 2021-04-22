@@ -15,18 +15,25 @@ from django.views.decorators.http import require_safe, require_http_methods
 from edit import forms, exceptions
 
 formatters = {
-    model_fields.URLField: lambda
-        input_val: f'<a class="link-value" rel="noopener" target="_blank" href="{escape(str(input_val))}">'
-                   f'{escape(str(input_val))}</a>',
-    model_fields.ImageField: lambda
-        input_val: f'<a class="link-value" target="_blank" href="{settings.MEDIA_URL}{escape(input_val)}"'
-                   f'>Click To View Image</a> ',
+    model_fields.URLField: lambda input_val: f'<a class="link-value" rel="noopener" target="_blank"'
+                                             f' href="{escape(str(input_val))}">'
+                                             f'{escape(str(input_val))}</a>',
+    model_fields.ImageField: lambda input_val: f'<a class="link-value" target="_blank"'
+                                               f' href="{settings.MEDIA_URL}{escape(input_val)}"'
+                                               f'>Click To View Image</a> ',
     model_fields.BooleanField: lambda input_val: f'<i class="fas '
                                                  f'{"fa-check-circle" if input_val is True else "fa-times-circle"}'
                                                  f' fa-lg bool-icon"></i>',
     model_fields.TimeField: lambda input_val: input_val.strftime("%I:%M %p"),
-    model_fields.DateTimeField: lambda input_val: input_val.strftime("%d-%m-%y at %I:%M %p")
+    model_fields.DateField: lambda input_val: input_val.strftime("%d-%m-%y")
 }
+
+
+class Action:
+    def __init__(self, name, icon, link):
+        self.name = name
+        self.icon = icon
+        self.link = link
 
 
 class ViewSet:
@@ -47,14 +54,14 @@ class ViewSet:
     """
 
     displayName: str = "base"
-    pictureClass = "fa-edit"
-    additionalActions = []
+    pictureClass: str = "fa-edit"
+    additionalActions: list = []
     model = None
     modelForm = None
-    ordered = False
-    per_page = 10
-    displayFields = []
-    labels = {}
+    ordered: bool = False
+    per_page: int = 10
+    displayFields: list = []
+    labels: dict = {}
 
     def __init__(self):
         """ This function is run when the ViewSet is instantiated
@@ -94,6 +101,10 @@ class ViewSet:
                                                                       f" (labels)")
             except FieldDoesNotExist:
                 raise exceptions.ImproperlyConfiguredViewSetError(f"Labels Contains Unknown Field: {field}")
+
+        for action in self.additionalActions:
+            if action.__class__.__name__ != "Action":
+                raise exceptions.ImproperlyConfiguredViewSetError("additinalActions contains a non-action object")
 
     def format_value_list(self, value_list):
         """ This function is used as a way to format any values we read from the database, like dates and links

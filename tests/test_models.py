@@ -22,7 +22,7 @@ class ModelStringFunctions(TestCase):
 
     def test_link_string(self):
         link = models.ExternalLink.objects.create(url=test_url, display_name="Test String Link")
-        self.assertEqual(str(link), "Link To Test String Link")
+        self.assertEqual(str(link), "Test String Link")
 
     def test_event_string(self):
         event = models.Event.objects.create(name="Test String Event", startDate=date(2021, 4, 5),

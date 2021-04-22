@@ -108,7 +108,7 @@ class ExternalLink(models.Model):
         :rtype: str
         """
 
-        return f"Link To {self.display_name}"
+        return f"{self.display_name}"
 
     class Meta:
         ordering = ['sort_order']

@@ -274,6 +274,16 @@ class ViewSetConfigurations(TestCase):
 
         self.assertRaises(exceptions.ImproperlyConfiguredViewSetError, BadVS)
 
+    def test_actions_check(self):
+        class BadVS(ViewSet):
+            model = models.ExternalLink
+            modelForm = forms.LinkForm
+            displayFields = ["url"]
+            displayName = "Link"
+            additionalActions = ["Not an action!"]
+
+        self.assertRaises(exceptions.ImproperlyConfiguredViewSetError, BadVS)
+
     def test_good_vs(self):
         class GoodVS(ViewSet):
             model = models.ExternalLink

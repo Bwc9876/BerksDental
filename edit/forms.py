@@ -232,7 +232,7 @@ class EventForm(ModelForm):
         }
 
     class Media:
-        js = ("admin/eventForm.js",)
+        js = ("admin/event_form.js",)
 
     def __init__(self, *args, **kargs):
         """ This function is run when the class is instantiated
@@ -262,6 +262,11 @@ class OrderForm(Form):
                     self.add_error("new_order", "Error Setting New Order (Counter)")
             except ValueError:
                 self.add_error("new_order", "Error Setting New Order (ValueError)")
+
+    def __init__(self, *args, **kargs):
+        super().__init__(*args, **kargs)
+        self.fields["new_order"].help_text = 'Click and drag the handle (<i class="fas fa-grip-lines"></i>)' \
+                                             ' on an item to move it.'
 
 
 class UserCreateForm(ModelForm):
