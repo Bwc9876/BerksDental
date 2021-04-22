@@ -6,7 +6,7 @@
 .model-table {
     --normal-color: white;
     --shaded-color: #f6f6f6;
-    --header-color: var(--ac-light-grey);
+    --header-color: var(--ac-light);
     --row-border-color: darkgrey;
     --text-color: var(--clr-header);
     border-collapse: collapse;
@@ -38,8 +38,7 @@
 }
 
 .model-table thead tr {
-    border-bottom: solid 2px var(--row-border-color);
-    border-top: solid 2px var(--row-border-color);
+    border-bottom: solid 1px var(--row-border-color);
 }
 
 .model-table tbody tr {
