@@ -414,10 +414,11 @@ class ViewSet:
         page = model_paginator.get_page(page_number)
         start = page.start_index() - 1
         end = page.end_index()
-        next_link = "javascript:void"
-        last_link = "javascript:void"
-        previous_link = "javascript:void"
-        first_link = "javascript:void"
+        blank_link = "javascript:void(0);"
+        next_link = blank_link
+        last_link = blank_link
+        previous_link = blank_link
+        first_link = blank_link
         if page.has_next():
             next_link = f"{self.overview_link()}?page={page.next_page_number()}"
             last_link = f"{self.overview_link()}?page={model_paginator.num_pages}"

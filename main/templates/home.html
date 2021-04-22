@@ -10,7 +10,7 @@
 {% endblock %}
 {% block header %}
     <div class="header-main header-dimensions-special">
-        HEADER HERE
+        <h1 class="header-text">Berks Dental Assistants</h1>
     </div>
 {% endblock %}
 {% block content %}
@@ -23,18 +23,19 @@
                     <div class="front-event-card">
                         <h2>{{ event.name }}</h2>
                         {% if event.startDate != event.endDate %}
-                        <p class="event-month h4">{{ event.startDate|date:"F" }}&nbsp;{{ event.startDate|date:"dS" }}
-                            at {{ event.startTime }}</p>
-                        <p class="event-month event-day h4">to</p>
-                        <p class="event-day h4">{{ event.endDate|date:"F" }}&nbsp;{{ event.endDate|date:"dS" }}
-                            at {{ event.endTime }}</p>
+                            <p class="event-month h4">{{ event.startDate|date:"F" }}&nbsp;{{ event.startDate|date:"dS" }}
+                                at {{ event.startTime }}</p>
+                            <p class="event-month event-day h4">to</p>
+                            <p class="event-day h4">{{ event.endDate|date:"F" }}&nbsp;{{ event.endDate|date:"dS" }}
+                                at {{ event.endTime }}</p>
                         {% else %}
-                        <p class="event-month h3">{{ event.startDate|date:"b"|upper }}</p>
-                        <p class="event-day h2">{{ event.startDate|date:"d" }}</p>
-                        <p class="h4">{{ event.startTime }} - {{ event.endTime }}</p>
+                            <p class="event-month h3">{{ event.startDate|date:"b"|upper }}</p>
+                            <p class="event-day h2">{{ event.startDate|date:"d" }}</p>
+                            <p class="h4">{{ event.startTime }} - {{ event.endTime }}</p>
                         {% endif %}
-                        <p class="h{% if event.startDate != event.endDate %}5{% else %}4{% endif %}">{% if event.virtual %}<a href="{{ event.link }}">{{ event.link }}</a>{% else %}
-                            {{ event.location }}{% endif %}</p>
+                        <p class="h{% if event.startDate != event.endDate %}5{% else %}4{% endif %}">
+                            {% if event.virtual %}<a href="{{ event.link }}">{{ event.link }}</a>{% else %}
+                                {{ event.location }}{% endif %}</p>
                         <p class="event-front-description h5">{{ event.description }}</p>
                     </div>
                     <div class="back-event-card">
@@ -42,15 +43,34 @@
                     </div>
                 </div>
             {% empty %}
-                <p class="no-upcoming-events">No upcoming events, check back soon! For more information on events go to the <a href="{% url "main:events" %}">events page</a>.</p>
+                <p class="no-upcoming-events">No upcoming events, check back soon! For more information on events go to
+                    the <a href="{% url "main:events" %}">events page</a>.</p>
             {% endfor %}
             {% if upcomingEvents|length >= 1 %}
                 <div class="event-card last-event-card">
                     <div class="front-event-card">
-                        <p class="h1">To view more events, go to the <a class="h1" href="{% url "main:events" %}">events page</a>.</p>
+                        <p class="h1">To view more events, go to the <a class="h1" href="{% url "main:events" %}">events
+                            page</a>.</p>
                     </div>
                 </div>
             {% endif %}
         </div>
+    </section>
+    <section class="featured">
+        <h1>Featured Photos</h1>
+        {% if featuredPhotos|length > 0 %}
+        <div class="featured-photos">
+            {% for photo in featuredPhotos %}
+                <a class="featured-photo" aria-label="View Photo" href="{% url "main:view_photo" %}?id={{ photo.id }}">
+                    <img alt="{{ photo.caption }}" src="{{ photo.photo_link }}" width="{{ photo.width }}px"/>
+                </a>
+            {% endfor %}
+            <a class="featured-photo view-all" aria-label="View All Photos" href="{% url "main:gallery" %}">
+                View All <i class="fas fa-arrow-right"></i>
+            </a>
+        </div>
+        {% else %}
+        <h2>There Are No Featured Photos <br/> <a href="{% url "main:gallery" %}">View All Of Our Photos</a></h2>
+        {% endif %}
     </section>
 {% endblock %}

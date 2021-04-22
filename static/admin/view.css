@@ -5,7 +5,8 @@
 
 .model-table {
     --normal-color: white;
-    --shaded-color: var(--ac-light-grey);
+    --shaded-color: #f6f6f6;
+    --header-color: var(--ac-light-grey);
     --row-border-color: darkgrey;
     --text-color: var(--clr-header);
     border-collapse: collapse;
@@ -16,6 +17,10 @@
 .model-table thead {
     background-color: var(--shaded-color);
     user-select: none;
+}
+
+.model-table .header-row {
+    background-color: var(--header-color);
 }
 
 .model-table .shaded {
@@ -42,7 +47,7 @@
 }
 
 .empty-notification-row {
-    background-color: var(--shaded-color);
+    background-color: var(--header-color);
     user-select: none;
 }
 
@@ -82,11 +87,6 @@
 
 .fa-times-circle {
     color: var(--red-color);
-}
-
-.bool-icon {
-    background-color: white;
-    border-radius: 100%;
 }
 
 .bottom-bar {
