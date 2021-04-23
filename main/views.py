@@ -28,7 +28,8 @@ def home(request):
     featured_photos = models.GalleryPhoto.objects.filter(featured=True)
     upcoming_events = models.Event.objects.filter(startDate__gte=date.today()).order_by("startDate")[:5]
     links = models.ExternalLink.objects.all()
-    return render(request, 'home.html', {'featuredPhotos': featured_photos, 'upcomingEvents': upcoming_events, 'external_links': links})
+    return render(request, 'home.html',
+                  {'featuredPhotos': featured_photos, 'upcomingEvents': upcoming_events, 'external_links': links})
 
 
 MAX_IMAGES_PER_PAGE = 12
@@ -71,18 +72,26 @@ def gallery(request):
     return render(request, "gallery.html", {"photos": first_list, 'hasNext': first_page.has_next()})
 
 
-def get_next_photo(photo):
+def get_next_photo(photo, featured_only):
     try:
-        return models.GalleryPhoto.objects.exclude(date_posted=photo.date_posted).filter(
-            date_posted__gte=photo.date_posted).order_by("date_posted")[0]
+        query = models.GalleryPhoto.objects.exclude(date_posted=photo.date_posted).filter(
+            date_posted__gte=photo.date_posted).order_by("date_posted")
+        if featured_only:
+            return query.filter(featured=True)[0]
+        else:
+            return query[0]
     except IndexError:
         return None
 
 
-def get_last_photo(photo):
+def get_last_photo(photo, featured_only):
     try:
-        return models.GalleryPhoto.objects.exclude(date_posted=photo.date_posted).filter(
-            date_posted__lte=photo.date_posted).order_by("-date_posted")[0]
+        query = models.GalleryPhoto.objects.exclude(date_posted=photo.date_posted).filter(
+            date_posted__lte=photo.date_posted).order_by("-date_posted")
+        if featured_only:
+            return query.filter(featured=True)[0]
+        else:
+            return query[0]
     except IndexError:
         return None
 
@@ -90,12 +99,16 @@ def get_last_photo(photo):
 @require_safe
 def view_photo(request):
     target_id = request.GET.get("id", "")
+    featured = request.GET.get("featured", "no")
+    featured_only = featured == "yes"
     try:
         target_photo = get_object_or_404(models.GalleryPhoto, id=target_id)
-        next_photo = get_next_photo(target_photo)
-        last_photo = get_last_photo(target_photo)
-        next_link = None if next_photo is None else f"{reverse('main:view_photo')}?id={next_photo.id}"
-        last_link = None if last_photo is None else f"{reverse('main:view_photo')}?id={last_photo.id}"
+        next_photo = get_next_photo(target_photo, featured_only)
+        last_photo = get_last_photo(target_photo, featured_only)
+        next_link = None if next_photo is None else f"{reverse('main:view_photo')}" \
+                                                    f"?id={next_photo.id}&featured={featured}"
+        last_link = None if last_photo is None else f"{reverse('main:view_photo')}" \
+                                                    f"?id={last_photo.id}&featured={featured}"
         return render(request, "photo_view.html",
                       {"photo": target_photo, "next_link": next_link, "last_link": last_link})
     except ValidationError:

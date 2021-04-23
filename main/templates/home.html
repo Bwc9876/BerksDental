@@ -9,14 +9,33 @@
     <script src="{% static "/home/home.js" %}" type="text/javascript"></script>
 {% endblock %}
 {% block header %}
-    <div class="header-main header-dimensions-special">
-        <h1 class="header-text">Berks Dental Assistants</h1>
+    <div class="header-main">
+        <h1 class="header-text"><img src="{% static "base/logo.png" %}" alt="The Berks Dental Assistants Society Logo"/></h1>
     </div>
 {% endblock %}
 {% block content %}
+    <section class="intro">
+        <h1>Welcome</h1>
+        <div class="into-text">
+            <p>Welcome to the Berks County Dental Assistant's Society's Website.</p>
+            <p>The purpose of this site is to keep you up-to-date on various aspects of our organization.</p>
+            <p>For more information, view our <a href="{% url "main:about" %}">About Page</a>,
+               or take a look at our <a href="{% url "main:officers" %}">Officers</a>.
+            </p>
+        </div>
+    </section>
+    <section class="links">
+        <h1>Quick Links</h1>
+        <ul class="link-list">
+            {% for link in external_links %}
+                <li><a target="_blank" rel="noopener" href="{{ link.url }}">{{ link.display_name }}&nbsp;<i
+                        class="fas fa-external-link-alt link-icon"></i></a></li>
+            {% endfor %}
+        </ul>
+    </section>
     <section class="upcoming-events">
         <h1 class="captioned-header">Upcoming Events</h1>
-        <p class="h6 captioned-header-caption">(Click on a card for more information)</p>
+        <p class="h6 captioned-header-caption">Click on a card for more information</p>
         <div class="event-card-container">
             {% for event in upcomingEvents %}
                 <div class="event-card">
@@ -29,7 +48,7 @@
                             <p class="event-day h4">{{ event.endDate|date:"F" }}&nbsp;{{ event.endDate|date:"dS" }}
                                 at {{ event.endTime }}</p>
                         {% else %}
-                            <p class="event-month h3">{{ event.startDate|date:"b"|upper }}</p>
+                            <p class="event-month h3">{{ event.startDate|date:"b"|title }}</p>
                             <p class="event-day h2">{{ event.startDate|date:"d" }}</p>
                             <p class="h4">{{ event.startTime }} - {{ event.endTime }}</p>
                         {% endif %}
@@ -57,20 +76,23 @@
         </div>
     </section>
     <section class="featured">
-        <h1>Featured Photos</h1>
+        <h1 class="captioned-header">Featured Photos</h1>
+        <p class="h6 captioned-header-caption">Click On A Photo To View It</p>
         {% if featuredPhotos|length > 0 %}
-        <div class="featured-photos">
-            {% for photo in featuredPhotos %}
-                <a class="featured-photo" aria-label="View Photo" href="{% url "main:view_photo" %}?id={{ photo.id }}">
-                    <img alt="{{ photo.caption }}" src="{{ photo.photo_link }}" width="{{ photo.width }}px"/>
+            <div class="featured-photos">
+                {% for photo in featuredPhotos %}
+                    <a class="featured-photo" aria-label="{{ photo.caption }}"
+                       href="{% url "main:view_photo" %}?id={{ photo.id }}&featured=yes"
+                       style="background-image: url({{ photo.photo_link }})">
+                    </a>
+                {% endfor %}
+                <a class="featured-photo view-all" aria-label="View All Photos" href="{% url "main:gallery" %}">
+                    View All <i class="fas fa-arrow-right"></i>
                 </a>
-            {% endfor %}
-            <a class="featured-photo view-all" aria-label="View All Photos" href="{% url "main:gallery" %}">
-                View All <i class="fas fa-arrow-right"></i>
-            </a>
-        </div>
+            </div>
         {% else %}
-        <h2>There Are No Featured Photos <br/> <a href="{% url "main:gallery" %}">View All Of Our Photos</a></h2>
+            <h2 class="empty-notification">There Are No Featured Photos <br/> <a href="{% url "main:gallery" %}">View
+                All Of Our Photos</a></h2>
         {% endif %}
     </section>
 {% endblock %}

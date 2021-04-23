@@ -190,7 +190,7 @@ class Event(models.Model):
         return escape(dumps(raw_dict))
 
     class Meta:
-        ordering = ["-startDate", "-endDate", ]
+        ordering = ["-startDate", "-endDate", "-startTime", "-endTime"]
 
 
 class Officer(models.Model):
@@ -217,6 +217,7 @@ class Officer(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     first_name = models.CharField(max_length=100)
     last_name = models.CharField(max_length=100)
+    role = models.CharField(max_length=100)
     width = models.IntegerField()
     height = models.IntegerField()
     picture = models.ImageField(upload_to="officer-photos", width_field='width', height_field='height')

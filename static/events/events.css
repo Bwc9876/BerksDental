@@ -2,7 +2,8 @@
     display: flex;
     justify-content: space-around;
     align-items: center;
-    padding: 40px 40px 0;
+    padding: 40px 40px 20px;
+    background-color: var(--clr-light);
 }
 
 .header-content *, .calendar * {
@@ -20,7 +21,7 @@
     display: grid;
     margin: auto;
     grid-template-columns: repeat(7, 1fr);
-    background: var(--ac-light);
+    background: whitesmoke;
     box-shadow: 0 0 8px 0;
 }
 
@@ -87,14 +88,17 @@
     overflow: auto;
 }
 
+.front-event-card.first {
+    background-color: var(--ac-light);
+}
+
 .front-event-card:hover {
     bottom: 0;
     box-shadow: none;
 }
 
-
-.front-event-card:nth-of-type(odd) {
-    background-color: transparent;
+.front-event-card:nth-of-type(even) {
+    background-color: #f6f6f6;
 }
 
 .event-front-description {

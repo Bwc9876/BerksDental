@@ -3,9 +3,20 @@
     <title>Berks Dental Assistants: Officers</title>
     <meta name="description" content="Berks Dental Assistants' Officers Page.">
 {% endblock %}
+{% block header %}
+    <h1>Our Officers</h1>
+{% endblock %}
 {% block links %}
 
     <style>
+
+        .header-content {
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            padding: 40px;
+            background-color: var(--clr-light);
+        }
 
         .cardContainer {
             display: flex;
@@ -57,8 +68,6 @@
 
 {% block content %}
 
-    <h1> Our Officers </h1>
-
     <div class="cardContainer">
 
         {% for officer in officers %}
@@ -67,6 +76,7 @@
                 <img draggable="false" width="300px" height="300px" src="{{ officer.photo_link }}"
                      alt="{{ officer }}'s Picture"/>
                 <h2>{{ officer }}</h2>
+                <h3>{{ officer.role }}</h3>
                 <p style="color: black;">{{ officer.biography }}</p>
                 {% if officer.email or officer.phone %}
                     <div class="contactMethods">

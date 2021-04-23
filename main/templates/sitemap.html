@@ -12,6 +12,12 @@
 
     <style>
 
+        .header-content {
+            display: flex;
+            padding: 40px;
+            background-color: var(--clr-light);
+        }
+
         ul {
             list-style: none;
         }
@@ -29,7 +35,7 @@
         <li><a href="{% url "main:about" %}">About</a></li>
     </ul>
     {% if user.is_authenticated %}
-        <h2>Administrative Pages</h2>
+        <h2 style="padding-left:22px;background-color: var(--ac-light);">Administrative Pages</h2>
         <ul>
             <li><a href="{% url "edit:admin_home" %}">Admin Home</a></li>
             <li><a href="{% url "edit:photo_view" %}">Gallery Photos</a></li>
@@ -40,6 +46,6 @@
         </ul>
     {% endif %}
 
-    <a href="{% url "main:django.contrib.sitemaps.views.sitemap" %}">View As XML</a>
+    <a style="margin-left:22px;" href="{% url "main:django.contrib.sitemaps.views.sitemap" %}">View As XML</a>
 
 {% endblock %}

@@ -134,7 +134,7 @@ class OfficerViewSet(GalleryPhotoViewSet):
     modelForm = forms.OfficerForm
     photoFolder = "officer-photos"
     ordered = True
-    displayFields = ["first_name", 'picture']
+    displayFields = ["first_name", "role", 'picture']
     labels = {
         "first_name": "Name"
     }
