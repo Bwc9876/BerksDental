@@ -1,190 +1,38 @@
-.header-text {
-    text-align: center;
+.hero-body {
+    padding-left: 0;
+    padding-right: 0;
 }
 
-.header-content {
-    display: flex;
-    justify-content: space-around;
-    align-items: center;
-    padding: 40px;
-    background-color: black;
-}
-
-section h1:first-child {
-    margin-top: 0;
-}
-
-section:last-child {
-    margin-bottom: 20px;
-}
-
-section h1 {
-    background-color: var(--ac-light);
-}
-
-section .captioned-header {
-    margin-bottom: 0;
-}
-
-section .captioned-header-caption {
-    background-color: var(--ac-light-grey);
-    margin-top: 0;
-}
-
-section h1, section .captioned-header-caption {
-    padding-left: 22px;
-}
-
-.upcoming-events, .featured-photos {
-    overflow: auto;
-}
-
-@media only screen and (max-width: 750px) {
-    .upcoming-events .captioned-header {
-        margin-bottom: var(--h4);
-    }
-
-    .upcoming-events .captioned-header-caption {
-        display: none;
-    }
-}
-
-.event-card-container {
-    display: flex;
-    padding: 15px 0 35px 0;
-    overflow-x: auto;
-}
-
-.no-upcoming-events {
-    margin: 0 22px;
-}
-
-.event-card {
+.hero-title {
     position: relative;
-    margin: 0 22px;
-    display: flex;
-    transition: margin 350ms linear;
+    top: 7vh;
+    width: 100%;
+    padding: 48px;
+    background-color: rgba(140,191,63,0.8);
 }
 
-.last-event-card::after {
-    content: '';
-    display: block;
-    width: 44px;
-    height: 1px;
+.no-top-padding {
+    padding-top: 0;
 }
 
-.front-event-card {
-    position: relative;
-    bottom: 0;
-    z-index: 3;
-    width: calc(var(--h4) * 10);
-    padding: 0 30px;
-    border: var(--clr-header) 3px solid;
-    background-color: white;
-    text-align: center;
-    transition: box-shadow 150ms linear, bottom 150ms linear, background-color 150ms linear;
-    --hover-height: 3px;
-}
-
-.back-event-card {
-    position: absolute;
-    top: 0;
-    left: 0;
-    bottom: 0;
-    width: calc(var(--h4) * 12);
-    padding: 0;
-    background-color: #f6f6f6;
-    border: var(--clr-header) 3px solid;
-    transition: bottom 350ms linear,left 350ms linear, padding 350ms linear, box-shadow 350ms linear;
-}
-
-.event-month {
-    margin-bottom: 0;
-}
-
-.event-day {
-    margin-top: 10px;
-}
-
-@media only screen and (min-width: 750px) {
-    .event-front-description {
-        display: none;
+@media only screen and (max-width: 768px) {
+    .no-top-padding-mobile {
+        padding-top: 0;
     }
-
-    .front-event-card:hover, .focused-event-card > .front-event-card:hover {
-        bottom: var(--hover-height);
-        box-shadow: 0 var(--hover-height) 8px 0;
-    }
-
-    .focused-event-card > .front-event-card {
-        bottom: 8px;
-        box-shadow: 0 8px 8px 0;
-        background-color: var(--clr-light);
-        --hover-height: 11px;
-    }
-
-    .focused-event-card {
-        margin-right: calc(var(--h4) * 13);
-    }
-
-    .focused-event-card > .back-event-card {
-        left: calc(var(--h4) * 12);
-        padding: 30px 0 0 30px;
-        box-shadow: -3px 3px 3px 0;
-    }
-}
-
-.featured-photos {
-    height: 460px;
-    white-space: nowrap;
-    user-select: none;
-    margin-left: 22px;
-}
-
-.featured-photo {
-    display: inline-block;
-    height: 350px;
-    width: 350px;
-    margin-right: 10px;
-    overflow: hidden;
-    background-position: center center;
-    background-repeat: no-repeat;
-    background-size: cover;
-    transition: filter 200ms ease-in-out;
-}
-
-.featured-photo:hover {
-    filter: brightness(0.9) blur(1px);
-}
-
-.featured-photo:last-child {
-    margin-right: 0;
-}
-
-.empty-notification {
-    margin-left: 22px;
-}
-
-.view-all {
-    font-size: var(--h2);
-    text-align: center;
-    box-sizing: border-box;
-    padding-top: 190px;
-    padding-bottom: 190px;
-}
-
-.view-all:hover {
-    filter: brightness(0.8);
-}
-
-.link-list {
-    list-style: none;
 }
 
 .link-icon {
-    font-size: var(--h6);
+    font-size: 12px;
 }
 
-.into-text {
-    margin-left: 22px;
+.upcoming-events {
+    background-color: var(--ac-light);
+}
+
+.upcoming-events .columns {
+    align-items: stretch;
+}
+
+.upcoming-events .card {
+    height: 100%;
 }

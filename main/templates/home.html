@@ -9,75 +9,71 @@
     <script src="{% static "/home/home.js" %}" type="text/javascript"></script>
 {% endblock %}
 {% block header %}
-    <div class="header-main">
-        <h1 class="header-text"><img src="{% static "base/logo.png" %}" alt="The Berks Dental Assistants Society Logo"/></h1>
+    <div class="hero is-fullheight-with-navbar" style="background-image: url({% static 'tests/hero-test.jpg' %});background-repeat: no-repeat;background-size: cover;">
+        <div class="hero-body">
+            <p class="title hero-title">Berks County Dental Assistants Society</p>
+        </div>
     </div>
 {% endblock %}
 {% block content %}
-    <section class="intro">
-        <h1>Welcome</h1>
-        <div class="into-text">
+    <div class="section columns">
+        <section class="column content">
+            <h1>Welcome</h1>
             <p>Welcome to the Berks County Dental Assistant's Society's Website.</p>
             <p>The purpose of this site is to keep you up-to-date on various aspects of our organization.</p>
             <p>For more information, view our <a href="{% url "main:about" %}">About Page</a>,
-               or take a look at our <a href="{% url "main:officers" %}">Officers</a>.
-            </p>
-        </div>
-    </section>
-    <section class="links">
-        <h1>Quick Links</h1>
-        <ul class="link-list">
-            {% for link in external_links %}
-                <li><a target="_blank" rel="noopener" href="{{ link.url }}">{{ link.display_name }}&nbsp;<i
-                        class="fas fa-external-link-alt link-icon"></i></a></li>
-            {% endfor %}
-        </ul>
-    </section>
-    <section class="upcoming-events">
-        <h1 class="captioned-header">Upcoming Events</h1>
-        <p class="h6 captioned-header-caption">Click on a card for more information</p>
-        <div class="event-card-container">
-            {% for event in upcomingEvents %}
-                <div class="event-card">
-                    <div class="front-event-card">
-                        <h2>{{ event.name }}</h2>
-                        {% if event.startDate != event.endDate %}
-                            <p class="event-month h4">{{ event.startDate|date:"F" }}&nbsp;{{ event.startDate|date:"dS" }}
-                                at {{ event.startTime }}</p>
-                            <p class="event-month event-day h4">to</p>
-                            <p class="event-day h4">{{ event.endDate|date:"F" }}&nbsp;{{ event.endDate|date:"dS" }}
-                                at {{ event.endTime }}</p>
-                        {% else %}
-                            <p class="event-month h3">{{ event.startDate|date:"b"|title }}</p>
-                            <p class="event-day h2">{{ event.startDate|date:"d" }}</p>
-                            <p class="h4">{{ event.startTime }} - {{ event.endTime }}</p>
-                        {% endif %}
-                        <p class="h{% if event.startDate != event.endDate %}5{% else %}4{% endif %}">
-                            {% if event.virtual %}<a href="{{ event.link }}">{{ event.link }}</a>{% else %}
-                                {{ event.location }}{% endif %}</p>
-                        <p class="event-front-description h5">{{ event.description }}</p>
+                or take a look at our <a href="{% url "main:officers" %}">Officers</a>.</p>
+        </section>
+        <section class="no-top-padding-mobile column">
+            <div class="panel">
+                <h1 class="panel-heading">Quick Links</h1>
+                {% for link in external_links %}
+                    <div class="panel-block"><a target="_blank" rel="noopener" href="{{ link.url }}">{{ link.display_name }}&nbsp;<i
+                            class="fas fa-external-link-alt link-icon"></i></a></div>
+                {% empty %}
+                    <p class="panel-block">There are no quick links currently available.</p>
+                {% endfor %}
+            </div>
+        </section>
+    </div>
+    <section class="section upcoming-events content">
+        <h1>Upcoming Events</h1>
+        {% if upcomingEvents|length != 0 %}
+            <div class="columns is-desktop">
+                {% for event in upcomingEvents %}
+                    <div class="column">
+                        <div class="card">
+                            <header class="card-header">
+                                <h3 class="card-header-title">{{ event.name }}</h3>
+                            </header>
+                            <div class="card-content">
+                                <div class="content">
+                                    <p>{{ event.description }}</p>
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                    <div class="back-event-card">
-                        {{ event.description }}
-                    </div>
-                </div>
-            {% empty %}
-                <p class="no-upcoming-events">No upcoming events, check back soon! For more information on events go to
-                    the <a href="{% url "main:events" %}">events page</a>.</p>
-            {% endfor %}
-            {% if upcomingEvents|length >= 1 %}
-                <div class="event-card last-event-card">
-                    <div class="front-event-card">
-                        <p class="h1">To view more events, go to the <a class="h1" href="{% url "main:events" %}">events
-                            page</a>.</p>
+                {% endfor %}
+                <div class="column">
+                    <div class="card">
+                        <header class="card-header">
+                            <h3 class="card-header-title">View More</h3>
+                        </header>
+                        <div class="card-content">
+                            <div class="content">
+                                <p>To view more events go to the <a href="{% url 'main:events' %}">events page</a>.</p>
+                            </div>
+                        </div>
                     </div>
                 </div>
-            {% endif %}
-        </div>
+            </div>
+        {% else %}
+            <p>No upcoming events, check back soon! For more information on events go to the <a href="{% url 'main:events' %}">events page</a>.</p>
+        {% endif %}
     </section>
-    <section class="featured">
-        <h1 class="captioned-header">Featured Photos</h1>
-        <p class="h6 captioned-header-caption">Click On A Photo To View It</p>
+    <section class="section content">
+        <h1>Featured Photos</h1>
+        <p class="subtitle">Click On A Photo To View It</p>
         {% if featuredPhotos|length > 0 %}
             <div class="featured-photos">
                 {% for photo in featuredPhotos %}
