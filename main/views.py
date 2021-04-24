@@ -26,10 +26,11 @@ def home(request):
     """
 
     featured_photos = models.GalleryPhoto.objects.filter(featured=True)
-    upcoming_events = models.Event.objects.filter(startDate__gte=date.today()).order_by("startDate")[:5]
+    upcoming_events = models.Event.objects.filter(startDate__gte=date.today()).order_by("startDate")[:3]
     links = models.ExternalLink.objects.all()
     return render(request, 'home.html',
-                  {'featuredPhotos': featured_photos, 'upcomingEvents': upcoming_events, 'external_links': links})
+                  {'featuredPhotos': featured_photos, 'upcomingEvents': upcoming_events, 'external_links': links,
+                   'hide_home_link': True})
 
 
 MAX_IMAGES_PER_PAGE = 12

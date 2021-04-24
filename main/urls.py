@@ -18,6 +18,7 @@ urlpatterns = [
     path('officers/', views.officers, name="officers"),
     path('events/', views.events, name="events"),
     path('about/', views.safe_render("about.html"), name="about"),
+    path('unsupported/', views.safe_render("ie-card.html"), name="ie"),
     path('sitemap/', views.safe_render("sitemap.html"), name="sitemap"),
     path('sitemap.xml/', sitemap, {'sitemaps': sitemaps}, name='django.contrib.sitemaps.views.sitemap'),
     path('robots.txt/', views.robots, name="robots")
