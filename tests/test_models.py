@@ -73,7 +73,7 @@ class PhotoModelUtilFunctions(TestCase):
         self.assertEqual(self.picture.get_extension(), "png")
 
     def test_photo_link(self):
-        self.assertEqual(self.picture.photo_link(), f"/media/gallery-photos/{self.picture.id}.png")
+        self.assertEqual(self.picture.photo_link(), f"/media/galleryphoto-pictures/{self.picture.id}.png")
 
     def tearDown(self):
         utils.delete_image(self.picture)

@@ -97,7 +97,7 @@ class PictureUploads(TestCase):
 
     def test_upload_on_creation(self):
         self.assertTrue(os.path.exists(settings.MEDIA_ROOT + self.picture.picture.name))
-        self.assertEqual(self.picture.picture.name, f"gallery-photos/{self.picture.id}.{self.picture.get_extension()}")
+        self.assertEqual(self.picture.picture.name, f"galleryphoto-pictures/{self.picture.id}.{self.picture.get_extension()}")
 
     def test_upload_on_edit(self):
         with open(test_image_path, 'rb') as image:
@@ -105,7 +105,7 @@ class PictureUploads(TestCase):
                                         {'caption': self.picture.caption, 'image': image})
             self.vs.obj_edit(request)
         self.assertTrue(os.path.exists(settings.MEDIA_ROOT + self.picture.picture.name))
-        self.assertEqual(self.picture.picture.name, f"gallery-photos/{self.picture.id}.{self.picture.get_extension()}")
+        self.assertEqual(self.picture.picture.name, f"galleryphoto-pictures/{self.picture.id}.{self.picture.get_extension()}")
 
     def test_removal_on_deletion(self):
         request = self.factory.post(f"/admin/delete/photo/?id={self.picture.id}")

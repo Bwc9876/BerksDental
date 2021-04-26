@@ -104,7 +104,7 @@ class ViewSet:
 
         for action in self.additionalActions:
             if action.__class__.__name__ != "Action":
-                raise exceptions.ImproperlyConfiguredViewSetError("additinalActions contains a non-action object")
+                raise exceptions.ImproperlyConfiguredViewSetError("additionalActions contains a non-action object")
 
     def format_value_list(self, value_list):
         """ This function is used as a way to format any values we read from the database, like dates and links

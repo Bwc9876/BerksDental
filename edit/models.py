@@ -13,42 +13,22 @@ from django.forms import ValidationError
 from django.template.defaultfilters import escape
 
 
-class User(AbstractUser):
-    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+class OrderedMixin(models.Model):
+    sort_order = models.PositiveSmallIntegerField(default=0)
 
-    def __str__(self):
-        if self.first_name and self.last_name:
-            return f"{self.first_name} {self.last_name}"
-        else:
-            return self.username
+    class Meta:
+        abstract = True
+        ordering = ['sort_order']
 
 
-class GalleryPhoto(models.Model):
-    """ This is a class meant to represent a table for gallery photos on the database
-    It is an extension of the :class:`django.db.models.Model` class
+def get_upload_to(instance, name):
+    return f"{instance.__class__.__name__.lower()}-pictures/{name}"
 
-    :attr id: A UUID To identify a specific picture
-    :type id: class:`django.db.models.UUIDField`
-    :attr picture: The photo to uploaded and displayed
-    :type picture: class:`django.db.models.ImageField`
-    :attr caption: A caption describing the picture
-    :type caption: class:`django.db.models.CharField`
-    :attr date_posted: The date the picture was posted, photos will be sorted using this
-    :type date_posted: class:`django.db.models.DateField`
-    :attr featured: Whether to display the picture on the carousel on the home page
-    :type featured: class:`django.db.models.BooleanField`
 
-    """
-
-    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+class PhotoMixin(models.Model):
     width = models.IntegerField()
     height = models.IntegerField()
-    picture = models.ImageField(upload_to="gallery-photos", width_field='width', height_field='height')
-    caption = models.CharField(max_length=1000)
-    date_posted = models.DateTimeField(auto_now_add=True)
-    featured = models.BooleanField(default=False,
-                                   help_text="This will determine whether to show this image on the home page "
-                                             "(Max of 6)")
+    picture = models.ImageField(upload_to=get_upload_to, width_field='width', height_field='height')
 
     def get_extension(self):
         """ Used to get the file extension of the uploaded image
@@ -68,6 +48,50 @@ class GalleryPhoto(models.Model):
 
         return f"{settings.MEDIA_URL}{self.picture.name}"
 
+    class Meta:
+        abstract = True
+
+
+class BaseModel(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+
+    class Meta:
+        abstract = True
+
+
+class User(AbstractUser):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+
+    def __str__(self):
+        if self.first_name and self.last_name:
+            return f"{self.first_name} {self.last_name}"
+        else:
+            return self.username
+
+
+class GalleryPhoto(PhotoMixin, BaseModel):
+    """ This is a class meant to represent a table for gallery photos on the database
+    It is an extension of the :class:`django.db.models.Model` class
+
+    :attr id: A UUID To identify a specific picture
+    :type id: class:`django.db.models.UUIDField`
+    :attr picture: The photo to uploaded and displayed
+    :type picture: class:`django.db.models.ImageField`
+    :attr caption: A caption describing the picture
+    :type caption: class:`django.db.models.CharField`
+    :attr date_posted: The date the picture was posted, photos will be sorted using this
+    :type date_posted: class:`django.db.models.DateField`
+    :attr featured: Whether to display the picture on the carousel on the home page
+    :type featured: class:`django.db.models.BooleanField`
+
+    """
+
+    caption = models.CharField(max_length=1000)
+    date_posted = models.DateTimeField(auto_now_add=True)
+    featured = models.BooleanField(default=False,
+                                   help_text="This will determine whether to show this image on the home page "
+                                             "(Max of 6)")
+
     def __str__(self):
         """ Defines how this object will be cast to a string
 
@@ -81,7 +105,7 @@ class GalleryPhoto(models.Model):
         ordering = ['-date_posted']
 
 
-class ExternalLink(models.Model):
+class ExternalLink(OrderedMixin, BaseModel):
     """ This is a class meant to represent a table for external links on the database
     It is an extension of the :class:`django.db.models.Model` class
 
@@ -96,10 +120,8 @@ class ExternalLink(models.Model):
 
     """
 
-    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     url = models.URLField(max_length=350)
     display_name = models.CharField(max_length=100)
-    sort_order = models.PositiveSmallIntegerField(default=0)
 
     def __str__(self):
         """ Define how this object will be cast to a string
@@ -110,11 +132,8 @@ class ExternalLink(models.Model):
 
         return f"{self.display_name}"
 
-    class Meta:
-        ordering = ['sort_order']
 
-
-class Event(models.Model):
+class Event(BaseModel):
     """ This is a class meant to represent a table for events on the database
     It is an extension of the :class:`django.db.models.Model` class
 
@@ -135,7 +154,6 @@ class Event(models.Model):
 
     """
 
-    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     name = models.CharField(max_length=100)
     virtual = models.BooleanField(default=False)
     location = models.CharField(max_length=200, blank=True, null=True)
@@ -193,7 +211,7 @@ class Event(models.Model):
         ordering = ["-startDate", "-endDate", "-startTime", "-endTime"]
 
 
-class Officer(models.Model):
+class Officer(OrderedMixin, PhotoMixin, BaseModel):
     """ This is a class meant to represent a table for gallery photos on the database
     It is an extension of the :class:`django.db.models.Model` class
 
@@ -214,35 +232,12 @@ class Officer(models.Model):
 
     """
 
-    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     first_name = models.CharField(max_length=100)
     last_name = models.CharField(max_length=100)
     title = models.CharField(max_length=100)
-    width = models.IntegerField()
-    height = models.IntegerField()
-    picture = models.ImageField(upload_to="officer-photos", width_field='width', height_field='height')
     biography = models.TextField(max_length=2000)
     phone = models.CharField(max_length=50, blank=True, null=True)
     email = models.EmailField(max_length=50, blank=True, null=True)
-    sort_order = models.PositiveSmallIntegerField(default=0)
-
-    def get_extension(self):
-        """ Used to get the file extension of the uploaded image
-
-        :returns: The file extension of the uploaded image to this Officer object
-        :rtype: str
-        """
-
-        return self.picture.name.split(".")[-1]
-
-    def photo_link(self):
-        """ Gets the link to set as a src tag in a <img>
-
-        :returns: The link to this GalleryPhoto's image
-        :rtype: str
-        """
-
-        return f"{settings.MEDIA_URL}officer-photos/{self.id}.{self.get_extension()}"
 
     def masked_email_link(self):
         """ This function is used to mask the officer's email from web scrapers
@@ -279,11 +274,8 @@ class Officer(models.Model):
 
         return f"{self.first_name} {self.last_name}"
 
-    class Meta:
-        ordering = ['sort_order']
 
-
-class Social(models.Model):
+class Social(OrderedMixin, BaseModel):
     """ This is a class meant to represent a table for social media pages on the database
     It is an extension of the :class:`django.db.models.Model` class
 
@@ -294,8 +286,6 @@ class Social(models.Model):
     :attr link: The link to the social media page
     :type link: class:`django.models.URLField`
     """
-
-    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
 
     class Services(models.TextChoices):
         """ This is an internal class used to specify what social media services you can choose from
@@ -312,7 +302,6 @@ class Social(models.Model):
 
     service = models.CharField(max_length=2, choices=Services.choices, default=Services.TWITTER)
     link = models.URLField(max_length=350)
-    sort_order = models.PositiveSmallIntegerField(default=0)
 
     def service_label(self):
         """ This function is used to get the label for the social media service this links to
@@ -355,6 +344,3 @@ class Social(models.Model):
         """
 
         return f"Berks Dental Assistants' {self.service_label()} Page"
-
-    class Meta:
-        ordering = ["sort_order"]

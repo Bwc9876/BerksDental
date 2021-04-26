@@ -90,7 +90,7 @@ class GalleryPhotoViewSet(ViewSet):
     model = models.GalleryPhoto
     modelForm = forms.PhotoForm
     # The photo-folder attribute tells the model where to store pictures
-    photoFolder = "gallery-photos"
+    photoFolder = "galleryphoto-pictures"
     displayFields = ["caption", "picture", "featured"]
 
     def rename_photo_file(self, photo_object):
@@ -132,7 +132,7 @@ class OfficerViewSet(GalleryPhotoViewSet):
     pictureClass = "fa-user-tie"
     model = models.Officer
     modelForm = forms.OfficerForm
-    photoFolder = "officer-photos"
+    photoFolder = "officer-pictures"
     ordered = True
     displayFields = ["first_name", "title", 'picture']
     labels = {
