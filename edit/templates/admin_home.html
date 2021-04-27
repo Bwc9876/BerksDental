@@ -1,4 +1,9 @@
 {% extends 'admin_base.html' %}
+{% comment %}
+    This file is a home where the user can access parts of the admin site
+    If the user doesn't have permissions to edit something it won't appear
+    We also provide a link to django's built-in admin for debugging only
+{% endcomment %}
 
 {% block adminLinks %}
 

@@ -1,3 +1,9 @@
+{% comment %}
+    This file is used to define a Widget for a Field
+    It lets the user use drag&drop to re-arrange objects
+
+{% endcomment %}
+
 <input type="hidden" name="{{ widget.name }}" id="{{ widget.attrs.id }}"
        value="{{ widget.currentOrder }}" {% include "custom_widgets/attrs.html" %}/>
 <ul class="sort_list">

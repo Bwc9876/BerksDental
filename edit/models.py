@@ -1,6 +1,6 @@
 """
     This file contains a collection of classes that will be translated into database tables, or "models"
-    These classes' attributes are set to Field objects which determine how the data will be stored in the database
+    These classes' attributes are set to ModelField objects which determine how the data will be stored in the database
 """
 
 import uuid
@@ -14,6 +14,10 @@ from django.template.defaultfilters import escape
 
 
 class OrderedMixin(models.Model):
+    """
+    A mixin which makes a model ordered via a sort_order attribute
+    """
+
     sort_order = models.PositiveSmallIntegerField(default=0)
 
     class Meta:
@@ -22,28 +26,44 @@ class OrderedMixin(models.Model):
 
 
 def get_upload_to(instance, name):
+    """
+    Gets what folder to upload an image to
+    @param instance: The model thats saving the photo
+    @type instance: Model
+    @param name: The name of the photo file
+    @type name: str
+    @return: The folder to store the image in
+    @rtype: str
+    """
+
     return f"{instance.__class__.__name__.lower()}-pictures/{name}"
 
 
 class PhotoMixin(models.Model):
+    """
+    A mixin that allows the user to upload a picture and save it to this model
+    """
+
     width = models.IntegerField()
     height = models.IntegerField()
     picture = models.ImageField(upload_to=get_upload_to, width_field='width', height_field='height')
 
     def get_extension(self):
-        """ Used to get the file extension of the uploaded image
+        """
+        This function gets the file extension an image uses, for renaming
 
-        :returns: The file extension of the uploaded image to this GalleryPhoto object
-        :rtype: str
+        @return: the extension (png, jpg, etc.) of the image
+        @rtype: str
         """
 
         return self.picture.name.split(".")[-1]
 
     def photo_link(self):
-        """ Gets the link to set as a src tag in a <img>
+        """
+        This function provides a link to use in a src attrbiute to show the image
 
-        :returns: The link to this GalleryPhoto's image
-        :rtype: str
+        @return: The url that the image uses
+        @rtype: str
         """
 
         return f"{settings.MEDIA_URL}{self.picture.name}"
@@ -53,6 +73,10 @@ class PhotoMixin(models.Model):
 
 
 class BaseModel(models.Model):
+    """
+    This class is a model that all models in this file should inherit from, it provides the ID attrbiute
+    """
+
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
 
     class Meta:
@@ -60,9 +84,20 @@ class BaseModel(models.Model):
 
 
 class User(AbstractUser):
+    """
+    This model represents users in the db
+    """
+
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
 
     def __str__(self):
+        """
+        If the user has a first and last name, show it, otherwise show the username
+
+        @return: The first/last name if available, otherwise the username
+        @rtype: str
+        """
+
         if self.first_name and self.last_name:
             return f"{self.first_name} {self.last_name}"
         else:
@@ -70,20 +105,8 @@ class User(AbstractUser):
 
 
 class GalleryPhoto(PhotoMixin, BaseModel):
-    """ This is a class meant to represent a table for gallery photos on the database
-    It is an extension of the :class:`django.db.models.Model` class
-
-    :attr id: A UUID To identify a specific picture
-    :type id: class:`django.db.models.UUIDField`
-    :attr picture: The photo to uploaded and displayed
-    :type picture: class:`django.db.models.ImageField`
-    :attr caption: A caption describing the picture
-    :type caption: class:`django.db.models.CharField`
-    :attr date_posted: The date the picture was posted, photos will be sorted using this
-    :type date_posted: class:`django.db.models.DateField`
-    :attr featured: Whether to display the picture on the carousel on the home page
-    :type featured: class:`django.db.models.BooleanField`
-
+    """
+    This class represents a GalleryPhoto in the db
     """
 
     caption = models.CharField(max_length=1000)
@@ -93,10 +116,10 @@ class GalleryPhoto(PhotoMixin, BaseModel):
                                              "(Max of 6)")
 
     def __str__(self):
-        """ Defines how this object will be cast to a string
-
-        :returns: The caption of the image
-        :rtype: str
+        """
+        Defines how this object will be cast to a string
+        @return: A string that can be used to represent the image
+        @rtype: str
         """
 
         return f"Photo Captioned: \"{self.caption}\""
@@ -106,52 +129,27 @@ class GalleryPhoto(PhotoMixin, BaseModel):
 
 
 class ExternalLink(OrderedMixin, BaseModel):
-    """ This is a class meant to represent a table for external links on the database
-    It is an extension of the :class:`django.db.models.Model` class
-
-    :attr id: A UUID To identify a specific picture
-    :type id: class:`django.db.models.UUIDField`
-    :attr url: The link that the user goes to when clicking
-    :type url: class:`django.db.models.URLField`
-    :attr display_name: The name to show instead of the actual URL
-    :type display_name: class:`django.db.models.CharField`
-    :attr sort_order: The order to display the links in
-    :type sort_order: class:`django.db.models.SmallIntegerField`
-
+    """
+    This class represents External Links (Quick Links) in the db
     """
 
     url = models.URLField(max_length=350)
     display_name = models.CharField(max_length=100)
 
     def __str__(self):
-        """ Define how this object will be cast to a string
+        """
+        Defines how this object will be cast to a string
 
-        :returns: The link's display name
-        :rtype: str
+        @return: A string that can be used to represent the link
+        @rtype: str
         """
 
         return f"{self.display_name}"
 
 
 class Event(BaseModel):
-    """ This is a class meant to represent a table for events on the database
-    It is an extension of the :class:`django.db.models.Model` class
-
-    :attr id: A UUID To identify a specific picture
-    :type id: class:`django.db.models.UUIDField`
-    :attr name: The name of the event
-    :type name: class:`django.db.models.CharField`
-    :attr location: Where the event will take place
-    :type location: class:`django.db.models.CharField`
-    :attr startDate: On what day the event starts
-    :type startDate: class:`django.db.models.DateField`
-    :attr endDate: On what day the event ends
-    :type endDate: class:`django.db.models.DateField`
-    :attr startTime: The time the event starts
-    :type startTime: class:`django.db.models.TimeField`
-    :attr endTime: The time the event stops
-    :type endTime: class:`django.db.models.TimeField`
-
+    """
+    This class represents an Event in the db
     """
 
     name = models.CharField(max_length=100)
@@ -165,6 +163,10 @@ class Event(BaseModel):
     endTime = models.TimeField()
 
     def clean(self):
+        """
+        Ensures the startTime is after the endtime and the startDate is after the endDate
+        """
+
         if self.startDate == self.endDate:
             if self.startTime > self.endTime:
                 raise ValidationError("Start time is after end time!")
@@ -182,15 +184,22 @@ class Event(BaseModel):
                 self.link = None
 
     def __str__(self):
-        """ Defines how this object will be cast to a string
+        """
+        Defines how this object will be cast to a string
 
-        :returns: The name of the event
-        :rtype: str
+        @return: The event's name
+        @rtype: str
         """
 
         return self.name
 
     def as_json_script(self):
+        """
+        Gives a version of the event that can be parsed as JSON, used in the calendar view
+
+        @return: The json representation of this event
+        @rtype: str
+        """
 
         raw_dict = {
             "id": str(self.id),
@@ -212,24 +221,8 @@ class Event(BaseModel):
 
 
 class Officer(OrderedMixin, PhotoMixin, BaseModel):
-    """ This is a class meant to represent a table for gallery photos on the database
-    It is an extension of the :class:`django.db.models.Model` class
-
-    :attr id: A UUID To identify a specific picture
-    :type id: class:`django.db.models.UUIDField`
-    :attr first_name: The first name of the Officer
-    :type first_name: class:`django.db.models.CharField`
-    :attr last_name: The first name of the Officer
-    :type last_name: class:`django.db.models.CharField`
-    :attr picture: The photo to uploaded and displayed
-    :type picture: class:`django.db.models.ImageField`
-    :attr biography: A short summary about the officer
-    :type biography: class:`django.db.models.CharField`
-    :attr phone: The phone number of the officer
-    :type phone: class:`django.db.models.CharField`, optional
-    :attr email: The email of the officer
-    :type email: class:`django.db.models.CharField`, optional
-
+    """
+    This class represents an Officer in the db
     """
 
     first_name = models.CharField(max_length=100)
@@ -240,10 +233,11 @@ class Officer(OrderedMixin, PhotoMixin, BaseModel):
     email = models.EmailField(max_length=50, blank=True, null=True)
 
     def masked_email_link(self):
-        """ This function is used to mask the officer's email from web scrapers
+        """
+        Gets the officer's email as a link, the link is like this to prevent scraping
 
-        :returns: A link that is much harder to get through scrapers
-        :rtype: str
+        @return: The officer's email "encoded" to a more secure string
+        @rtype: str
         """
 
         if self.email:
@@ -253,10 +247,11 @@ class Officer(OrderedMixin, PhotoMixin, BaseModel):
             return "#"
 
     def masked_phone_link(self):
-        """ This function is used to mask the officer's phone from web scrapers
+        """
+        Gets the officer's phone as a link, the link is like this to prevent scraping
 
-        :returns: A link that is much harder to get through scrapers
-        :rtype: str
+        @return: The officer's phone "encoded" to a more secure string
+        @rtype: str
         """
 
         if self.phone:
@@ -266,31 +261,24 @@ class Officer(OrderedMixin, PhotoMixin, BaseModel):
             return "#"
 
     def __str__(self):
-        """ Defines how this object will be cast to a string
+        """
+        Defines how this object will be cast to a string
 
-        :returns: The name of the officer
-        :rtype: str
+        @return: The officer's name
+        @rtype: str
         """
 
         return f"{self.first_name} {self.last_name}"
 
 
 class Social(OrderedMixin, BaseModel):
-    """ This is a class meant to represent a table for social media pages on the database
-    It is an extension of the :class:`django.db.models.Model` class
-
-    :attr id: A UUID To identify a specific picture
-    :type id: class:`django.db.models.UUIDField`
-    :attr service: The name of the social media service we're linking to, the icon displayed is based off this
-    :type service: class:`django.db.models.CharField`
-    :attr link: The link to the social media page
-    :type link: class:`django.models.URLField`
+    """
+    This class represents a Social Media Page in the db
     """
 
     class Services(models.TextChoices):
-        """ This is an internal class used to specify what social media services you can choose from
-        It extends :class:`django.db.models.TextChoices`
-
+        """
+        This class represents all of the choices the user has for social media pages
         """
 
         TWITTER = "TW", "Twitter"
@@ -304,31 +292,34 @@ class Social(OrderedMixin, BaseModel):
     link = models.URLField(max_length=350)
 
     def service_label(self):
-        """ This function is used to get the label for the social media service this links to
+        """
+        Gets the label of this Social Media Page's service
+        (YT -> "YouTube")
 
-        :returns: The name of the social media service this links to
-        :rtype: str
+        @return: The label for the service this Social Media Page uses
+        @rtype: str
         """
 
         return self.Services.labels[self.Services.values.index(self.service)]
 
     @classmethod
     def service_label_from_string(cls, service):
-        """ This function nsi used as a way to get the label for a social media service given its code
+        """
+        Gets the label of a given Social Media Service's 2 letter code
+        (YT -> "YouTube")
 
-        :param service: The code for a service (FB, IG, YT, etc.)
-        :type service: str
-        :returns: The Service's label (FaceBook, Instagram, YouTube, etc.)
-        :rtype: str
+        @return: The label for the service
+        @rtype: str
         """
 
         return cls.Services.labels[cls.Services.values.index(service)]
 
     def fa_icon_class(self):
-        """ This function is used to get the url to the icon for this social media service
+        """
+        Gets the font awesome class that this social media uses
 
-        :returns: The url to the icon for this social media type
-        :rtype: str
+        @return: The font awesome class to use to make the icon for this social media page
+        @rtype: str
         """
 
         if self.service == "LI":
@@ -337,10 +328,11 @@ class Social(OrderedMixin, BaseModel):
             return f"fa-{self.service_label().lower()}-square"
 
     def __str__(self):
-        """ Defines how this object will be cast to a string
+        """
+        Defines how this object will be cast to a string
 
-        :returns: The name of the social media service
-        :rtype: str
+        @return: The social media service's name
+        @rtype: str
         """
 
         return f"Berks Dental Assistants' {self.service_label()} Page"

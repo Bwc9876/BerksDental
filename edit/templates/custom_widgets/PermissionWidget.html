@@ -1,3 +1,8 @@
+{% comment %}
+    This file is used to define a Widget for a Field
+    It lets the user select from a series of dropdowns, what permissions other users have
+{% endcomment %}
+
 <input type="hidden" name="{{ widget.name }}" id="{{ widget.attrs.id }}"
        value="{{ widget.value|default_if_none:"{}" }}" {% include "custom_widgets/attrs.html" %}/>
 <br>

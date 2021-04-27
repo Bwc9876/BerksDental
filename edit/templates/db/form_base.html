@@ -1,10 +1,8 @@
 {% extends 'admin_base.html' %}
 {% comment %}
-    This file is used to edit an object in the database
-    This file will keep being rendered with the required errors until the forms is filled out correctly
-    We use the {% csrf_token %} tag to ensure the edit was invoked by the user, and not a malicous third-party
-    We loop through every field in the form and render it
-    We set the enctype to "multipart/form-data" so files can be uploaded
+    This file is used as a base for all forms
+    As long as a Form object is passed, this file can generate all neccessary html
+    It allows for you to override certain texts (like the text inside the submit button) for better UX
 {% endcomment %}
 {% block adminLinks %}
     {% load static %}
