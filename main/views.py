@@ -73,7 +73,7 @@ def gallery(request):
     return render(request, "gallery.html", {"photos": first_list, 'hasNext': first_page.has_next()})
 
 
-def get_next_photo(photo, featured_only):
+def get_last_photo(photo, featured_only):
     try:
         query = models.GalleryPhoto.objects.exclude(date_posted=photo.date_posted).filter(
             date_posted__gte=photo.date_posted).order_by("date_posted")
@@ -85,7 +85,7 @@ def get_next_photo(photo, featured_only):
         return None
 
 
-def get_last_photo(photo, featured_only):
+def get_next_photo(photo, featured_only):
     try:
         query = models.GalleryPhoto.objects.exclude(date_posted=photo.date_posted).filter(
             date_posted__lte=photo.date_posted).order_by("-date_posted")
