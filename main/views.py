@@ -16,13 +16,13 @@ from edit import models
 
 @require_safe
 def home(request):
-    """ This view function gets many objects from the database and uses them to render home.html
-    We use @require_safe to make sure only GET requests are allowed
+    """
+    This view function renders the home page
 
-    :param request: A request object sent by django
-    :type request: class:`django.http.HttpRequest`
-    :returns: An HttpResponse containing the rendered html file
-    :rtype: class:`django.http.HttpResponse` 
+    @param request: A django request object
+    @type request: HttpRequest
+    @return: A response to the ruest
+    @rtype: HttpResponse
     """
 
     featured_photos = models.GalleryPhoto.objects.filter(featured=True)
@@ -39,6 +39,15 @@ MAX_IMAGES_PER_PAGE = 12
 @csrf_exempt
 @require_http_methods(["POST"])
 def get_gallery_page(request):
+    """
+    This view is to be called via AJAX to get more photos to load in the gallery page
+
+    @param request: A django request object
+    @type request: HttpRequest
+    @return: A json object that has the photos, and whether or not there are more photos to load
+    @rtype: JsonResponse
+    """
+
     target_page_number = request.POST.get("page", 1)
     photo_objects = models.GalleryPhoto.objects.all()
     photo_paginator = Paginator(photo_objects, MAX_IMAGES_PER_PAGE, allow_empty_first_page=True)
@@ -57,13 +66,14 @@ def get_gallery_page(request):
 
 @require_safe
 def gallery(request):
-    """ This view function gets gallery photo objects from the database and uses them to render gallery.html
-    We use @require_safe to make sure only GET requests are allowed
+    """
+    This view renders the gallery page, it only renders a few images at first,
+    but you can render more via a button
 
-    :param request: A request object sent by django
-    :type request: class:`django.http.HttpRequest`
-    :returns: An HttpResponse containing the rendered html file
-    :rtype: class:`django.http.HttpResponse` 
+    @param request: A django request object
+    @type request: HttpRequest
+    @return: A response to the ruest
+    @rtype: HttpResponse
     """
 
     photo_objects = models.GalleryPhoto.objects.all()
@@ -74,6 +84,17 @@ def gallery(request):
 
 
 def get_last_photo(photo, featured_only):
+    """
+    This function is used by photo_view to get the previous photo relative to another photo
+
+    @param photo: The photo to check
+    @type photo: models.GalleryPhoto
+    @param featured_only: whether or not to only get featured photos
+    @type featured_only: bool
+    @return: The previous photo object, if any
+    @rtype: models.GalleryPhoto
+    """
+
     try:
         query = models.GalleryPhoto.objects.exclude(date_posted=photo.date_posted).filter(
             date_posted__gte=photo.date_posted).order_by("date_posted")
@@ -86,6 +107,17 @@ def get_last_photo(photo, featured_only):
 
 
 def get_next_photo(photo, featured_only):
+    """
+    This function is used by photo_view to get the next photo relative to another photo
+
+    @param photo: The photo to check
+    @type photo: models.GalleryPhoto
+    @param featured_only: whether or not to only get featured photos
+    @type featured_only: bool
+    @return: The next photo object, if any
+    @rtype: models.GalleryPhoto
+    """
+
     try:
         query = models.GalleryPhoto.objects.exclude(date_posted=photo.date_posted).filter(
             date_posted__lte=photo.date_posted).order_by("-date_posted")
@@ -99,6 +131,15 @@ def get_next_photo(photo, featured_only):
 
 @require_safe
 def view_photo(request):
+    """
+    This view renders a specific photo and lets you go to the next or the previous
+
+    @param request: A django request object
+    @type request: HttpRequest
+    @return: A response to the ruest
+    @rtype: HttpResponse
+    """
+
     target_id = request.GET.get("id", "")
     featured = request.GET.get("featured", "no")
     featured_only = featured == "yes"
@@ -118,13 +159,13 @@ def view_photo(request):
 
 @require_safe
 def officers(request):
-    """ This view function gets officers from the database and uses them to render officers.html
-    We use @require_safe to make sure only GET requests are allowed
+    """
+    This view renders the officers and diaplys their info
 
-    :param request: A request object sent by django
-    :type request: class:`django.http.HttpRequest`
-    :returns: An HttpResponse containing the rendered html file
-    :rtype: class:`django.http.HttpResponse` 
+    @param request: A django request object
+    @type request: HttpRequest
+    @return: A response to the ruest
+    @rtype: HttpResponse
     """
 
     officer_objects = models.Officer.objects.all()
@@ -132,6 +173,17 @@ def officers(request):
 
 
 def get_last_month_and_year(month, year):
+    """
+    Given a month and year, get the previous month and year
+
+    @param month: the month to use
+    @type month: int
+    @param year: the year to use
+    @type year: int
+    @return: The previous month and year
+    @rtype: int, int
+    """
+
     if month == 1:
         return 12, year - 1
     else:
@@ -139,6 +191,17 @@ def get_last_month_and_year(month, year):
 
 
 def get_next_month_and_year(month, year):
+    """
+    Given a month and year, get the next month and year
+
+    @param month: the month to use
+    @type month: int
+    @param year: the year to use
+    @type year: int
+    @return: The next month and year
+    @rtype: int, int
+    """
+
     if month == 12:
         return 1, year + 1
     else:
@@ -146,6 +209,19 @@ def get_next_month_and_year(month, year):
 
 
 def get_next_and_previous_links(month, year, view_type):
+    """
+    Get the previous and next links for the event view
+
+    @param month: the current month
+    @type month: int
+    @param year: the current year
+    @type year: int
+    @param view_type: the view type (calendar or list)
+    @type view_type: str
+    @return: The link to the next and previous month
+    @rtype: str, str
+    """
+
     next_month, next_year = get_next_month_and_year(month, year)
     next_link = f"{reverse('main:events')}?month={next_month}&year={next_year}&view={view_type}"
     last_month, last_year = get_last_month_and_year(month, year)
@@ -155,14 +231,15 @@ def get_next_and_previous_links(month, year, view_type):
 
 @require_safe
 def events(request):
-    """ This view function gets events from the database and uses them to render events-list.html
-    We use @require_safe to make sure only GET requests are allowed
-
-    :param request: A request object sent by django
-    :type request: class:`django.http.HttpRequest`
-    :returns: An HttpResponse containing the rendered html file
-    :rtype: class:`django.http.HttpResponse` 
     """
+    This view renders events to either a calendar or a list view
+
+    @param request: A django request object
+    @type request: HttpRequest
+    @return: A response to the ruest
+    @rtype: HttpResponse
+    """
+
     view_type = request.GET.get("view", "calendar")
 
     if view_type == "calendar" or view_type == "list":
@@ -191,10 +268,13 @@ def events(request):
 
 
 def safe_render(template_name, ctx=None):
-    """ This function is used as a shortcut to render the given html file and require that the request type is GET
+    """
+    This function is used as a shortcut to generate a view that renders a given html file safely
 
-    :returns: A view function that can be used in a path object to render an HTML file
-    :rtype: function(request) -> HttpResponse
+    @param template_name: the name of the html file
+    @param ctx: additonal context to pass
+    @return: a view function that renders the given html file
+    @rtype: function
     """
 
     if ctx is None:
@@ -209,14 +289,13 @@ def safe_render(template_name, ctx=None):
 
 @require_safe
 def test_error(request):
-    """ This function is used as a way to test how error pages will look in production
-    While debugging, whenever there's an error, django will always show a stacktrace
-    So, we set up this url while debugging that allows us to see how error pages will look
+    """
+    This view is used in debugging to see how error pages will look
 
-    :param request: A request object sent by django
-    :type request: class:`django.http.HttpRequest`
-    :returns: An HttpResponse containing the rendered html file
-    :rtype: class:`django.http.HttpResponse`
+    @param request: A django request object
+    @type request: HttpRequest
+    @return: A response to the ruest
+    @rtype: HttpResponse
     """
 
     try:
@@ -229,4 +308,13 @@ def test_error(request):
 
 
 def robots(request):
+    """
+    This view renders robots.txt for search engines
+
+    @param request: A django request object
+    @type request: HttpRequest
+    @return: A response to the ruest
+    @rtype: HttpResponse
+    """
+
     return render(request, "robots.txt", content_type="text/plain")

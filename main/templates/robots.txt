@@ -1,3 +1,7 @@
+{% comment %}
+    This file defines how search engines index the site
+    We block access to the admin section so that way it won't appear in search results
+{% endcomment %}
 # Admin Pages
 User-agent: *
 Disallow: /admin/

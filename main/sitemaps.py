@@ -1,3 +1,7 @@
+"""
+    This file has the sitemap for the site, this sitemap generates an XML document for search engines
+"""
+
 from django.contrib import sitemaps
 from django.urls import reverse
 

@@ -22,7 +22,7 @@ from edit.exceptions import ImproperlyConfiguredViewSetError
 from edit.view_set import ViewSet, formatters, Action
 
 
-# The following classes inherit from EditViewSet class, and are used to add functionality to the models we want
+# The following classes inherit from the ViewSet class, and are used to add functionality to the models we want
 
 
 class EventViewSet(ViewSet):
@@ -55,14 +55,6 @@ class SocialViewSet(ViewSet):
     displayFields = ['service', 'link']
 
     def format_value_list(self, value_list):
-        """ This function overrides the format_value_list function the EditViewSet class
-        it does this in order to provide additional formatting
-        The formatting we provide is making sure the label for the social media we chose is shown and not the code
-        ("YT" -> "YouTube", "IG" -> "Instagram")
-
-        :param value_list:
-        :return:
-        """
 
         new_value_list = super().format_value_list(value_list)
 
@@ -94,10 +86,11 @@ class GalleryPhotoViewSet(ViewSet):
     displayFields = ["caption", "picture", "featured"]
 
     def rename_photo_file(self, photo_object):
-        """ This function is used to rename the picture uploaded by the user to the photo's id
-        This is to prevent naming conflicts
+        """
+        This function renames the photo file uploaded to the GalleryPhoto object's id
 
-        :param photo_object: The GalleryPhoto object that we want to rename the file of
+        @param photo_object: The object with the photo file
+        @type photo_object: Model
         """
 
         initial_path = photo_object.picture.path
@@ -109,19 +102,11 @@ class GalleryPhotoViewSet(ViewSet):
         photo_object.save()
 
     def post_save(self, new_obj, form_data, new):
-        """ This function is run after a GalleryPhoto object is added/edited
-        It renames the pictures file to prevent naming conflicts
-
-        """
 
         if new or str(new_obj.id) not in new_obj.picture.name:
             self.rename_photo_file(new_obj)
 
     def pre_del(self, obj_to_delete):
-        """ This code is run before the GalleryPhoto object is deleted from the database
-        It deletes the picture if it still exists
-
-        """
 
         if os.path.exists(obj_to_delete.picture.path):
             os.remove(obj_to_delete.picture.path)
@@ -161,6 +146,13 @@ for view_set in REGISTERED_VIEWSETS:
 
 
 def gen_name_dict():
+    """
+    Generates a dictonary where ViewSet safe names are the keys, and their objects are the values
+
+    @return: A dictionary that converts safe_name -> ViewSet
+    @rtype: dict
+    """
+
     names = {}
     for vs in REGISTERED_VIEWSETS:
         names[vs().get_safe_name()] = vs
@@ -171,10 +163,28 @@ VIEWSET_NAMES = gen_name_dict()
 
 
 def get_viewset_by_safename(name):
+    """
+    This function gets the ViewSet object from its safe name
+
+    @param name: The safe name of the target object
+    @type name: str
+    @return: The ViewSet object that was found, if any
+    """
+
     return VIEWSET_NAMES.get(name, None)
 
 
 def view_set_to_permission_pair(user, viewset):
+    """
+    This function is used to get the permissions the user has for a viewset
+
+    @param user: The user to check
+    @type user: User
+    @param viewset: The ViewSet to check the permissions for
+    @return: The permission level the user has for the viewset
+    @rtype: str, str
+    """
+
     vs = viewset()
     viewset_name = vs.get_safe_name()
     permission_level = "None"
@@ -209,6 +219,15 @@ class UserViewSet(ViewSet):
 
     @staticmethod
     def gen_json_from_viewsets(user, viewsets):
+        """
+        This function is used to generate json to be sent to the PermissionField object
+
+        @param user: The user to check permissions for
+        @param viewsets: The viewset to check
+        @return: A JSON string of all permissions for the list of viewsets
+        @rtype: str
+        """
+
         output_dictionary = {}
         for vs in viewsets:
             name, level = view_set_to_permission_pair(user, vs)
@@ -246,6 +265,15 @@ class UserViewSet(ViewSet):
             return user_form
 
     def change_password_view(self, request):
+        """
+        This view is used to change a user's password
+
+        @param request: A django request object
+        @type request: HttpRequest
+        @return: A response to the request
+        @rtype: HttpResponse
+        """
+
         target_id = request.GET.get("id", "")
         target_user = get_object_or_404(models.User, id=target_id)
         if request.method == "POST":
@@ -270,7 +298,14 @@ class UserViewSet(ViewSet):
                            'help_link': reverse("edit:help_password")})
 
     def get_password_view_function(self):
+        """
+        This function is used to get the password view as a function
 
+        @return: The change password view function
+        @rtype: function
+        """
+
+        @login_required
         @require_http_methods(["GET", "POST"])
         def change_password(request):
             if request.user.has_perms(self.gen_perms(["edit", "view"])):
@@ -282,11 +317,11 @@ class UserViewSet(ViewSet):
 
 
 def generate_paths_from_view_set(source_view_set):
-    """ This function will add give the url patterns for a given :class:`EditViewSet` class
-
-    :param source_view_set: The :class:`EditViewSet` class to generate the url patterns for
-    :returns: A list of paths with the :class:`EditViewSet`'s url patterns
-    :rtype: list(:class:`django.urls.path`)
+    """
+    This function creates path objects for all the views in a ViewSet
+    @param source_view_set: The view set to get the views from
+    @return: Path objects to be added to url_paterns
+    @rtype: list[path]
     """
 
     view_set_instance = source_view_set()
@@ -311,10 +346,11 @@ def generate_paths_from_view_set(source_view_set):
 
 
 def setup_viewsets():
-    """ This function gives the url patterns for all the models we want
+    """
+    This function loops through each registered ViewSet and adds their views to the patterns
 
-    :returns: The list of wanted patterns for the models
-    :rtype: list(:class:`django.urls.path`)
+    @return: A list of paths to be added to url_patterns
+    @rtype: list[path]
     """
 
     new_patterns = []
@@ -330,13 +366,13 @@ def setup_viewsets():
 @require_safe
 @login_required
 def admin_home(request):
-    """ A django view function, this will render and send the admin_home.html file
+    """
+    This view is used to show a user all of their available actions
 
-    :param request: A request object sent by django
-    :type request: class:`django.http.HttpRequest`
-    :returns: An HttpResponse containing the rendered html file
-    :rtype: class:`django.http.HttpResponse`
-
+    @param request: A django request object
+    @type request: HttpRequest
+    @return: A response to the request
+    @rtype: HttpResponse
     """
 
     accessible_viewsets = []
@@ -354,6 +390,17 @@ def admin_home(request):
 
 
 def help_page(name, display_name):
+    """
+    This function is used as a shortcut to generate a view for a help page
+
+    @param name: The name of the html file to display as a help page
+    @type name: str
+    @param display_name: The display name for the help page
+    @type display_name: str
+    @return: A path object for the help page
+    @rtype: path
+    """
+
     def render_function(request):
         return render(request, f"help/{name}.html", {"article_name": display_name, "back_link": reverse("edit:help")})
 

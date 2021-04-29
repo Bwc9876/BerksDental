@@ -1,3 +1,11 @@
+"""
+    This file contains a base class from which classes can inherit
+    This base class provides a way to handle generating and processing many parts of the admin site
+    It provides methods like pre_save and post_save to allow for customization and additional behaviour
+    Classes that inherit from the base class must specify a model and a form to use
+"""
+
+
 from uuid import UUID
 
 from django.conf import settings
@@ -39,18 +47,12 @@ class Action:
 class ViewSet:
     """ A class used to manage and render models easily, this class is meant to be inherited
 
-    :attr displayName: The name to display on html forms and certain links
-    :type displayName: str
-    :attr model: The model to edit using the view functions
-    :type model: class:`django.db.models.Model`
-    :attr modelForm: The form to render in the view functions
-    :type modelForm: class:`django.forms.ModelForm`
-    :attr ordered: A boolean, tells us if we can edit the order in which these objects appear
-    :type ordered: bool
-    :attr displayFields: A list of fields we want to be shown in the overview view
-    :type displayFields: list(str)
-    :attr labels: If there's any fields we want to be displayed differently,
-    we put the field name as the key, and the desired label as the value
+    @type displayName: str
+    @type model: class:`django.db.models.Model`
+    @type modelForm: class:`django.forms.ModelForm`
+    @type ordered: bool
+    @type displayFields: list(str)
+    @type labels: str
     """
 
     displayName: str = "base"
@@ -64,9 +66,12 @@ class ViewSet:
     labels: dict = {}
 
     def __init__(self):
-        """ This function is run when the ViewSet is instantiated
-        It sets up a format list, which essentially tells us how each field of the object should be formatted
         """
+        Checks the class to ensure the inheritor has been configured correctly
+
+        @raise edit.exceptions.ImproperlyConfiguredViewSetError
+        """
+
         if self.model is None:
             raise exceptions.ImproperlyConfiguredViewSetError("No Model Set")
         if self.modelForm is None:
@@ -107,13 +112,12 @@ class ViewSet:
                 raise exceptions.ImproperlyConfiguredViewSetError("additionalActions contains a non-action object")
 
     def format_value_list(self, value_list):
-        """ This function is used as a way to format any values we read from the database, like dates and links
-        It reads from the format_list and if the field name matches it, it'll fun teh lambda function specified
+        """
+        This function formats values to a more suitable format
+        Like making links go in a tags, making bools render as checkmarks or x'es etc.
 
-        :param value_list: A list of lists, each nested list containing the values for objects
-        :type value_list: list(list(*))
-        :returns: A new, formatted valueList
-        :rtype: list(list(*))
+        @param value_list: The list of tuples to format
+        @type value_list: list
         """
 
         new_value_list = [list(obj) for obj in value_list]
@@ -126,85 +130,102 @@ class ViewSet:
         return new_value_list
 
     def pre_save(self, new_obj, form_data, new):
-        """ The function to be run before an object is saved to the database
-        For now, it just passes, but classes that inherit this can override this function
+        """
+        Before saving an object, this function will run
 
-        :param new_obj: The newObj that is about to be saved (if the item is being added, it will be :type:None)
-        :type new_obj: class:`django.db.models.Model`
-        :param form_data: Additional data from the form that the viewSet may need
-        :type form_data: dict
-        :param new: True if the object is just being added to the db, false if its being edited
-        :type new: bool
+        @param new_obj: The object to be saved, will be None is the object is new
+        @type new_obj: Model
+        @param form_data: Form data from the request, in case the inheritor needs it
+        @type form_data: dict
+        @param new: Whether or not this object is new
+        @type new: bool
         """
 
         pass
 
     def post_save(self, new_obj, form_data, new):
-        """ The function to be run after an object is saved to the database
-        For now, it just passes, but classes that inherit this can override this function
-
-        :param new_obj: The newObj that has been saved
-        :type new_obj: class:`django.db.models.Model`
-        :param form_data: Additional data from the form that the viewSet may need
-        :type form_data: dict
-        :param new: True if the object is just being added to the db, false if its being edited
-        :type new: bool
         """
+        After saving an object, this function will run
 
-        pass
-
-    def pre_del(self, obj_to_delete):
-        """ The function to be run before an object is deleted from the database
-        For now, it just passes, but classes that inherit this can override this function
-
-        :param obj_to_delete: The object that is about to be deleted
-        :type obj_to_delete: class:`django.db.models.Model`
+        @param new_obj: The object that was saved
+        @type new_obj: Model
+        @param form_data: Form data from the request, in case the inheritor needs it
+        @type form_data: dict
+        @param new: Whether or not this object is new
+        @type new: bool
         """
 
         pass
 
     def get_form_object(self, data_sources, instance=None):
-        # dataSources.append(self.additional_form_data(instance))
+        """
+        This function is run to get the form object, this can be overriden if the inheritor needs it
+        @param data_sources: Sources to create the form from (POST, FILES, etc.)
+        @type data_sources: list[str]
+        @param instance: The instance the form may get data from
+        @type instance: Model
+        @return: The form object to render/validate
+        @rtype: Form
+        """
+
         return self.modelForm(*data_sources, initial=self.additional_form_data(instance), instance=instance)
 
     def additional_form_data(self, obj):
+        """
+        Additional form data to pass as a data source
+
+        @param obj: The instance the inhertor may read from
+        @return: A dict with additional form data
+        @rtype: dict
+        """
+
         return {}
 
-    def post_del(self, obj_deleted):
-        """ The function to be run after an object is deleted from the database
-        For now, it just passes, but classes that inherit this can override this function
+    def pre_del(self, obj_to_delete):
+        """
+        Before deleting an object, this function will run
 
-        :param obj_deleted: The object that has been deleted (the data will still be passed, but the db row is deleted)
-        :type obj_deleted: class:`django.db.models.Model`
+        @param obj_to_delete: The object to be deleted
+        @type obj_to_delete: Model
+        """
+
+        pass
+
+    def post_del(self, obj_deleted):
+        """
+        After deleting an object, this function will run
+
+        @param obj_deleted: The object that was deleted (ReadOnly)
+        @type obj_deleted: Model
         """
 
         pass
 
     def get_safe_name(self):
-        """ This function is run to get the name of this view set as a template syntax safe string
-        it gets rid of spaces in favor of underscores, and makes the name lowercase
+        """
+        Get a URL/File safe name for this ViewSet
 
-        :returns: A safe name to be used in template syntax and url patterns
-        :rtype: str
+        @return: A name that can be used internally to reffer to the ViewSet
+        @rtype: str
         """
 
         current_name = self.displayName.lower()
         current_name = slugify(current_name.replace(" ", "_"))
         return current_name
 
-    def get_link(self, link_type):
-        """ This function is used to get and reverse a name with a given type.
-         So passing "add" when the model is "ExternalLink" will resolve to the url "/admin/edit/link/"
+    def gen_perms(self, actions, include_app_name=True):
+        """
+        Get a list of permission codenames for this ViewSet based off actions
 
-        :param link_type: The type of url we want to reverse
-        :type link_type: str
-        :returns: The link to hte requested url
-        :rtype: str
+        @param actions: The actions you want to generate permissions for
+        @type actions: list[str]
+        @param include_app_name: Whether or not to include the app name
+        (needed to convert from codename to permission object)
+        @type include_app_name: bool
+        @return: A list of permission codenames you can use
+        @rtype: list[str]
         """
 
-        return reverse(f"edit:{self.get_safe_name()}_{link_type}")
-
-    def gen_perms(self, actions, include_app_name=True):
         perms = []
         for action in actions:
             if include_app_name:
@@ -214,6 +235,15 @@ class ViewSet:
         return perms
 
     def get_permissions_as_dict(self, include_app_name=True):
+        """
+        Gets permissions as a dictionary
+        @param include_app_name: Whether or not to include the app name
+        (needed to convert from codename to permission object)
+        @type include_app_name: bool
+        @return: A dictionary of permission codenames
+        @rtype: dict
+        """
+
         return {
             "Edit": self.gen_perms(["change", "add", "delete"], include_app_name=include_app_name),
             "View": self.gen_perms(["view"], include_app_name=include_app_name),
@@ -221,29 +251,44 @@ class ViewSet:
             "None": []
         }
 
-    def overview_link(self):
-        """ A function used to get the link that can be used to redirect to the overview page for this model
+    def get_link(self, link_type):
+        """
+        Gets a link for this ViewSet based off an action (view, edit, delete, etc.)
 
-        :returns: The link to be used in the redirect
-        :rtype: str
+        @param link_type: The action for the link
+        @type link_type: str
+        @return: A link to the requested action for this ViewSet
+        @rtype: str
+        """
+
+        return reverse(f"edit:{self.get_safe_name()}_{link_type}")
+
+    def overview_link(self):
+        """
+        Gets the overview link for this ViewSet
+
+        @return: The overview link
+        @rtype: str
         """
 
         return self.get_link("view")
 
     def edit_link(self):
-        """ A function used to get the link that can be used to redirect to the edit page for this model
+        """
+        Gets the edit link for this ViewSet
 
-        :returns: The link to be used in the redirect
-        :rtype: str
+        @return: The edit link
+        @rtype: str
         """
 
         return self.get_link("edit")
 
     def order_link(self):
-        """ A function used to get the link that can be used to redirect to the re-order page for this model
+        """
+        Gets the re-order link for this ViewSet
 
-        :returns: The link to be used in the redirect
-        :rtype: str
+        @return: The re-orderlink
+        @rtype: str
         """
 
         if self.ordered:
@@ -252,23 +297,23 @@ class ViewSet:
             return "#"
 
     def delete_link(self):
-        """ A function used to get the link that can be used to redirect to the delete page for this model
+        """
+        Gets the delete link for this ViewSet
 
-        :returns: The link to be used in the redirect
-        :rtype: str
+        @return: The delete link
+        @rtype: str
         """
 
         return self.get_link("delete")
 
     def obj_add(self, request):
-        """ A django view function, this will add the model to the database given form data
-        If the form is invalid, it re-renders the html and sends it back to the user
-        If the form is valid, it will redirect to the overview page
+        """
+        This view is used to add an object to the database
 
-        :param request: A request object sent by django
-        :type request: class:`django.http.HttpRequest`
-        :returns: An HttpResponse containing the rendered html file
-        :rtype: class:`django.http.HttpResponse`
+        @param request: A django request object
+        @type request: HttpRequest
+        @return: A response to the request
+        @rtype: HttpResponse
         """
 
         form = self.get_form_object([request.POST, request.FILES])
@@ -287,14 +332,13 @@ class ViewSet:
                                                          'help_link': reverse("edit:help_edit")})
 
     def obj_edit(self, request):
-        """ A django view function, this will edit the model on the database given form data
-        If the form is invalid, it re-renders the html and sends it back to the user
-        If the form is valid, it will redirect to the overview page
+        """
+        This view is used to edit an object in the database
 
-        :param request: A request object sent by django
-        :type request: class:`django.http.HttpRequest`
-        :returns: An HttpResponse containing the rendered html file
-        :rtype: class:`django.http.HttpResponse`
+        @param request: A django request object
+        @type request: HttpRequest
+        @return: A response to the request
+        @rtype: HttpResponse
         """
 
         target_obj = get_object_or_404(self.model, id=request.GET.get('id', ''))
@@ -311,15 +355,15 @@ class ViewSet:
                            "back_link": self.overview_link(), 'help_link': reverse("edit:help_edit")})
 
     def obj_delete_view(self, request):
-        """ A django view function, this will delete the model from the database given form data
-        It will ask the user for confirmation that they would like to delete the object
-        After the object is deleted, it will redirect to the overview page
-
-        :param request: A request object sent by django
-        :type request: class:`django.http.HttpRequest`
-        :returns: An HttpResponse containing the rendered html file
-        :rtype: class:`django.http.HttpResponse`
         """
+        This view is used to delete an object from the database
+
+        @param request: A django request object
+        @type request: HttpRequest
+        @return: A response to the request
+        @rtype: HttpResponse
+        """
+
         form = forms.ConfirmDeleteForm()
         if request.method == "POST":
             target_obj = get_object_or_404(self.model, id=request.GET.get('id', ''))
@@ -341,15 +385,13 @@ class ViewSet:
                            "back_link": self.overview_link(), "form": form})
 
     def obj_edit_or_add_view(self, request):
-        """ A django view function, this will add the model to the database given form data
-        This function uses the :func:`obj_add` and :func:`obj_edit` functions and combines them
-        If an id is passed, we'll edit the object with that id
-        If an id is not passed, we add the object to the database
+        """
+        This view is used to determine whether to add or edit (if an id is specified in the GET parameters)
 
-        :param request: A request object sent by django
-        :type request: class:`django.http.HttpRequest`
-        :returns: An HttpResponse containing the rendered html file
-        :rtype: class:`django.http.HttpResponse`
+        @param request: A django request object
+        @type request: HttpRequest
+        @return: A response to the request
+        @rtype: HttpResponse
         """
 
         if request.method == "POST":
@@ -377,15 +419,15 @@ class ViewSet:
                            "back_link": self.overview_link(), 'help_link': reverse("edit:help_edit")})
 
     def object_order_view(self, request):
-        """ This function allows the user to edit the order external links will appear with drag-and-drop
-        On the backend, we expect a list of ids, we then get the links these ids are associates with
-        and set the sort_order property of it to where the id is located from the incoming list
-
-        :param request: A request object sent by django
-        :type request: class:`django.http.HttpRequest`
-        :returns: Either a page where the user can edit the order of links, or a redirect back to the overview page
-        :rtype: :class:`django.http.HttpResponse`
         """
+        This view is used to arrange objects in the database
+
+        @param request: A django request object
+        @type request: HttpRequest
+        @return: A response to the request
+        @rtype: HttpResponse
+        """
+
         if request.method == "POST":
             form = forms.OrderForm(request.POST)
             form.fields["new_order"].set_objects(self.model.objects.all())
@@ -412,14 +454,15 @@ class ViewSet:
                            'help_link': reverse("edit:help_ordering")})
 
     def obj_overview_view(self, request):
-        """ A django view function, this will add the model to the database given form data
-        It displays all the objects based off this model in the database as an HTML file
-
-        :param request: A request object sent by django
-        :type request: class:`django.http.HttpRequest`
-        :returns: An HttpResponse containing the rendered html file
-        :rtype: class:`django.http.HttpResponse`
         """
+        This view is used to view objects in the database
+
+        @param request: A django request object
+        @type request: HttpRequest
+        @return: A response to the request
+        @rtype: HttpResponse
+        """
+
         page_number = request.GET.get('page', 1)
         model_paginator = Paginator(self.model.objects.all(), self.per_page, allow_empty_first_page=True)
         page = model_paginator.get_page(page_number)
@@ -454,16 +497,22 @@ class ViewSet:
 
     @staticmethod
     def missing_permissions_link():
+        """
+        This is the link the user will be sent to if they're missing permissions to access a page
+
+        @return: The link the user will be redirected to
+        @rtype: str
+        """
+
         missing_permissions_message = "You don't have sufficient permissions to perform this action"
         return f"{reverse('edit:admin_home')}?alert={missing_permissions_message}&alertType=error"
 
     def get_view_functions(self):
-        """ This function sets up proxy functions
-        We need to use the @login_required and other decorators, but we can't use this within a class,
-        So we create functions that have the decorator that use the class
+        """
+        This is used a way to add decorators to view functions, such as require_safe and login_required
 
-        :returns: Three view functions (overview, edit/add, delete)
-        :rtype: function(3)
+        @return: The view, edit, and delete Views
+        @rtype: list[function]
         """
 
         @require_safe
@@ -493,6 +542,13 @@ class ViewSet:
         return viewset_overview, viewset_edit_or_add, viewset_delete
 
     def get_edit_order_view(self):
+        """
+        This is used a way to add decorators to the order view function
+
+        @return: The order View
+        @rtype: function
+        """
+
         @require_http_methods(["GET", "POST"])
         @login_required()
         def edit_order_view(request):

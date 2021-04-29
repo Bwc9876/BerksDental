@@ -1,3 +1,8 @@
+"""
+    This file defines the url patterns for the main app
+    If DEBUG is true, we add the error view for testing
+"""
+
 from django.conf import settings
 from django.contrib.sitemaps.views import sitemap
 from django.urls import path
