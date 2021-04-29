@@ -1,0 +1,54 @@
+.main p {
+    color: grey;
+}
+
+.viewer-box {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 50px;
+}
+
+.viewer-box a, .viewer-box p {
+    display: none;
+}
+
+.viewer-box img {
+    width: auto;
+    height: auto;
+}
+
+.info-box {
+    display: flex;
+    justify-content: space-between;
+    padding: 0 50px 25px;
+}
+
+.info-box div {
+    max-width: 44%;
+    color: #4a4a4a;
+}
+
+.info-box div p {
+    color: #4a4a4a;
+}
+
+@media only screen and (min-width: 670px) {
+    .viewer-box {
+        min-height: 55vh;
+    }
+
+    .viewer-box a, .viewer-box p {
+        display: initial;
+    }
+
+    .viewer-box img {
+        max-width: 80%;
+        max-height: 500px;
+        padding: 20px;
+    }
+
+    .info-box a, .info-box > p {
+        display: none;
+    }
+}

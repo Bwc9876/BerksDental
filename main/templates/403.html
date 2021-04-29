@@ -5,14 +5,13 @@
 {% endcomment %}
 {% block meta %}
     <title>Berks Dental Assistants: Access Denied</title>
-    <meta name="description" content="Berks Dental Assistants' 403 Page.">
+    <meta name="description" content="Berks Dental Assistants 403 Page.">
 {% endblock %}
 {% block links %}
-    <style>.main-content{display: flex;flex-direction: column;align-items: center;justify-content: center;}.main-content * {text-align: center}</style>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'base/errors.css' %}" />
 {% endblock %}
 {% block content %}
-
-    <h1> Access Denied </h1>
-    <h2> You do not have sufficient permissions to view the page you requested </h2>
-
+    <h1 class="title">403 - Access Denied</h1>
+    <p class="subtitle">You do not have sufficient permissions to view the page you requested.</p>
 {% endblock %}

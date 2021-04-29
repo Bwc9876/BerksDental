@@ -1,0 +1,32 @@
+.image-grid {
+    display: grid;
+}
+
+@media only screen and (min-width: 400px) {
+    .image-grid {
+        grid-template-columns: repeat(auto-fit, minmax(330px, 1fr));
+    }
+}
+
+.image-grid-item-outer-wrapper {
+    position: relative;
+    padding-top: 100%;
+    background-color: black;
+    margin: 15px;
+}
+
+.image-grid-item-inner-wrapper {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.image-grid img {
+    max-width: 100%;
+    max-height: 100%;
+}

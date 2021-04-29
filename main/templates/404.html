@@ -8,11 +8,10 @@
     <meta name="description" content="Berks Dental Assistants' 404 Page.">
 {% endblock %}
 {% block links %}
-    <style>.main-content{display: flex;flex-direction: column;align-items: center;justify-content: center;}.main-content * {text-align: center}</style>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'base/errors.css' %}" />
 {% endblock %}
 {% block content %}
-
-    <h1> Page Not Found </h1>
-    <h2> The page you requested was not able to be found on our server </h2>
-
+    <h1 class="title">404 - Page Not Found</h1>
+    <p class="subtitle">We were unable to find the page you requested.</p>
 {% endblock %}

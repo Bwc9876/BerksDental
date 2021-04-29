@@ -5,25 +5,33 @@
 {% endblock %}
 {% block links %}
     {% load static %}
-    <script src="{% static '/gallery/gallery.js' %}" defer type="text/javascript"></script>
-    <link href="{% static "/gallery/gallery.css" %}" type="text/css" rel="stylesheet">
+    <link href="{% static "/base/image.css" %}" type="text/css" rel="stylesheet">
+    <script type="text/javascript" src="{% static "/gallery/gallery.js" %}"></script>
 {% endblock %}
 {% block header %}
-    <h1>Gallery</h1>
+    <div class="hero is-medium">
+        <div class="hero-body">
+            <h1 class="title has-text-centered">Gallery</h1>
+        </div>
+    </div>
 {% endblock %}
 {% block content %}
-    <div class="grid">
-    {% for photo in photos %}
-        <a class="grid-item" href="{% url "main:view_photo" %}?id={{ photo.id }}" aria-label="{{ photo.caption }}" style="background-image: url('{{ photo.photo_link }}')">
-            <div class="image-clicker">
-                <p class="h3">Click To View</p>
-            </div>
-        </a>
-    {% endfor %}
-    </div>
-    {% if hasNext %}
-        <button id="load-images-button">Load More Images</button>
+    {% if photos|length > 0 %}
+        <div class="image-grid" style="margin: 15px;">
+            {% for photo in photos %}
+                <div class="image-grid-item-outer-wrapper">
+                    <a href="{% url 'main:view_photo' %}?id={{ photo.id }}" class="image-grid-item-inner-wrapper">
+                        <img src="{{ photo.photo_link }}" alt="{{ photo.caption }}" />
+                    </a>
+                </div>
+            {% endfor %}
+            {% if hasNext %}
+                <div id="load-images-button" class="image-grid-item-outer-wrapper" style="background-color: white;">
+                    <button style="width: 100%;" class="image-grid-item-inner-wrapper">Load More Images</button>
+                </div>
+            {% endif %}
+        </div>
     {% else %}
-        <button disabled id="load-images-button">There Are No More Images</button>
+        <p>Currently there are no photos. Check back soon!</p>
     {% endif %}
 {% endblock %}

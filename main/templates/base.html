@@ -51,7 +51,7 @@
 </head>
 <body class="has-navbar-fixed-top">
 <header>
-    <div class="navbar is-fixed-top">
+    <nav class="navbar is-fixed-top">
         <div class="navbar-brand">
             <a class="navbar-item" href="{% url 'main:home' %}">
                 <img src="{% static 'base/logo.png' %}" alt="Berks Dental Assistants' Logo"/>
@@ -71,7 +71,7 @@
                 <a class="navbar-item nav-link" href="{% url 'main:about' %}">About</a>
             </div>
         </div>
-    </div>
+    </nav>
     <div class="header-main">{% block header %}{% endblock %}</div>
 </header>
 <div class="main">
@@ -90,6 +90,7 @@
            href="{{ social.link }}"><i
                 class="fab {{ social.fa_icon_class }} fa-lg"></i></a>
     {% endfor %}
+    </div>
 </footer>
 </body>
 </html>

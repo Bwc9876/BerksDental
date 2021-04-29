@@ -5,47 +5,36 @@
     <meta name="description" content="Berks Dental Assistants' Sitemap.">
 {% endblock %}
 {% block header %}
-    <h1>Sitemap</h1>
+    <div class="hero is-medium">
+        <div class="hero-body">
+            <h1 class="title has-text-centered">Sitemap</h1>
+        </div>
+    </div>
 {% endblock %}
-
-{% block links %}
-
-    <style>
-
-        .header-content {
-            display: flex;
-            padding: 40px;
-            background-color: var(--clr-light);
-        }
-
-        ul {
-            list-style: none;
-        }
-
-    </style>
-
-{% endblock %}
-
 {% block content %}
-    <ul>
-        <li><a href="{% url "main:home" %}">Home</a></li>
-        <li><a href="{% url "main:officers" %}">Officers</a></li>
-        <li><a href="{% url "main:gallery" %}">Gallery</a></li>
-        <li><a href="{% url "main:events" %}">Events</a></li>
-        <li><a href="{% url "main:about" %}">About</a></li>
-    </ul>
-    {% if user.is_authenticated %}
-        <h2 style="padding-left:22px;background-color: var(--ac-light);">Administrative Pages</h2>
-        <ul>
-            <li><a href="{% url "edit:admin_home" %}">Admin Home</a></li>
-            <li><a href="{% url "edit:photo_view" %}">Gallery Photos</a></li>
-            <li><a href="{% url "edit:officer_view" %}">Officers</a></li>
-            <li><a href="{% url "edit:officer_view" %}">External Links</a></li>
-            <li><a href="{% url "edit:officer_view" %}">Events</a></li>
-            <li><a href="{% url "edit:officer_view" %}">Social Media Pages</a></li>
-        </ul>
-    {% endif %}
-
-    <a style="margin-left:22px;" href="{% url "main:django.contrib.sitemaps.views.sitemap" %}">View As XML</a>
-
+    <div class="section content columns">
+        <div class="column">
+            {% if user.is_authenticated %}<h2>User Pages</h2>{% endif %}
+            <ul>
+                <li><a class="is-size-5" href="{% url "main:home" %}">Home</a></li>
+                <li><a class="is-size-5" href="{% url "main:officers" %}">Officers</a></li>
+                <li><a class="is-size-5" href="{% url "main:gallery" %}">Gallery</a></li>
+                <li><a class="is-size-5" href="{% url "main:events" %}">Events</a></li>
+                <li><a class="is-size-5" href="{% url "main:about" %}">About</a></li>
+            </ul>
+        </div>
+        {% if user.is_authenticated %}
+            <div class="column">
+                <h2>Administrative Pages</h2>
+                <ul>
+                    <li><a class="is-size-5" href="{% url "edit:admin_home" %}">Admin Home</a></li>
+                    <li><a class="is-size-5" href="{% url "edit:photo_view" %}">Gallery Photos</a></li>
+                    <li><a class="is-size-5" href="{% url "edit:officer_view" %}">Officers</a></li>
+                    <li><a class="is-size-5" href="{% url "edit:officer_view" %}">External Links</a></li>
+                    <li><a class="is-size-5" href="{% url "edit:officer_view" %}">Events</a></li>
+                    <li><a class="is-size-5" href="{% url "edit:officer_view" %}">Social Media Pages</a></li>
+                </ul>
+            </div>
+        {% endif %}
+    </div>
 {% endblock %}
