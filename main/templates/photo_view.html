@@ -10,20 +10,20 @@
 {% block content %}
     <div class="viewer-box">
         {% if last_link %}
-            <a href="{{ last_link|default_if_none:"#" }}"><i class="is-size-4 icon fas fa-arrow-alt-circle-left"></i></a>
+            <a aria-label="Previous Image" href="{{ last_link|default_if_none:"#" }}"><i class="is-size-4 icon fas fa-arrow-alt-circle-left"></i></a>
         {% else %}
             <p><i class="is-size-4 icon fas fa-arrow-alt-circle-left"></i></p>
         {% endif %}
         <img alt="{{ photo.caption }}" src="{{ photo.photo_link }}" />
         {% if next_link %}
-            <a href="{{ next_link|default_if_none:"#" }}"><i class="is-size-4 icon fas fa-arrow-alt-circle-right"></i></a>
+            <a aria-label="Next Image" href="{{ next_link|default_if_none:"#" }}"><i class="is-size-4 icon fas fa-arrow-alt-circle-right"></i></a>
         {% else %}
             <p><i class="is-size-4 icon fas fa-arrow-alt-circle-right"></i></p>
         {% endif %}
     </div>
     <div class="info-box">
         {% if last_link %}
-            <a href="{{ last_link|default_if_none:"#" }}"><i class="is-size-4 icon fas fa-arrow-alt-circle-left"></i></a>
+            <a aria-label="Previous Image"  href="{{ last_link|default_if_none:"#" }}"><i class="is-size-4 icon fas fa-arrow-alt-circle-left"></i></a>
         {% else %}
             <p><i class="is-size-4 icon fas fa-arrow-alt-circle-left"></i></p>
         {% endif %}
@@ -32,7 +32,7 @@
             <p>{{ photo.caption }}</p>
         </div>
         {% if next_link %}
-            <a href="{{ next_link|default_if_none:"#" }}"><i class="is-size-4 icon fas fa-arrow-alt-circle-right"></i></a>
+            <a aria-label="Next Image" href="{{ next_link|default_if_none:"#" }}"><i class="is-size-4 icon fas fa-arrow-alt-circle-right"></i></a>
         {% else %}
             <p><i class="is-size-4 icon fas fa-arrow-alt-circle-right"></i></p>
         {% endif %}
