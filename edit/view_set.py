@@ -2,9 +2,8 @@
     This file contains a base class from which classes can inherit
     This base class provides a way to handle generating and processing many parts of the admin site
     It provides methods like pre_save and post_save to allow for customization and additional behaviour
-    Classes that inherit from the base class must specify a model and a form to use
+    Classes that inherit from the base class must specify a model, and a form to use
 """
-
 
 from uuid import UUID
 
@@ -92,7 +91,7 @@ class ViewSet:
                 self.model._meta.get_field("sort_order")
             except FieldDoesNotExist:
                 raise exceptions.ImproperlyConfiguredViewSetError("Ordered Is True,"
-                                                                  " but Model Doesnt Have sort_order Field")
+                                                                  " but Model Doesn't Have sort_order Field")
 
         if self.per_page <= 0:
             raise exceptions.ImproperlyConfiguredViewSetError("per_page Must Be Over 0")
@@ -137,7 +136,7 @@ class ViewSet:
         @type new_obj: Model
         @param form_data: Form data from the request, in case the inheritor needs it
         @type form_data: dict
-        @param new: Whether or not this object is new
+        @param new: Whether this object is new
         @type new: bool
         """
 
@@ -151,7 +150,7 @@ class ViewSet:
         @type new_obj: Model
         @param form_data: Form data from the request, in case the inheritor needs it
         @type form_data: dict
-        @param new: Whether or not this object is new
+        @param new: Whether this object is new
         @type new: bool
         """
 
@@ -219,7 +218,7 @@ class ViewSet:
 
         @param actions: The actions you want to generate permissions for
         @type actions: list[str]
-        @param include_app_name: Whether or not to include the app name
+        @param include_app_name: Whether to include the app name
         (needed to convert from codename to permission object)
         @type include_app_name: bool
         @return: A list of permission codenames you can use
@@ -237,7 +236,7 @@ class ViewSet:
     def get_permissions_as_dict(self, include_app_name=True):
         """
         Gets permissions as a dictionary
-        @param include_app_name: Whether or not to include the app name
+        @param include_app_name: Whether to include the app name
         (needed to convert from codename to permission object)
         @type include_app_name: bool
         @return: A dictionary of permission codenames
@@ -287,7 +286,7 @@ class ViewSet:
         """
         Gets the re-order link for this ViewSet
 
-        @return: The re-orderlink
+        @return: The re-order link
         @rtype: str
         """
 

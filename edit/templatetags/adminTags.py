@@ -31,9 +31,9 @@ def action(name, url, icon, size="h4", show_name=False, new_tab=False, enabled=T
     @type icon: str
     @param size: The size (class) of the icon
     @type size: str
-    @param show_name: Whether or not to show the name of the action next to the icon
+    @param show_name: Whether to show the name of the action next to the icon
     @type show_name: bool
-    @param new_tab: Whether or not to open the url in a new tab
+    @param new_tab: Whether to open the url in a new tab
     @type show_name: bool
     @param enabled: If the action is enables
     @type enabled: bool
@@ -111,7 +111,7 @@ def is_checkbox(field):
 
     @param field: The field to check
     @type field: Field
-    @return: Whether or not its a check box
+    @return: Whether it's a checkbox
     @rtype: bool
     """
 
@@ -126,7 +126,7 @@ def needs_multipart(form):
 
     @param form: The form to check
     @type form: Form
-    @return: Whether or not we need multipart enctype
+    @return: Whether we need multipart enctype
     @rtype: bool
     """
 

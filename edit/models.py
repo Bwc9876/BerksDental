@@ -28,7 +28,7 @@ class OrderedMixin(models.Model):
 def get_upload_to(instance, name):
     """
     Gets what folder to upload an image to
-    @param instance: The model thats saving the photo
+    @param instance: The model that's saving the photo
     @type instance: Model
     @param name: The name of the photo file
     @type name: str
@@ -164,7 +164,7 @@ class Event(BaseModel):
 
     def clean(self):
         """
-        Ensures the startTime is after the endtime and the startDate is after the endDate
+        Ensures the startTime is after the endtime, and the startDate is after the endDate
         """
 
         if self.startDate == self.endDate:
@@ -278,7 +278,7 @@ class Social(OrderedMixin, BaseModel):
 
     class Services(models.TextChoices):
         """
-        This class represents all of the choices the user has for social media pages
+        This class represents all the choices the user has for social media pages
         """
 
         TWITTER = "TW", "Twitter"
@@ -305,7 +305,7 @@ class Social(OrderedMixin, BaseModel):
     @classmethod
     def service_label_from_string(cls, service):
         """
-        Gets the label of a given Social Media Service's 2 letter code
+        Gets the label of a given Social Media Service's 2-letter code
         (YT -> "YouTube")
 
         @return: The label for the service

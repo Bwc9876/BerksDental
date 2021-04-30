@@ -41,7 +41,7 @@ def check_media_quota():
     """
     Checks to ensure we won't go over the max amount of bytes we can store
 
-    @return: whether or not we're close to going over the limit
+    @return: whether we're close to going over the limit
     @rtype: bool
     """
 
@@ -231,7 +231,7 @@ class ConfirmField(fields.CharField):
         """
         Sets the objects name to display
 
-        @param object_name: The name of an object thats being deleted
+        @param object_name: The name of an object that's being deleted
         @type object_name: str
         """
 
@@ -350,7 +350,7 @@ class EventForm(ModelForm):
 
     def __init__(self, *args, **kargs):
         """
-        Sets labels and help texts to more suitable values
+        Sets label and help texts to more suitable values
         It also updates the description field to have differnt width/col
         """
 
@@ -449,7 +449,7 @@ class UserCreateForm(ModelForm):
 class UserEditForm(ModelForm):
     """
     This form is used to edit details about a user
-    This form cannot change a users password, we use another page for that
+    This form cannot change a user's password, we use another page for that
     """
 
     permissions = PermField()
@@ -501,7 +501,7 @@ class SetUserPasswordForm(Form):
 
     def clean(self):
         """
-        Validates the password and ensures that the confirm password matches
+        Validates the password and ensures that the passwords match
         """
 
         cleaned_data = super().clean()

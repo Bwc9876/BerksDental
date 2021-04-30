@@ -1,5 +1,5 @@
 """
-    This file defines the what url patterns go to what views in the edit app
+    This file defines what url patterns go to what views in the edit app
 """
 
 from django.contrib.auth.views import LoginView, LogoutView

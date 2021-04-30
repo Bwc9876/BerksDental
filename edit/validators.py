@@ -24,9 +24,9 @@ class RequiredCharactersValidator:
         @type min_lowercase: int
         @param min_uppercase: Minimum amount of uppercase letters needed
         @type min_uppercase: int
-        @param special_characters: Allows you to override whats considered a special character
+        @param special_characters: Allows you to override what's considered a special character
         @type special_characters: str
-        @param allow_other_characters: Whether or not to throw an error is a character doesnt apply to any filter
+        @param allow_other_characters: Whether to throw an error is a character doesn't apply to any filter
         @type allow_other_characters: bool
         """
 
@@ -132,7 +132,7 @@ class RequiredCharactersValidator:
     @staticmethod
     def determine_plural(test, single='r', plural='rs'):
         """
-        Given an int determine whether or not to put a plural ending
+        Given an int determine whether to put a plural ending
 
         @param test: the int to test
         @type test: int

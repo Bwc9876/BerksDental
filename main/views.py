@@ -44,7 +44,7 @@ def get_gallery_page(request):
 
     @param request: A django request object
     @type request: HttpRequest
-    @return: A json object that has the photos, and whether or not there are more photos to load
+    @return: A json object that has the photos, and whether there are more photos to load
     @rtype: JsonResponse
     """
 
@@ -89,7 +89,7 @@ def get_last_photo(photo, featured_only):
 
     @param photo: The photo to check
     @type photo: models.GalleryPhoto
-    @param featured_only: whether or not to only get featured photos
+    @param featured_only: whether to only get featured photos
     @type featured_only: bool
     @return: The previous photo object, if any
     @rtype: models.GalleryPhoto
@@ -112,7 +112,7 @@ def get_next_photo(photo, featured_only):
 
     @param photo: The photo to check
     @type photo: models.GalleryPhoto
-    @param featured_only: whether or not to only get featured photos
+    @param featured_only: whether to only get featured photos
     @type featured_only: bool
     @return: The next photo object, if any
     @rtype: models.GalleryPhoto
@@ -232,7 +232,7 @@ def get_next_and_previous_links(month, year, view_type):
 @require_safe
 def events(request):
     """
-    This view renders events to either a calendar or a list view
+    This view renders events to either a calendar, or a list view
 
     @param request: A django request object
     @type request: HttpRequest

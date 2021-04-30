@@ -342,7 +342,7 @@ def generate_paths_from_view_set(source_view_set):
 
         return patterns_to_return
     else:
-        raise ValueError(f"{source_view_set.__name__} Won't Work! Please pass a class that *inherits* EditViewSet!")
+        raise ValueError(f"{source_view_set.__name__} Won't Work! Please pass a class that *inherits* ViewSet!")
 
 
 def setup_viewsets():
