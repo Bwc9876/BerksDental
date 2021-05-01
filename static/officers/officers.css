@@ -1,0 +1,24 @@
+.card-image {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.card-header-icon {
+    font-weight: bold;
+    cursor: default;
+}
+
+.columns {
+    align-items: stretch;
+}
+
+.card {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+.card-image {
+    flex-grow: 1;
+}

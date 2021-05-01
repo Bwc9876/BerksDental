@@ -7,99 +7,49 @@
     <meta name="description" content="Berks Dental Assistants' Officers Page.">
 {% endblock %}
 {% block header %}
-    <h1>Our Officers</h1>
+    <div class="hero is-medium">
+        <div class="hero-body">
+            <h1 class="title has-text-centered">Our Officers</h1>
+        </div>
+    </div>
 {% endblock %}
 {% block links %}
-
-    <style>
-
-        .header-content {
-            display: flex;
-            justify-content: space-around;
-            align-items: center;
-            padding: 40px;
-            background-color: var(--clr-light);
-        }
-
-        .cardContainer {
-            display: flex;
-            flex-wrap: wrap;
-        }
-
-        .officerCard {
-            border-radius: 5px;
-            width: 340px;
-            margin: 30px 50px;
-            background-color: white;
-            box-shadow: 0 5px 5px grey;
-        }
-
-        .officerCard * {
-            padding: 10px 20px;
-            border-bottom: solid 2px lightgrey;
-            display: block;
-            margin: 2px 0;
-        }
-
-        .officerCard *:last-child {
-            border: none;
-            margin-bottom: 5px;
-        }
-
-        .contactLink {
-            border: none;
-            padding: 0;
-            margin-right: 20px;
-            float: left;
-            text-decoration: none;
-            color: black;
-            transition: color 100ms linear;
-        }
-
-        .contactLink i {
-            font-size: 50px;
-        }
-
-        .contactLink:hover {
-            color: #9ba7ac;
-            text-decoration: none;
-        }
-
-    </style>
-
+    {% load static %}
+    <link href="{% static "/officers/officers.css" %}" type="text/css" rel="stylesheet">
 {% endblock links %}
-
 {% block content %}
-
-    <div class="cardContainer">
-
-        {% for officer in officers %}
-
-            <div class="officerCard">
-                <img draggable="false" width="300px" height="300px" src="{{ officer.photo_link }}"
-                     alt="{{ officer }}'s Picture"/>
-                <h2>{{ officer }}</h2>
-                <h3>{{ officer.role }}</h3>
-                <p style="color: black;">{{ officer.biography }}</p>
-                {% if officer.email or officer.phone %}
-                    <div class="contactMethods">
-                        {% if officer.email %}
-                            <a aria-label="{{ officer }}'s Email Address" class="contactLink"
-                               href="{{ officer.masked_email_link }}"><i
-                                    class="fas fa-envelope"></i></a>
-                        {% endif %}
-                        {% if officer.phone %}
-                            <a aria-label="{{ officer }}'s Phone Number" class="contactLink"
-                               href="{{ officer.masked_phone_link }}"><i
-                                    class="fas fa-phone-alt"></i></a>
-                        {% endif %}
+    {% for officer in officers %}
+        {% if forloop.counter|divisibleby:3 or forloop.first %}
+            <div class="section columns">
+        {% endif %}
+            <div class="column is-half">
+                <div class="card">
+                    <div class="card-header">
+                        <h2 class="card-header-title">{{ officer }}</h2>
+                        <h2 class="card-header-icon">{{ officer.title }}</h2>
                     </div>
-                {% endif %}
+                    <div class="card-image">
+                        <div class="card-image">
+                            <img src="{{ officer.photo_link }}" alt="{{ officer }}'s Photo">
+                        </div>
+                    </div>
+                    <div class="card-content">
+                        <div class="content">{% lorem %}</div>
+                    </div>
+                    {% if officer.email or officer.phone %}
+                        <div class="card-footer">
+                            {% if officer.email %}
+                            <a class="card-footer-item" href="{{ officer.masked_email_link }}" aria-label="{{ officer }}'s Email"><i class="fas fa-envelope"></i></a>
+                            {% endif %}
+                            {% if officer.phone %}
+                            <a class="card-footer-item" href="{{ officer.masked_phone_link }}" aria-label="{{ officer }}'s Phone Number"><i class="fas fa-phone-alt"></i></a>
+                            {% endif %}
+                        </div>
+                    {% endif %}
+                </div>
             </div>
-
-        {% endfor %}
-
-    </div>
-
-
+        {% if forloop.counter|divisibleby:2 or forloop.last %}
+            </div>
+        {% endif %}
+    {% endfor %}
 {% endblock %}
