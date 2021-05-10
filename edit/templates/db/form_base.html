@@ -28,8 +28,7 @@
             </ul>
 
         {% endif %}
-        {% needsMultiPart form as needs_multipart %}
-        <form class="form" method="POST" {% if needs_multipart %}enctype="multipart/form-data"{% endif %}>
+        <form class="form" method="POST" {% if form|needs_multi_part %}enctype="multipart/form-data"{% endif %}>
 
             {% csrf_token %}
             {% for field in form %}

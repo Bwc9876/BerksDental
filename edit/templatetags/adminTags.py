@@ -118,7 +118,7 @@ def is_checkbox(field):
     return field.field.widget.__class__.__name__ == CheckboxInput().__class__.__name__
 
 
-@register.simple_tag(name="needsMultiPart")
+@register.filter(name="needs_multi_part")
 def needs_multipart(form):
     """
     This function is used to check if a form's enctype needs to be set to multipart
