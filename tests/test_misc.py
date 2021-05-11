@@ -133,7 +133,7 @@ class Template(TestCase):
         self.assertFalse(adminTags.is_checkbox(DummyFieldObject(not_checkbox)))
 
     def test_get_primary_value(self):
-        test_object = ["1", "2"]
+        test_object = ("1", "2")
         self.assertEqual(adminTags.get_primary_value(test_object), "1")
 
     def test_base_data(self):

@@ -1,9 +1,10 @@
 $(document).ready(() => {
+    // noinspection JSUnresolvedFunction
     /**
      * This event handles three things
-     * 1. Setup the sortable (drag & drop) on the sort_list element
-     * 2. Setup the form to read the order of the items in the sort_list element and send it ot the backend
-     * 3. If there's no items in the database, we disable the save button
+     * 1. Set up the sortable (drag & drop) on the sort_list element
+     * 2. Set up the form to read the order of the items in the sort_list element and send it ot the backend
+     * 3. If there are no items in the database, we disable the save button
      */
     // noinspection JSUnresolvedFunction
     $(".sort_list").sortable({

@@ -1,6 +1,6 @@
 class ViewSetError(Exception):
     """
-        This Eror acts as a base for all other viewset based errors
+        This Error acts as a base for all other viewset based errors
     """
 
     pass
