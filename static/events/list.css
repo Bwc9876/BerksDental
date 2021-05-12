@@ -1,0 +1,23 @@
+.main {
+    display: flex;
+    flex-direction: column;
+}
+
+.list-box {
+    box-sizing: border-box;
+    min-height: 150px;
+    position: relative;
+}
+
+.list-box:nth-of-type(odd) {
+    background-color: lightblue;
+}
+
+.list-box .none-text {
+    position: absolute;
+    left: 50%;
+}
+
+#calendar-link {
+    margin: 35px 35px 35px auto;
+}

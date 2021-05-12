@@ -1,0 +1,13 @@
+.hero-body {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+}
+
+.subtitle.is-link {
+    color: #3273dc;
+}
+
+.subtitle.is-link:hover {
+    text-decoration: underline;
+}

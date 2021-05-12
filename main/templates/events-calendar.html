@@ -8,18 +8,20 @@
 {% endblock %}
 {% block links %}
     {% load static %}
-    <link href="{% static "/home/home.css" %}" type="text/css" rel="stylesheet">
-    <link href="{% static "/events/events.css" %}" type="text/css" rel="stylesheet">
-    <script src="{% static "/events/events.js" %}" type="text/javascript"></script>
+    <link href="{% static "/events/shared.css" %}" type="text/css" rel="stylesheet">
+    <link href="{% static "/events/list.css" %}" type="text/css" rel="stylesheet">
 {% endblock %}
 {% block header %}
-    <a aria-label="Last Month" href="{{ previous_link }}"><i class="h3 fas fa-arrow-alt-circle-left"></i></a>
-    <div>
-        <h1>{{ month_name }}</h1>
-        <h2>{{ year }}</h2>
-        <a href="{% url "main:events" %}">Today<br/></a>
+    <div class="hero is-medium">
+        <div class="hero-body">
+            <a href="{{ previous_link }}"><i class="is-size-4 icon fas fa-arrow-alt-circle-left"></i></a>
+            <div>
+                <h1 class="title hero-title has-text-centered">{{ month_name }} {{ year }}</h1>
+                <a class="is-link subtitle" href="{% url "main:events" %}?view=list">View As List</a>
+            </div>
+            <a href="{{ next_link }}"><i class="is-size-4 icon fas fa-arrow-alt-circle-right"></i></a>
+        </div>
     </div>
-    <a aria-label="Next Month" href="{{ next_link }}"><i class="h3 fas fa-arrow-alt-circle-right"></i></a>
 {% endblock %}
 {% block content %}
     {% load eventTags %}
