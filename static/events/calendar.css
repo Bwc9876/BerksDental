@@ -1,0 +1,76 @@
+.box {
+    box-shadow: none;
+}
+
+.calendar {
+    display: grid;
+    margin: 0 auto;
+    min-width: 300px;
+    width: 80vw;
+    max-width: calc(100vh - 30px);
+    grid-template-columns: repeat(7, 1fr);
+    align-self: flex-start;
+}
+
+.calendar-tile, .calendar-weekday, .calendar-event, .out-of-month {
+    box-sizing: border-box;
+    position: relative;
+    padding-top: 100%;
+    max-width: calc(calc(100vh - 30px) / 7);
+    border: 1px black solid;
+}
+
+.tile-content {
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    margin: 5px;
+}
+
+.calendar-weekday {
+    color: black;
+    font-weight: bold;
+}
+
+.calendar-weekday .tile-content {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.calendar-event {
+    background-color: lightblue;
+}
+
+.calendar-event::after {
+    content:'';
+    display: none;
+    border-radius: 50%;
+    width: 7px;
+    height: 7px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    background-color: black;
+}
+
+.out-of-month {
+    background-color: gray;
+}
+
+.event-descriptions {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.event-descriptions-list {
+    display: none;
+    grid-template-columns: repeat(2, 1fr);
+}
+
+.card {
+    margin: 25px;
+}

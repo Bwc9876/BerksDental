@@ -9,10 +9,11 @@
 {% block links %}
     {% load static %}
     <link href="{% static "/events/shared.css" %}" type="text/css" rel="stylesheet">
-    <link href="{% static "/events/list.css" %}" type="text/css" rel="stylesheet">
+    <link href="{% static "/events/calendar.css" %}" type="text/css" rel="stylesheet">
+    <script type="text/javascript" src="{% static 'events/calendar.js' %}"></script>
 {% endblock %}
 {% block header %}
-    <div class="hero is-medium">
+    <div class="hero is-small">
         <div class="hero-body">
             <a href="{{ previous_link }}"><i class="is-size-4 icon fas fa-arrow-alt-circle-left"></i></a>
             <div>
@@ -24,31 +25,65 @@
     </div>
 {% endblock %}
 {% block content %}
-    {% load eventTags %}
-    <div class="calendar">
-    {% for day in weekdays %}
-        <div class="calendar-tile calendar-weekday"><p class="tile-content">{{ day }}</p></div>
-    {% endfor %}
-        {% for week in weeks %}
-            {% for day in week %}
-                {% makeDateObj as date %}
-                {% getEventsOnDate as eventsOnThisDate %}
-                <div class="calendar-tile {% if eventsOnThisDate|length > 0 %}calendar-event{% endif %} {% if date == today %}calendar-today focused-tile{% endif %} {% if day == 0 %}out-of-month{% endif %}">
-                    {% if day != 0 %}
-                        <p class="tile-content">{{ day }}</p>
-                    {% endif %}
-                    <p class="dateText">{{ date|date:"m/d/y" }}</p>
-                    {% for event in eventsOnThisDate %}
-                        <p class="eventJSON">{{ event.as_json_script|safe }}</p>
-                    {% endfor %}
-                </div>
+    <div class="box columns is-desktop">
+        <div class="calendar column">
+            {% for day in weekdays %}
+                <div class="calendar-weekday"><p class="is-size-6 tile-content">{{ day }}</p></div>
             {% endfor %}
-        {% endfor %}
-    </div>
-    <div style="display: flex;justify-content: center;margin:15px;"><a href="{% url "main:events" %}?view=list">(View as list)</a></div>
-    <div class="event-cards-calendar">
-        <div class="front-event-card first">
-            <h2 id="event-list-title">Events on Day</h2>
+            {% load eventTags %}
+            {% for week in weeks %}
+                {% for day in week %}
+                    {% makeDateObj as date %}
+                    {% getEventsOnDate as eventsOnThisDate %}
+                    <div data-berks-dental-event-date="{{ date|date:"mdY" }}" class="{% if day == 0 %}out-of-month{% else %}calendar-tile{% endif %} {% if eventsOnThisDate|length > 0 %}calendar-event calendar-tile{% endif %} {% if date == today %}calendar-today focused-tile{% endif %}">
+                    {% if day != 0 %}
+                        <p class="tile-content is-size-5">{{ day }}</p>
+                    {% endif %}
+                    </div>
+                {% endfor %}
+            {% endfor %}
+        </div>
+        <div class="column content event-descriptions">
+            <h2>Events:</h2>
+            {% for week in weeks %}
+                {% for day in week %}
+                    {% if day != 0 %}
+                        {% makeDateObj as date %}
+                        {% getEventsOnDate as eventsOnThisDate %}
+                        {% if eventsOnThisDate|length != 0 %}
+                            <p class="{{ date|date:"mdY" }}">{{ date }}</p>
+                        {% else %}
+                            <p class="{{ date|date:"mdY" }}">There are no events on {{ date }}.</p>
+                        {% endif %}
+                        <div class="event-descriptions-list {{ date|date:"mdY" }}">
+                            {% for event in eventsOnThisDate %}
+                                <div class="card">
+                                    <header class="card-header">
+                                        <h3 class="card-header-title">{{ event.name }}</h3>
+                                    </header>
+                                    <div class="card-content">
+                                        <div class="content">
+                                            {% if event.startDate != event.endDate %}
+                                                <p>Start Date & Time: {{ event.startDate }} at {{ event.startTime }}</p>
+                                                <p>End Date & Time: {{ event.endDate }} at {{ event.endTime }}</p>
+                                            {% else %}
+                                                <p>Date & Time: {{ event.startDate }} at {{ event.startTime }}</p>
+                                            {% endif %}
+                                            {% if event.virtual %}
+                                                <p>Link: <a href="{{ event.link }}">{{ event.link }}</a></p>
+                                            {% else %}
+                                                <p>Location: {{ event.location }}</p>
+                                            {% endif %}
+                                            <p>Description: {{ event.description }}</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+                {% endfor %}
+            {% endfor %}
         </div>
     </div>
+    <a class="view-switch-link" href="{% url "main:events" %}?view=list">View As List</a>
 {% endblock %}
