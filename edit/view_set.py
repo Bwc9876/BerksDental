@@ -113,7 +113,7 @@ class ViewSet:
     def format_value_list(self, value_list):
         """
         This function formats values to a more suitable format
-        Like making links go in a tags, making bools render as checkmarks or x'es etc.
+        Like making links go in a tags, making booleans render as checkmarks or crosses etc.
 
         @param value_list: The list of tuples to format
         @type value_list: list
@@ -158,7 +158,7 @@ class ViewSet:
 
     def get_form_object(self, data_sources, instance=None):
         """
-        This function is run to get the form object, this can be overriden if the inheritor needs it
+        This function is run to get the form object, this can be overridden if the inheritor needs it
         @param data_sources: Sources to create the form from (POST, FILES, etc.)
         @type data_sources: list[str]
         @param instance: The instance the form may get data from
@@ -173,7 +173,7 @@ class ViewSet:
         """
         Additional form data to pass as a data source
 
-        @param obj: The instance the inhertor may read from
+        @param obj: The instance the inheritor may read from
         @return: A dict with additional form data
         @rtype: dict
         """
@@ -204,7 +204,7 @@ class ViewSet:
         """
         Get a URL/File safe name for this ViewSet
 
-        @return: A name that can be used internally to reffer to the ViewSet
+        @return: A name that can be used internally to referrer to the ViewSet
         @rtype: str
         """
 

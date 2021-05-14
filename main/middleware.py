@@ -1,5 +1,5 @@
 """
-    This file contains custom middleware, which is run between receving a request, and sending the response
+    This file contains custom middleware, which is run between receiving a request, and sending the response
 """
 
 from django.shortcuts import redirect

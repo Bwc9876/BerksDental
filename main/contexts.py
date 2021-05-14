@@ -11,7 +11,7 @@ def base_data(request):
 
     @param request: A django request object
     @type request: HttpRequest
-    @return: Additonal context to be sent to the templates
+    @return: Additional context to be sent to the templates
     @rtype: dict
     """
 

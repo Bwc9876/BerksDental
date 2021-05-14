@@ -21,7 +21,7 @@ def home(request):
 
     @param request: A django request object
     @type request: HttpRequest
-    @return: A response to the ruest
+    @return: A response to the request
     @rtype: HttpResponse
     """
 
@@ -72,7 +72,7 @@ def gallery(request):
 
     @param request: A django request object
     @type request: HttpRequest
-    @return: A response to the ruest
+    @return: A response to the request
     @rtype: HttpResponse
     """
 
@@ -136,7 +136,7 @@ def view_photo(request):
 
     @param request: A django request object
     @type request: HttpRequest
-    @return: A response to the ruest
+    @return: A response to the request
     @rtype: HttpResponse
     """
 
@@ -160,11 +160,11 @@ def view_photo(request):
 @require_safe
 def officers(request):
     """
-    This view renders the officers and diaplys their info
+    This view renders the officers and displays their info
 
     @param request: A django request object
     @type request: HttpRequest
-    @return: A response to the ruest
+    @return: A response to the request
     @rtype: HttpResponse
     """
 
@@ -236,7 +236,7 @@ def events(request):
 
     @param request: A django request object
     @type request: HttpRequest
-    @return: A response to the ruest
+    @return: A response to the request
     @rtype: HttpResponse
     """
 
@@ -272,7 +272,7 @@ def safe_render(template_name, ctx=None):
     This function is used as a shortcut to generate a view that renders a given html file safely
 
     @param template_name: the name of the html file
-    @param ctx: additonal context to pass
+    @param ctx: additional context to pass
     @return: a view function that renders the given html file
     @rtype: function
     """
@@ -294,7 +294,7 @@ def test_error(request):
 
     @param request: A django request object
     @type request: HttpRequest
-    @return: A response to the ruest
+    @return: A response to the request
     @rtype: HttpResponse
     """
 
@@ -313,7 +313,7 @@ def robots(request):
 
     @param request: A django request object
     @type request: HttpRequest
-    @return: A response to the ruest
+    @return: A response to the request
     @rtype: HttpResponse
     """
 

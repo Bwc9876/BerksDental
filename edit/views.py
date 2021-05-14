@@ -147,7 +147,7 @@ for view_set in REGISTERED_VIEWSETS:
 
 def gen_name_dict():
     """
-    Generates a dictonary where ViewSet safe names are the keys, and their objects are the values
+    Generates a dictionary where ViewSet safe names are the keys, and their objects are the values
 
     @return: A dictionary that converts safe_name -> ViewSet
     @rtype: dict
@@ -320,7 +320,7 @@ def generate_paths_from_view_set(source_view_set):
     """
     This function creates path objects for all the views in a ViewSet
     @param source_view_set: The view set to get the views from
-    @return: Path objects to be added to url_paterns
+    @return: Path objects to be added to url_patterns
     @rtype: list[path]
     """
 

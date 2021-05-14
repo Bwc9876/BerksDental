@@ -67,7 +67,7 @@ class DateSelectorField(DateInput):
 
 class OrderInput(TextInput):
     """
-    This input is used to allow the user to re-order the arrangemnt of objects with drag&drop
+    This input is used to allow the user to re-order the arrangement of objects with drag&drop
     """
 
     input_type = "hidden"
@@ -101,7 +101,7 @@ class OrderInput(TextInput):
 
     class Media:
         """
-        This class defines additonal css and js we want to use in the input
+        This class defines additional css and js we want to use in the input
         """
 
         css = {
@@ -132,7 +132,7 @@ class OrderField(fields.CharField):
         """
         This sets the display name for the widget
 
-        @param name: The new name to diaplay
+        @param name: The new name to display
         @type name: str
         """
 
@@ -163,7 +163,7 @@ class PermInput(TextInput):
 
     class Media:
         """
-        This class defines additonal css and js we want to use in the input
+        This class defines additional css and js we want to use in the input
         """
 
         css = {
@@ -212,7 +212,7 @@ class ConfirmWidget(TextInput):
 
     class Media:
         """
-        This class defines additonal css and js we want to use in the input
+        This class defines additional css and js we want to use in the input
         """
 
         css = {
@@ -244,7 +244,7 @@ class PhotoField(ClearableFileInput):
 
 class LinkForm(ModelForm):
     """
-    This form handles editting and adding links in the db
+    This form handles editing and adding links in the db
     """
 
     class Meta:
@@ -254,7 +254,7 @@ class LinkForm(ModelForm):
 
 class SocialForm(ModelForm):
     """
-    This form handles editting and adding Social Media Pages to the db
+    This form handles editing and adding Social Media Pages to the db
     """
 
     class Meta:
@@ -264,7 +264,7 @@ class SocialForm(ModelForm):
 
 class PhotoForm(ModelForm):
     """
-    This form handles editting and adding Gallery Photos to the db
+    This form handles editing and adding Gallery Photos to the db
     """
 
     def __init__(self, *args, **kargs):
@@ -307,7 +307,7 @@ class PhotoForm(ModelForm):
 
 class OfficerForm(ModelForm):
     """
-    This form handles adding and editting Officers to the db
+    This form handles adding and editing Officers to the db
     """
 
     class Meta:
@@ -328,7 +328,7 @@ class OfficerForm(ModelForm):
 
 class EventForm(ModelForm):
     """
-    This form handles editting and adding events to the db
+    This form handles editing and adding events to the db
     """
 
     class Meta:
@@ -351,7 +351,7 @@ class EventForm(ModelForm):
     def __init__(self, *args, **kargs):
         """
         Sets label and help texts to more suitable values
-        It also updates the description field to have differnt width/col
+        It also updates the description field to have different width/col
         """
 
         super().__init__(*args, **kargs)
@@ -432,7 +432,7 @@ class UserCreateForm(ModelForm):
 
     def clean(self):
         """
-        This validates the password, and makes sure the sonfirm password matches
+        This validates the password, and makes sure the confirm password matches
         """
 
         cleaned_data = super().clean()

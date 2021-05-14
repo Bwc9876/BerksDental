@@ -60,7 +60,7 @@ class PhotoMixin(models.Model):
 
     def photo_link(self):
         """
-        This function provides a link to use in a src attrbiute to show the image
+        This function provides a link to use in a src attribute to show the image
 
         @return: The url that the image uses
         @rtype: str
@@ -74,7 +74,7 @@ class PhotoMixin(models.Model):
 
 class BaseModel(models.Model):
     """
-    This class is a model that all models in this file should inherit from, it provides the ID attrbiute
+    This class is a model that all models in this file should inherit from, it provides the ID attribute
     """
 
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
@@ -164,7 +164,7 @@ class Event(BaseModel):
 
     def clean(self):
         """
-        Ensures the startTime is after the endtime, and the startDate is after the endDate
+        Ensures the startTime is after the endTime, and the startDate is after the endDate
         """
 
         if self.startDate == self.endDate:
