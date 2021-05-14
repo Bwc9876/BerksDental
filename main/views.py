@@ -12,6 +12,7 @@ from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_safe, require_http_methods
 
 from edit import models
+from edit.webcal import CALENDAR_URL
 
 
 @require_safe
@@ -258,7 +259,7 @@ def events(request):
                           {"events": matching_events, "weeks": month_calendar, 'today': today, "month": month,
                            "month_name": month_name, "year": year,
                            "next_link": next_link, "previous_link": previous_link,
-                           "weekdays": ["SUN", "MON", "TUE", "WED", "THU", "FRI", "SAT"]})
+                           "weekdays": ["SUN", "MON", "TUE", "WED", "THU", "FRI", "SAT"], 'ics_link': CALENDAR_URL})
         except calendar.IllegalMonthError:
             raise Http404("Invalid Month")
         except ValueError:

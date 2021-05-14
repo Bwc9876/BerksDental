@@ -20,6 +20,7 @@ from django.views.decorators.http import require_safe, require_http_methods
 from edit import forms, models
 from edit.exceptions import ImproperlyConfiguredViewSetError
 from edit.view_set import ViewSet, formatters, Action
+from edit.webcal import update_file
 
 
 # The following classes inherit from the ViewSet class, and are used to add functionality to the models we want
@@ -44,6 +45,12 @@ class EventViewSet(ViewSet):
                 event[location_index] = formatters[source_fields.URLField](new_value)
 
         return new_value_list
+
+    def post_save(self, new_obj, form_data, new):
+        update_file()
+
+    def post_del(self, obj_deleted):
+        update_file()
 
 
 class SocialViewSet(ViewSet):

@@ -86,4 +86,5 @@
         </div>
     </div>
     <a class="view-switch-link" href="{% url "main:events" %}?view=list">View As List</a>
+    <a class="view-switch-link" href="webcal://{{ request.get_host }}/{{ ics_link }}">Import To Your Calendar Software</a>
 {% endblock %}

@@ -2,3 +2,4 @@ django
 pillow
 mysqlclient
 django_password_validators
+icalendar

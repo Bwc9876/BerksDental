@@ -164,12 +164,15 @@ if STAGE == "PRODUCTION":
     # SESSION_COOKIE_SECURE = True
 
     STATIC_ROOT = '/var/www/BerksDental/static'
+    MEDIA_ROOT = "/var/www/BerksDental/media"
+else:
+    MEDIA_ROOT = "media/"
 
 STATIC_URL = '/static/'
 
 STATICFILES_DIRS = [
     BASE_DIR / "static",
 ]
-
-MEDIA_ROOT = "media/"
 MEDIA_URL = "/media/"
+
+ICAL_FILE_NAME = "berks-dental-calendar"
