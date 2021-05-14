@@ -9,6 +9,14 @@
     align-items: center;
 }
 
+.center-text {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100px;
+}
+
 .subtitle.is-link {
     color: #3273dc;
 }

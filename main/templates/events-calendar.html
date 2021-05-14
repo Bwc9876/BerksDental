@@ -16,7 +16,7 @@
     <div class="hero is-small">
         <div class="hero-body">
             <a href="{{ previous_link }}"><i class="is-size-4 icon fas fa-arrow-alt-circle-left"></i></a>
-            <div>
+            <div class="center-text">
                 <h1 class="title hero-title has-text-centered">{{ month_name }} {{ year }}</h1>
                 <a class="is-link subtitle" href="{% url "main:events" %}?view=list">View As List</a>
             </div>
@@ -35,7 +35,7 @@
                 {% for day in week %}
                     {% makeDateObj as date %}
                     {% getEventsOnDate as eventsOnThisDate %}
-                    <div data-berks-dental-event-date="{{ date|date:"mdY" }}" class="{% if day == 0 %}out-of-month{% else %}calendar-tile{% endif %} {% if eventsOnThisDate|length > 0 %}calendar-event calendar-tile{% endif %} {% if date == today %}calendar-today focused-tile{% endif %}">
+                    <div data-berks-dental-event-date="{{ date|date:"mdY" }}" class="{% if day == 0 %}out-of-month{% else %}calendar-tile{% endif %} {% if eventsOnThisDate|length > 0 %}calendar-event calendar-tile{% endif %} {% if date == today %}calendar-today{% endif %}">
                     {% if day != 0 %}
                         <p class="tile-content is-size-5">{{ day }}</p>
                     {% endif %}
@@ -51,9 +51,9 @@
                         {% makeDateObj as date %}
                         {% getEventsOnDate as eventsOnThisDate %}
                         {% if eventsOnThisDate|length != 0 %}
-                            <p class="{{ date|date:"mdY" }}">{{ date }}</p>
+                            <p class="event-descriptions-subtitle {{ date|date:"mdY" }}">{{ date }}</p>
                         {% else %}
-                            <p class="{{ date|date:"mdY" }}">There are no events on {{ date }}.</p>
+                            <p class="event-descriptions-subtitle {{ date|date:"mdY" }}">There are no events on {{ date }}.</p>
                         {% endif %}
                         <div class="event-descriptions-list {{ date|date:"mdY" }}">
                             {% for event in eventsOnThisDate %}
