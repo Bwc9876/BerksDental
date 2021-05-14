@@ -26,8 +26,18 @@ def setup_calendar():
     """
 
     cal = Calendar()
-    cal.add('prodid', '-//Berks Dental Assistant Society Events//mxm.dk//')
+    cal.add('prodid', '-//Berks Dental Assistant Society Webpage//mxm.dk//')
     cal.add('version', '2.0')
+    cal.add('X-WR-CALNAME', "Berks Dental Assistants Society")
+    cal.add('name', "Berks Dental Assistants Society")
+    cal.add("X-WR-CALDESC", "Events realting to the Berks Dental Assistants Society")
+    cal.add("description", "Events realting to the Berks Dental Assistants Society")
+    cal.add("X-WR-TIMEZONE", "America/New_York")
+    cal.add("timezone-id", "America/New_York")
+    cal.add("color", "dodgerblue")
+
+    if not settings.DEBUG:
+        cal.add('url', f"webcal://{settings.ALLOWED_HOSTS[0]}/{CALENDAR_URL}")
     return cal
 
 
