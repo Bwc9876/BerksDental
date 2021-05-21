@@ -28,7 +28,7 @@ from edit.webcal import update_file
 
 class EventViewSet(ViewSet):
     displayName = "Event"
-    pictureClass = "fa-calendar-alt"
+    pictureClass = "calendar-alt"
     model = models.Event
     modelForm = forms.EventForm
     displayFields = ['name', 'virtual', 'location', 'startDate', 'endDate']
@@ -55,7 +55,7 @@ class EventViewSet(ViewSet):
 
 class SocialViewSet(ViewSet):
     displayName = "Social Media Page"
-    pictureClass = "fa-share-alt"
+    pictureClass = "share-alt"
     model = models.Social
     modelForm = forms.SocialForm
     ordered = True
@@ -75,7 +75,7 @@ class SocialViewSet(ViewSet):
 
 class LinkViewSet(ViewSet):
     displayName = "Link"
-    pictureClass = "fa-link"
+    pictureClass = "link"
     model = models.ExternalLink
     modelForm = forms.LinkForm
     ordered = True
@@ -85,7 +85,7 @@ class LinkViewSet(ViewSet):
 
 class GalleryPhotoViewSet(ViewSet):
     displayName = "Photo"
-    pictureClass = "fa-images"
+    pictureClass = "images"
     model = models.GalleryPhoto
     modelForm = forms.PhotoForm
     # The photo-folder attribute tells the model where to store pictures
@@ -121,7 +121,7 @@ class GalleryPhotoViewSet(ViewSet):
 
 class OfficerViewSet(GalleryPhotoViewSet):
     displayName = "Officer"
-    pictureClass = "fa-user-tie"
+    pictureClass = "user-tie"
     model = models.Officer
     modelForm = forms.OfficerForm
     photoFolder = "officer-pictures"
@@ -205,7 +205,7 @@ def view_set_to_permission_pair(user, viewset):
 
 class UserViewSet(ViewSet):
     displayName = "User"
-    pictureClass = "fa-users-cog"
+    pictureClass = "users-cog"
     additionalActions = [Action("Change Password For", "fa-key", "/admin/password/user/")]
     model = models.User
     modelForm = forms.UserEditForm

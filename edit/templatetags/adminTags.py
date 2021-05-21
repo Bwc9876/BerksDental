@@ -134,3 +134,15 @@ def needs_multipart(form):
         if field.widget.__class__.__name__ == PhotoField().__class__.__name__:
             return True
     return False
+
+
+@register.simple_tag(name="homeTile")
+def home_tile(url, icon_class, name, new_tab=False):
+    return safe(f"""
+        <a {'target="_blank"' if new_tab else ""} href="{url}" class="action">
+            <div class="action-thumbnail">
+                <i class="fas fa-{icon_class}"></i>
+            </div>
+            <h2 class="action-name">{title(name)}</h2>
+        </a>
+    """)

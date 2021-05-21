@@ -5,11 +5,11 @@
 """
 
 import os
-from datetime import datetime, date, time
+from datetime import datetime, date, time, timedelta
 
 from django.conf import settings
 from icalendar import Calendar
-from icalendar import Event as CalendarEvent, vText
+from icalendar import Event as CalendarEvent, vText, vDuration
 
 from edit.models import Event
 
@@ -30,12 +30,12 @@ def setup_calendar():
     cal.add('version', '2.0')
     cal.add('X-WR-CALNAME', "Berks Dental Assistants Society")
     cal.add('name', "Berks Dental Assistants Society")
-    cal.add("X-WR-CALDESC", "Events realting to the Berks Dental Assistants Society")
-    cal.add("description", "Events realting to the Berks Dental Assistants Society")
+    cal.add("X-WR-CALDESC", "Events relating to the Berks Dental Assistants Society")
+    cal.add("description", "Events relating to the Berks Dental Assistants Society")
     cal.add("X-WR-TIMEZONE", "America/New_York")
     cal.add("timezone-id", "America/New_York")
     cal.add("color", "dodgerblue")
-
+    cal.add('refresh-interval', vDuration(timedelta(hours=12)))
     if not settings.DEBUG:
         cal.add('url', f"webcal://{settings.ALLOWED_HOSTS[0]}/{CALENDAR_URL}")
     return cal
@@ -78,7 +78,7 @@ def make_calendar_event(event):
 
     @param event: The event to read data from
     @type event: Event
-    @return: the Event object ot be added to the calendar
+    @return: the Event object to be added to the calendar
     @rtype: CalendarEvent
     """
 
