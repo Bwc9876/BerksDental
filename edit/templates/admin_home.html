@@ -4,17 +4,11 @@
     If the user doesn't have permissions to edit something it won't appear
     We also provide a link to django's built-in admin for debugging only
 {% endcomment %}
-
 {% block adminLinks %}
-
     {% load static %}
-    <!--suppress HtmlUnknownTarget -->
     <link rel="stylesheet" type="text/css" href="{% static "admin/home.css" %}">
-
 {% endblock %}
-
 {% block adminHeader %}Welcome, {{ user|title }}{% endblock %}
-
 {% block adminContent %}
     <div class="actions">
         <a href="{% url "main:home" %}" class="action">

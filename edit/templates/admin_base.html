@@ -3,22 +3,17 @@
     This file is used as a base for all admin pages, it loads common css and js, and provides navigation
     It also allows for alerts, which come from the GET parameters of a request
 {% endcomment %}
-
 {% block meta %}
     <title>Berks Dental Assistants: Admin</title>
     <meta name="description" content="Berks Dental Assistants' Admin Section.">
 {% endblock %}
-
 {% load adminTags %}
-
 {% block links %}
     {% load static %}
     <link type="text/css" rel="stylesheet" href="{% static "admin/base.css" %}">
     {% block adminLinks %}{% endblock %}
 {% endblock %}
-
 {% block content %}
-
     {% getAlert request as alert %}
     {% if alert %}
         <script type="text/javascript" defer>
@@ -29,28 +24,31 @@
                 });
             });
         </script>
-        <h3 class="alert alert-{% getAlertType request %}">
+        <div class="alert alert-{% getAlertType request %}">
             <i class="fas alert-icon fa-{% getAlertIcon request %}"></i>
-            {{ alert }}
-            <span class="close-alert"><a class="close-alert-button"><i class="fas fa-times h4"></i></a></span>
-        </h3>
+            <p>{{ alert }}</p>
+            <button aria-label="Close Alert" class="close-alert-button"><i class="fas fa-times h4"></i></button>
+        </div>
     {% endif %}
-
-
     {% url "edit:admin_home" as home_link %}
-    <h1 class="admin-header">{% if back_link %}{% action "back" back_link "fa-arrow-left" "h2" %}&nbsp;{% endif %}
-        {% block adminHeader %}
-            {{ verb }} {{ viewSet.displayName|title }}{% if plural %}s{% endif %}{% endblock %}
-        <span class="additional-navigation">{% block additionalNavigation %}{% endblock %}{% if help_link %}&nbsp;
-            {% action "Help" help_link "fa-question-circle" "h2" new_tab=True %}{% endif %}{% if not hide_home %}&nbsp;
-            {% action "home" home_link "fa-home" "h2" %}{% endif %}</span>
-    </h1>
-
-
-    <div class="admin-content">
+    <nav class="admin-navigation">
+        {% if back_link %}{% action "back" back_link "fa-arrow-left" "h2" %}{% endif %}
+        {% if not hide_home %}&nbsp;
+            {% action "home" home_link "fa-home" "h2" %}
+        {% endif %}
+        {% if help_link %}&nbsp;
+            {% action "Help" help_link "fa-question-circle" "h2" new_tab=True %}
+        {% endif %}
+    </nav>
+    <div class="admin-header">
+        <p>{% block adminHeader %}
+            {{ verb }} {{ viewSet.displayName|title }}{% if plural %}s{% endif %}
+        {% endblock %}</p>
+        {% block additionalNavigation %}{% endblock %}
+    </div>
+    <div class="admin-main">
         {% block adminContent %}
             <h1>This html file is meant to be inherited, please don't render the base version!</h1>
         {% endblock %}
     </div>
-
 {% endblock %}
