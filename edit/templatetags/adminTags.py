@@ -143,6 +143,6 @@ def home_tile(url, icon_class, name, new_tab=False):
             <div class="action-thumbnail">
                 <i class="fas fa-{icon_class}"></i>
             </div>
-            <h2 class="action-name">{title(name)}</h2>
+            <p class="action-name">{title(name)}</p>
         </a>
     """)

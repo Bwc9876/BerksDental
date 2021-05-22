@@ -17,7 +17,7 @@
         {% url "edit:help" as help_link %}
         {% homeTile home_link "eye" "View Site" new_tab=True %}
         {% for vs in viewsets %}
-            {% homeTile vs.overview_link vs.pictureClass vs.displayName %}
+            {% homeTile vs.overview_link vs.pictureClass vs.displayName|add:"s" %}
         {% endfor %}
         {% homeTile logout_link "sign-out-alt" "logout" %}
         {% homeTile help_link "question-circle" "help" new_tab=True %}
