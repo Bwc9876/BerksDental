@@ -30,7 +30,7 @@ a.navbar-item:hover {
     color: var(--clr);
 }
 
-.main {
+.main, .admin-main {
     flex-grow: 1;
 }
 

@@ -1,95 +1,30 @@
-.form {
-    --text-size: 20px;
-    --help-error-text-size: calc(var(--text-size) - 5px);
+form {
+    margin: 5vw;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
 }
 
-.error-list {
-    list-style: none;
-    padding-left: 0;
-    margin: 0;
-    font-size: var(--help-error-text-size);
+form > * {
+    margin: calc(5px + 1vh) 0;
 }
 
-.error {
-    color: #ff0000;
+form > div {
+    display: flex;
+    align-items: flex-start;
+    flex-direction: column;
 }
 
-input, textarea, select {
-    padding: 6px 8px;
-}
-
-select {
-    width: 260px;
-}
-
-input[type="file"] {
-    padding: 0;
-}
-
-@media only screen and (max-width: 700px) {
-
-    input, textarea, select {
-        width: 100%;
-        box-sizing: border-box;
+@media only screen and (min-width: 769px) {
+    form > div {
+        flex-direction: row;
+        align-items: center;
     }
-
-    .field-label {
-        margin-bottom: 5px;
-    }
-
 }
 
-input, textarea, .field-label, select {
-    font-size: var(--text-size);
-}
-
-.field-label {
-    display: inline-block;
-    user-select: none;
-    font-weight: bold;
-    vertical-align: top;
-    width: 250px;
-    padding-top: 6px;
-}
-
-.field-label.checkbox-label {
-    display: inline;
-    width: unset;
-    padding-top: 0;
-}
-
-textarea {
-    resize: none;
-}
-
-fieldset {
-    padding: 2vh;
-    border: none;
-    border-top: solid 1px var(--ac-grey);
-}
-
-fieldset:last-of-type {
-    margin-bottom: 20px;
-    border-bottom: solid 1px var(--ac-grey);
-}
-
-input[type="checkbox"] {
-    width: calc(var(--text-size) - 2px);
-    height: calc(var(--text-size) - 2px);
-    vertical-align: center;
-}
-
-.submit-button {
-    width: 100%;
-    transition: var(--hover-bg-transition);
-    background-color: var(--ac-light);
-    border: solid 2px var(--ac-grey);
-    border-radius: 7px;
-    font-size: var(--h2);
-}
-
-.submit-button:hover:not(:disabled) {
-    background-color: var(--ac-light-grey);
+form button {
+    font-size: 15px;
 }
 
 @keyframes load-spin {
@@ -109,10 +44,4 @@ input[type="checkbox"] {
 
 .hidden {
     display: none;
-}
-
-.help-text {
-    font-size: var(--help-error-text-size);
-    margin-bottom: 0;
-    user-select: none;
 }
