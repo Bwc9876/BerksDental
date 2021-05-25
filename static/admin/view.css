@@ -8,7 +8,7 @@
     --shaded-color: #f6f6f6;
     --header-color: var(--ac-light);
     --row-border-color: darkgrey;
-    --text-color: var(--clr-header);
+    --text-color: #353b31;
     border-collapse: collapse;
     text-align: center;
     width: 100%;
@@ -32,7 +32,6 @@
 }
 
 .model-table td, .model-table th {
-    font-size: var(--h5);
     color: var(--text-color);
     padding: 1vh 2vw;
     white-space: nowrap;
@@ -61,19 +60,13 @@
 }
 
 .action {
-    --size: var(--h1);
-    --hover-color: var(--defualt-hover-color);
-    color: var(--clr-header);
+    --hover-color: var(--default-hover-color);
+    color: #353b31;
     transition: var(--hover-transition);
-    font-size: var(--size);
     vertical-align: middle;
 }
 
-.action .fas {
-    font-size: var(--size);
-}
-
-.action.delete:hover {
+.action.delete_c:hover {
     --hover-color: var(--red-color);
 }
 
@@ -86,7 +79,7 @@
     color: var(--green-color);
 }
 
-.fa-check-circle {
+.bool-icon.fa-check-circle {
     color: var(--green-color);
 }
 
@@ -94,6 +87,6 @@
     color: var(--red-color);
 }
 
-.bottom-bar {
-    text-align: right;
+.page-navigation > * {
+    margin: 0 5px 0 5px;
 }

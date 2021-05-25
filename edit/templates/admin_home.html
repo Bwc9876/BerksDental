@@ -22,7 +22,7 @@
         {% homeTile logout_link "sign-out-alt" "logout" %}
         {% homeTile help_link "question-circle" "help" new_tab=True %}
         {% if debug and user.is_staff %}
-            {% homeTile "/debug_admin/" "code" "debug" %}
+            {% homeTile "/debug_admin/" "code" "debug" new_tab=True %}
         {% endif %}
     </div>
 {% endblock %}

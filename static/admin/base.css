@@ -1,3 +1,12 @@
+:root {
+    --red-color: #e33434;
+    --green-color: #2eb72e;
+    --default-hover-color: #23B7D9;
+    --color-transition-time: 100ms;
+    --hover-transition: color var(--color-transition-time) linear;
+    --hover-bg-transition: background-color var(--color-transition-time) linear;
+}
+
 .main {
     display: flex;
     flex-direction: column;
@@ -24,8 +33,9 @@
     border: none;
     background-color: unset;
     margin-left: auto;
-    color: #3273dc;
+    color: #262626;
     font-size: 1em;
+    cursor: pointer;
 }
 
 .alert-error {
@@ -55,6 +65,15 @@
 .admin-navigation {
     display: flex;
     margin: 25px 25px 12px;
+}
+
+.navigation-action {
+    color: #353b31;
+    transition: var(--hover-transition);
+}
+
+.navigation-action:hover {
+    color: var(--default-hover-color);
 }
 
 .home {

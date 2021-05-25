@@ -36,8 +36,8 @@
                     {{ field }}
                 </div>
             {% endfor %}
-            <button class="submit-button is-loading " type="submit"><span class="submit-word">{% block submitWord %}
-                Save{% endblock %}</span>&nbsp;<i class="loading hidden fas fa-circle-notch"></i></button>
+            <button class="submit-button" type="submit"><span class="submit-word">{% block submitWord %}
+                Save{% endblock %}</span><i class="loading hidden fas fa-circle-notch"></i></button>
         </form>
     {% else %}
         <h1>No Form Object Passed!</h1>

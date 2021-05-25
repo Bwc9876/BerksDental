@@ -36,10 +36,25 @@ form button {
     }
 }
 
+.submit-button {
+    padding: 3px 15px;
+    transition: var(--hover-bg-transition);
+    background-color: #C4E5F2;
+    border: solid 2px #9ba7ac;
+    border-radius: 7px;
+}
+
+.submit-button:hover {
+    background-color: #bcd8dc;
+}
+
+.submit-button:hover:disabled {
+    background-color: #C4E5F2;
+}
+
 .loading {
     animation: load-spin 2s 0s linear infinite;
-    font-size: var(--h3);
-    color: var(--clr-header);
+    color: #353b31;
 }
 
 .hidden {

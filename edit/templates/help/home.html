@@ -11,35 +11,12 @@
 {% endblock %}
 {% block adminContent %}
     <div class="actions">
-        <a href="{% url "edit:help_navigation" %}" class="action">
-            <div class="action-thumbnail">
-                <i class="fas fa-compass"></i>
-            </div>
-            <h2 class="action-name">Navigation</h2>
-        </a>
-        <a href="{% url "edit:help_edit" %}" class="action">
-            <div class="action-thumbnail">
-                <i class="fas fa-edit"></i>
-            </div>
-            <h2 class="action-name">Editing/Adding</h2>
-        </a>
-        <a href="{% url "edit:help_image" %}" class="action">
-            <div class="action-thumbnail">
-                <i class="fas fa-images"></i>
-            </div>
-            <h2 class="action-name">Uploading Pictures</h2>
-        </a>
-        <a href="{% url "edit:help_ordering" %}" class="action">
-            <div class="action-thumbnail">
-                <i class="fas fa-sort"></i>
-            </div>
-            <h2 class="action-name">Ordering</h2>
-        </a>
-        <a href="{% url "edit:help_password" %}" class="action">
-            <div class="action-thumbnail">
-                <i class="fas fa-user-lock"></i>
-            </div>
-            <h2 class="action-name">User Passwords</h2>
-        </a>
+        {% helpTile "navigation" "compass" "Navigation" %}
+        {% helpTile "edit" "edit" "Editing/Adding" %}
+        {% helpTile "image" "images" "Uploading Pictures" %}
+        {% helpTile "ordering" "sort" "Ordering" %}
+        {% if user.is_staff %}
+            {% helpTile "password" "user-lock" "User Passwords" %}
+        {% endif %}
     </div>
 {% endblock %}
