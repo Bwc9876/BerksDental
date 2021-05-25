@@ -15,12 +15,12 @@
 {% block header %}
     <div class="hero is-small">
         <div class="hero-body">
-            <a href="{{ previous_link }}"><i class="is-size-4 icon fas fa-arrow-alt-circle-left"></i></a>
+            <a aria-label="Previous Month" href="{{ previous_link }}"><i class="is-size-4 icon fas fa-arrow-alt-circle-left"></i></a>
             <div class="center-text">
                 <h1 class="title hero-title has-text-centered">{{ month_name }} {{ year }}</h1>
                 <a class="is-link subtitle" href="{% url "main:events" %}?view=list">View As List</a>
             </div>
-            <a href="{{ next_link }}"><i class="is-size-4 icon fas fa-arrow-alt-circle-right"></i></a>
+            <a aria-label="Next Month" href="{{ next_link }}"><i class="is-size-4 icon fas fa-arrow-alt-circle-right"></i></a>
         </div>
     </div>
 {% endblock %}
