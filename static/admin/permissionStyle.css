@@ -6,6 +6,7 @@
 
 .perm-entry {
     padding: 10px 0;
+    margin-left: 274px;
 }
 
 .perm-dropdown {
@@ -27,5 +28,6 @@
         padding: 0;
         flex-direction: column;
         margin-bottom: 6px;
+        margin-left: 0;
     }
 }
