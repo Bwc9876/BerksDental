@@ -30,15 +30,19 @@
                                 <li class="error">{{ error }}</li>
                             {% endfor %}
                         </ul>
+                        <br/>
                     {% endif %}
                     {% if field|is_checkbox %}
-                        {{ field }}
+                        {{ field }}&nbsp;
                         <label id="{{ field.label }}_label" for="{{ field.id_for_label }}"
                            class="field-label h4 checkbox-label">{{ field.label|title }}</label>
                     {% else %}
                         <label id="{{ field.label }}_label" for="{{ field.id_for_label }}"
                            class="field-label h4">{{ field.label|title }}:</label>
                         {{ field }}
+                    {% endif %}
+                    {% if field.help_text and not field.errors %}
+                        <br/><br/><p class="help-text">{{ field.help_text|safe }}</p>
                     {% endif %}
                 </div>
             {% endfor %}
