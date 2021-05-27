@@ -11,6 +11,7 @@
 .image-grid-item-outer-wrapper {
     position: relative;
     padding-top: 100%;
+    /* TODO: Change gallery photo background to blend in better */
     background-color: black;
     margin: 15px;
 }

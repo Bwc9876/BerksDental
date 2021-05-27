@@ -167,6 +167,8 @@ class Event(BaseModel):
         Ensures the startTime is after the endTime, and the startDate is after the endDate
         """
 
+        # TODO: Change Event errors to be non-field
+
         if self.startDate == self.endDate:
             if self.startTime > self.endTime:
                 raise ValidationError("Start time is after end time!")

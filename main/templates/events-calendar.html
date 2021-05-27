@@ -18,6 +18,7 @@
             <a aria-label="Previous Month" href="{{ previous_link }}"><i class="is-size-4 icon fas fa-arrow-alt-circle-left"></i></a>
             <div class="center-text">
                 <h1 class="title hero-title has-text-centered">{{ month_name }} {{ year }}</h1>
+                {# TODO: Add "Jump to today" link to calendar view #}
                 <a class="is-link subtitle" href="{% url "main:events" %}?view=list">View As List</a>
             </div>
             <a aria-label="Next Month" href="{{ next_link }}"><i class="is-size-4 icon fas fa-arrow-alt-circle-right"></i></a>
@@ -64,6 +65,7 @@
                                     <div class="card-content">
                                         <div class="content">
                                             {% if event.startDate != event.endDate %}
+                                                {# TODO: Reword event date & time descriptions #}
                                                 <p>Start Date & Time: {{ event.startDate }} at {{ event.startTime }}</p>
                                                 <p>End Date & Time: {{ event.endDate }} at {{ event.endTime }}</p>
                                             {% else %}
