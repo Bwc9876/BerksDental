@@ -16,7 +16,6 @@
 {% endblock %}
 {% load adminTags %}
 {% block additionalNavigation %}
-    {# TODO: Change the action button sizes to be more suitable #}
     {% if canEdit %}
         {% if viewSet.ordered %}
             {% action "add" viewSet.edit_link "fa-plus" "h2" show_name=True %}&nbsp;

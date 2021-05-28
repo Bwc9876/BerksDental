@@ -95,6 +95,7 @@
 .admin-header {
     display: flex;
     justify-content: flex-end;
+    font-size: 1.2em;
     margin: 0 25px 25px;
 }
 

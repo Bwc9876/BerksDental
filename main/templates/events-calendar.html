@@ -65,9 +65,8 @@
                                     <div class="card-content">
                                         <div class="content">
                                             {% if event.startDate != event.endDate %}
-                                                {# TODO: Reword event date & time descriptions #}
-                                                <p>Start Date & Time: {{ event.startDate }} at {{ event.startTime }}</p>
-                                                <p>End Date & Time: {{ event.endDate }} at {{ event.endTime }}</p>
+                                                <p>Starts on {{ event.startDate }} at {{ event.startTime }}</p>
+                                                <p>Ends on {{ event.endDate }} at {{ event.endTime }}</p>
                                             {% else %}
                                                 <p>Date & Time: {{ event.startDate }} at {{ event.startTime }}</p>
                                             {% endif %}

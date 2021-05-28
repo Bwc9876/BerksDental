@@ -12,6 +12,7 @@
     border-collapse: collapse;
     text-align: center;
     width: 100%;
+    font-size: 1.1em;
 }
 
 .model-table thead {

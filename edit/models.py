@@ -167,13 +167,11 @@ class Event(BaseModel):
         Ensures the startTime is after the endTime, and the startDate is after the endDate
         """
 
-        # TODO: Change Event errors to be non-field
-
         if self.startDate == self.endDate:
             if self.startTime > self.endTime:
-                raise ValidationError("Start time is after end time!")
+                raise ValidationError({"startTime": "Start time is after end time!"})
         elif self.startDate > self.endDate:
-            raise ValidationError("Start date is after end date!")
+            raise ValidationError({"startDate": "Start date is after end date!"})
         if self.virtual:
             if self.link is None:
                 raise ValidationError({"link": "Please fill out this field"})

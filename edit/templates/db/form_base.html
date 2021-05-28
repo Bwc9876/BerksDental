@@ -14,8 +14,7 @@
     {% load adminTags %}
     {% if form %}
         {% if form.non_field_errors %}
-            {# TODO: Style nonfield errors #}
-            <ul id="nonfield_errors" class="error-list">
+            <ul id="nonfield_errors" class="error-list nonfield">
                 {% for error in form.non_field_errors %}
                     <li class="error">{{ error }}</li>
                 {% endfor %}
