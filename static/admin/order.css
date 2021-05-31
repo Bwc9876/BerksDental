@@ -1,3 +1,17 @@
+form {
+    margin-top: 2vw;
+}
+
+form > div {
+    align-items: stretch;
+    flex-direction: column;
+    width: 100%;
+}
+
+.field-label {
+    text-align: left;
+}
+
 .sort_list {
     list-style: none;
     margin-bottom: 20px;
@@ -8,7 +22,6 @@
     box-shadow: grey 0 1px 2px;
     margin: 10px 5px;
     padding: 0;
-    font-size: var(--h5);
     user-select: none;
 }
 

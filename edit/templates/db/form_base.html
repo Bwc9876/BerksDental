@@ -23,7 +23,7 @@
         <form class="form" method="POST" {% if form|needs_multi_part %}enctype="multipart/form-data"{% endif %}>
             {% csrf_token %}
             {% for field in form %}
-                <div id="{{ field.label }}_fieldset">
+                <div id="{{ field.label }}_fieldset" {% if field|is_checkbox %}class="checkbox_c"{% endif %}>
                     {% if field.errors %}
                         <ul class="error-list" id="{{ field.label }}_errors">
                             {% for error in field.errors %}

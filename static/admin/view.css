@@ -73,7 +73,7 @@
     font-size: var(--size);
 }
 
-.action.delete:hover {
+.action.delete_c:hover {
     --hover-color: var(--red-color);
 }
 

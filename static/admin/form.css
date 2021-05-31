@@ -6,6 +6,12 @@ form {
     justify-content: space-between;
 }
 
+@media only screen and (max-width: 250px) {
+    form {
+        align-items: flex-start;
+    }
+}
+
 form > * {
     margin: calc(5px + 1vh) 0;
 }
@@ -14,6 +20,15 @@ form > div {
     display: flex;
     align-items: flex-start;
     flex-direction: column;
+}
+
+.checkbox_c {
+    flex-direction: row;
+    align-items: center;
+}
+
+.checkbox_c * {
+    margin: 0 4px;
 }
 
 @media only screen and (min-width: 769px) {
@@ -38,8 +53,6 @@ form button {
 
 .loading {
     animation: load-spin 2s 0s linear infinite;
-    font-size: var(--h3);
-    color: var(--clr-header);
 }
 
 .hidden {
