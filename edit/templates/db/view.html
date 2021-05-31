@@ -77,13 +77,13 @@
         </table>
     </div>
     {% if page.has_other_pages %}
-        <h1 class="bottom-bar">
+        <nav class="admin-navigation page-navigation">
             {% action "First Page" first_link "fa-fast-backward" "h2" enabled=page.has_previous %}
             {% action "Previous Page" previous_link "fa-step-backward" "h2" enabled=page.has_previous %}
-            Page {{ page.number }}/{{ max_pages }}
+            <p>Page {{ page.number }}/{{ max_pages }}</p>
             {% action "Next Page" next_link "fa-step-forward" "h2" enabled=page.has_next %}
             {% action "Last Page" last_link "fa-fast-forward" "h2" enabled=page.has_next %}
-        </h1>
+        </nav>
     {% endif %}
 
 {% endblock %}

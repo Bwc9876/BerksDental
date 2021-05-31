@@ -5,6 +5,7 @@
 from django import template
 from django.forms.fields import CheckboxInput
 from django.template.defaultfilters import safe, title, slugify
+from django.urls import reverse
 
 from edit.forms import PhotoField
 
@@ -146,3 +147,8 @@ def home_tile(url, icon_class, name, new_tab=False):
             <p class="action-name">{title(name)}</p>
         </a>
     """)
+
+
+@register.simple_tag(name="helpTile")
+def help_tile(article, icon_class, name):
+    return home_tile(reverse(f"edit:help_{article}"), icon_class, name)

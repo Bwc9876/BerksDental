@@ -91,9 +91,7 @@ class RequiredCharactersValidator:
             ]
 
         if len(errors) > 0:
-            raise ValidationError(
-                "This password doesn't contain at least " +
-                self.print_list_as_sentence(errors))
+            raise ValidationError("This password is missing " + self.print_list_as_sentence(errors))
 
     def get_requirements(self):
         """

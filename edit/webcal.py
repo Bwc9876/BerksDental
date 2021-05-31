@@ -26,7 +26,7 @@ def setup_calendar():
     """
 
     cal = Calendar()
-    cal.add('prodid', '-//Berks Dental Assistant Society Webpage//mxm.dk//')
+    cal.add('prodid', '-//Berks Dental Assistant Society//Berks Dental Assistant Society Webpage//EN')
     cal.add('version', '2.0')
     cal.add('X-WR-CALNAME', "Berks Dental Assistants Society")
     cal.add('name', "Berks Dental Assistants Society")

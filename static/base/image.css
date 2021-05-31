@@ -11,6 +11,7 @@
 .image-grid-item-outer-wrapper {
     position: relative;
     padding-top: 100%;
+    /* TODO: Change gallery photo background to blend in better */
     background-color: black;
     margin: 15px;
 }
@@ -29,4 +30,17 @@
 .image-grid img {
     max-width: 100%;
     max-height: 100%;
+}
+
+.load-more {
+    background-color: #EEE;
+    border: solid 2px #9ba7ac;
+    transition: background-color 100ms linear;
+    border-radius: 5px;
+    font-size: 1.2em;
+}
+
+.load-more:hover {
+    background-color: #9ba7ac;
+    border-color: #73797f;
 }
