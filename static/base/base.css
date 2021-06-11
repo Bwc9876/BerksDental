@@ -1,16 +1,35 @@
-:root {
-    --clr-light: #a2d47a;
-    --clr: #8CBF3F;
-    --clr-dark: #55781a;
-
-    --ac: #23B7D9;
-    --ac-light: #88c1db;
+html {
+    /* Colors */
+    --clr1: #23B7D9;
+    --clr2: #28A3A9;
+    --clr3: #1D777C;
+    --ac1: #AFD971;
+    --ac2: #7BB661;
+    --ac3: #609A47;
+    /* Text Sizes */
+    --h1: 3.2rem;
+    --h2: 2.4rem;
+    --h3: 1.8rem;
+    --h4: 1.6rem;
+    --h5: 1.35rem;
+    --h6: 1.1rem;
 }
 
 body {
+    margin: 0;
+    overflow-x: hidden;
     display: flex;
     flex-direction: column;
     min-height: 100vh;
+}
+
+/* Text */
+h1, h2, h3, h4, h5, h6 {
+    font-family: "Roboto Slab", Georgia, "Times New Roman", Times, serif;
+}
+
+p, a {
+    font-family: "Noto Sans", Verdana, Geneva, Tahoma, sans-serif;
 }
 
 .navbar {
@@ -18,7 +37,7 @@ body {
 }
 
 .nav-link-current {
-    color: var(--ac)!important;
+    color: var(--ac1);
 }
 
 .navbar-item {
@@ -27,7 +46,7 @@ body {
 
 a.navbar-item:hover {
     background-color: #c0c0c0;
-    color: var(--clr);
+    color: var(--clr1);
 }
 
 .main, .admin-main {

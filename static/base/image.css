@@ -2,17 +2,12 @@
     display: grid;
 }
 
-@media only screen and (min-width: 400px) {
-    .image-grid {
-        grid-template-columns: repeat(auto-fit, minmax(330px, 1fr));
-    }
-}
-
 .image-grid-item-outer-wrapper {
     position: relative;
     padding-top: 100%;
     /* TODO: Change gallery photo background to blend in better */
-    background-color: black;
+    box-shadow: 3px 3px 12px rgba(0,0,0,0.5);
+    border-radius: 5px;
     margin: 15px;
 }
 
@@ -43,4 +38,26 @@
 .load-more:hover {
     background-color: #9ba7ac;
     border-color: #73797f;
+}
+
+.empty {
+    box-shadow: none;
+    display: none;
+    order: 2;
+}
+
+@media only screen and (min-width: 400px) {
+    .image-grid {
+        grid-template-columns: repeat(auto-fit, minmax(330px, 1fr));
+    }
+
+    .small {
+        grid-template-columns: repeat(auto-fit, minmax(330px, 550px));
+    }
+}
+
+@media only screen and (min-width: 660px) {
+    .empty {
+        display: block;
+    }
 }

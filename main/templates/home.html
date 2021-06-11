@@ -13,9 +13,12 @@
     <link href="{% static "/home/home.css" %}" type="text/css" rel="stylesheet">
 {% endblock %}
 {% block header %}
-    <div class="hero is-fullheight-with-navbar" style="background-image: url({% static 'tests/hero-test.jpg' %});background-repeat: no-repeat;background-size: cover;">
+    <div class="hero is-fullheight-with-navbar">
         <div class="hero-body">
-            <h1 class="title hero-title">Berks County Dental Assistants Society</h1>
+            <h1 class="landing-header">
+                <span>Berks County</span>
+                <br/>Dental Assistants Society
+            </h1>
         </div>
     </div>
 {% endblock %}
@@ -90,7 +93,7 @@
         <h1 class="title">Featured Photos</h1>
         {% if featuredPhotos|length > 0 %}
             <p class="subtitle">(Click On A Photo To View It)</p>
-            <div class="image-grid">
+            <div class="image-grid small">
                 {% for photo in featuredPhotos %}
                     <div class="image-grid-item-outer-wrapper">
                         <a href="{% url 'main:view_photo' %}?id={{ photo.id }}&featured=yes" class="image-grid-item-inner-wrapper">

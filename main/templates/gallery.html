@@ -34,6 +34,11 @@
                     <button style="width: 100%;" class="image-grid-item-inner-wrapper load-more">Load More Images</button>
                 </div>
             {% endif %}
+            {% for x in "123" %}
+                <div class="image-grid-item-outer-wrapper empty">
+                    <a aria-hidden="true" href="{% url 'main:view_photo' %}?id={{ photo.id }}" class="image-grid-item-inner-wrapper"></a>
+                </div>
+            {% endfor %}
         </div>
     {% else %}
         <p>Currently, there are no photos. Check back soon!</p>
