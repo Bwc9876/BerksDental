@@ -1,11 +1,42 @@
 .image-grid {
     display: grid;
+    margin: -15px;
+}
+
+.image-grid-cell {
+    position: relative;
+    margin: 15px;
+    width: calc(100% - 30px);
+    padding-top: calc(100% - 30px);
+    background-color: var(--gr-clr);
+}
+
+.image-grid-item-wrapper {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.image-grid-item {
+    max-width: 80%;
+    max-height: 80%;
+}
+
+@media only screen and (min-width: 400px) {
+    .image-grid {
+        grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    }
+}
+
+/*.image-grid {
+    display: grid;
 }
 
 .image-grid-item-outer-wrapper {
     position: relative;
     padding-top: 100%;
-    /* TODO: Change gallery photo background to blend in better */
     box-shadow: 3px 3px 12px rgba(0,0,0,0.5);
     border-radius: 5px;
     margin: 15px;
@@ -60,4 +91,4 @@
     .empty {
         display: block;
     }
-}
+}*/

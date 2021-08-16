@@ -1,93 +1,50 @@
 .hero-body {
-    padding-left: 0;
-    padding-right: 0;
-    background-image: linear-gradient(-135deg, transparent, whitesmoke 60%);
+    background-image: linear-gradient(25deg, var(--ac1), 5%, whitesmoke, 95%, var(--clr1));
 }
 
-.hero-title {
-    position: relative;
-    top: 7vh;
-    width: 100%;
-    padding: 48px;
-    background-color: rgba(140,191,63,0.8);
-}
-
-.no-top-padding {
-    padding-top: 0;
-}
-
-@media only screen and (max-width: 768px) {
-    .no-top-padding-mobile {
-        padding-top: 0;
+@media only screen and (min-width: 1200px) {
+    .hero-body {
+        background-image: linear-gradient(25deg, whitesmoke, 80%, transparent),
+        url('../tests/hero-test.jpg');
+        background-repeat: no-repeat;
+        background-size: cover;
     }
 }
 
-.link-icon {
-    font-size: 1.2rem;
-}
-
-.landing-header {
+.landing-header-top {
     color: var(--ac2);
-    max-width: 350px;
-    margin: 3rem 5vw;
-    line-height: 6rem;
-    font-size: 5.12rem;
+    font-size: 4rem;
+    line-height: 0.9em;
+    margin: 0.6em 0;
 }
 
-.landing-header span {
-    position: relative;
-    top: 1.5rem;
+.landing-header-bottom {
     color: var(--clr2);
-    font-weight: normal;
-    font-size: 2.48rem;
+    font-size: var(--h2);
+    margin: 0;
+}
+
+.link-icon {
+    font-size: var(--h6);
+}
+
+.panel-heading {
+    margin-bottom: 0;
 }
 
 .upcoming-events {
     background-color: var(--ac1);
 }
 
-.upcoming-events .columns {
-    align-items: stretch;
+.upcoming-events .column {
+    flex-basis: 400px;
+    flex-grow: 0;
 }
 
-.upcoming-events .card {
+.card {
     height: 100%;
 }
 
-@media only screen and (min-width: 500px) {
-    .grid-container {
-        display: flex;
-        justify-content: center;
-    }
-
-    .featured-images {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-    }
-
-    .image-container {
-        width: 400px;
-    }
-
-}
-
-@media only screen and (min-width: 1100px) {
-    .hero-body {
-        background-image: linear-gradient(-135deg, transparent, whitesmoke 60%), url('../tests/hero-test.jpg');background-repeat: no-repeat;background-size: cover;
-    }
-}
-
-@media only screen and (min-width: 1000px) {
-    .featured-images {
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-    }
-}
-
-@media only screen and (min-width: 1500px) {
-    .featured-images {
-        display: grid;
-        grid-template-columns: 1fr 1fr 1fr;
-    }
+.property-title {
+    color: var(--clr3);
 }

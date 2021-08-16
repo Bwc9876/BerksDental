@@ -15,41 +15,21 @@
         <title>Berks Dental Assistants: Base</title>
         <meta name="description" content="Berks Dental Assistants' Base Page.">
     {% endblock %}
-    {% include "favicon-data.html" %}
-    <meta name="keywords" content="Berks Dental Assistants, Dental Health, Dental"/>
-    <meta name="copyright" content="TBD"/>
-    <meta name="robots" content="index, follow"/>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, shrink-to-fit=no">
-    <meta property="og:title" content="Berks Dental Assistants Society">
-    <meta property="og:description"
-          content="An informational website to keep you up-to-date on various aspects of the Berks Dental Assistants Society">
-    <meta property="og:image" content="{{ protocol }}://{{ request.get_host }}{% static "base/logo-with-bg.png" %}">
-    <meta property="og:image:alt" content="The Berks County Dental Assistants Logo">
-    <meta name="twitter:card" content="summary_large_image">
-    <meta property="twitter:domain" content="{{ request.get_host }}">
-    <meta property="twitter:url" content="{{ protocol }}://{{ request.get_host }}/">
-    <meta name="twitter:title" content="Berks Dental Assistants Society">
-    <meta name="twitter:description" content="An informational website to keep you up-to-date on various aspects of the Berks Dental Assistants Society">
-    <meta name="twitter:image" content="{{ protocol }}://{{ request.get_host }}{% static "base/logo-with-bg.png" %}">
+    {% include "meta.html" %}
     {# Links #}
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans&family=Roboto+Slab:wght@500&display=swap"
+          rel="stylesheet">
     {# CSS #}
-    <link rel="preload"
-          href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400&family=Roboto:wght@300&display=swap"
-          as="style" onload="// noinspection JSUnusedGlobalSymbols
-this.onload=null;this.rel='stylesheet'" />
-    <link rel="stylesheet" href="{% static 'base/normalize.css' %}" />
-    <noscript>
-        <link href="https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@500&display=swap" rel="stylesheet">
-        <link href="https://fonts.googleapis.com/css2?family=Noto+Sans&display=swap" rel="stylesheet">
-    </noscript>
-    <link crossorigin="anonymous" rel="preconnect" href="https://fonts.gstatic.com" />
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.2/css/bulma.min.css" />
-    <link rel="stylesheet" href="{% static 'base/base.css' %}" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.2/css/bulma.min.css"/>
+    <link href="https://unpkg.com/@csstools/normalize.css" rel="stylesheet" crossorigin="anonymous"/>
+    <link rel="stylesheet" href="{% static 'base/base.css' %}"/>
     {# JavaScript #}
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script defer="defer" src="https://kit.fontawesome.com/b7739b9b58.js" crossorigin="anonymous"></script>
     <script type="text/javascript" src="{% static 'base/base.js' %}"></script>
-    {% block links %}{% endblock %}
+    {% block head %}{% endblock %}
 </head>
 <body class="has-navbar-fixed-top">
 <header>
@@ -58,7 +38,7 @@ this.onload=null;this.rel='stylesheet'" />
             <a class="navbar-item" href="{% url 'main:home' %}">
                 <img src="{% static 'base/logo.png' %}" alt="Berks Dental Assistants' Logo"/>
             </a>
-            <button role="button" class="navbar-burger button is-white" aria-label="Menu" aria-expanded="false" data-target="nav-menu">
+            <button role="button" class="navbar-burger button is-white" aria-label="Menu" aria-expanded="false">
                 <span aria-hidden="true"></span>
                 <span aria-hidden="true"></span>
                 <span aria-hidden="true"></span>
@@ -74,7 +54,7 @@ this.onload=null;this.rel='stylesheet'" />
             </div>
         </div>
     </nav>
-    <div class="header-main">{% block header %}{% endblock %}</div>
+    <div>{% block header %}{% endblock %}</div>
 </header>
 <div class="main">
     {% block content %}
@@ -84,14 +64,14 @@ this.onload=null;this.rel='stylesheet'" />
 <footer class="footer">
     <a href="{% url "main:sitemap" %}" class="footer-link">Site Map</a>
     <a href="{% url "main:about" %}" class="footer-link">About</a>
-    <div class="social-div">
-    {% load socialTags %}
-    {% getSocials as socials %}
-    {% for social in socials %}
-        <a aria-label="Link To {{ social }}" target="_blank" rel="noopener" class="footer-link social-link"
-           href="{{ social.link }}"><i
-                class="fab {{ social.fa_icon_class }} fa-lg"></i></a>
-    {% endfor %}
+    <div class="dental-social-div">
+        {% load socialTags %}
+        {% getSocials as socials %}
+        {% for social in socials %}
+            <a aria-label="Link To {{ social }}" target="_blank" rel="noopener" class="footer-link dental-social-link"
+               href="{{ social.link }}"><i
+                    class="fab {{ social.fa_icon_class }} fa-lg"></i></a>
+        {% endfor %}
     </div>
 </footer>
 </body>

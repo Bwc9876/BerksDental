@@ -1,18 +1,26 @@
+/* Bulma Fixes */
+.panel-heading, .card-content {
+    color: black;
+}
+
 html {
     /* Colors */
     --clr1: #23B7D9;
     --clr2: #28A3A9;
     --clr3: #1D777C;
+    --gr-clr: #53979a;
     --ac1: #AFD971;
     --ac2: #7BB661;
     --ac3: #609A47;
+    --color-transition: color 200ms linear, background-color 200ms linear, border-color 200ms linear;
     /* Text Sizes */
-    --h1: 3.2rem;
-    --h2: 2.4rem;
-    --h3: 1.8rem;
-    --h4: 1.6rem;
-    --h5: 1.35rem;
-    --h6: 1.1rem;
+    font-size: 16px;
+    --h1: 2rem;
+    --h2: 1.5rem;
+    --h3: 1.125rem;
+    --h4: 1rem;
+    --h5: 0.75rem;
+    --h6: 0.625rem;
 }
 
 body {
@@ -21,9 +29,35 @@ body {
     display: flex;
     flex-direction: column;
     min-height: 100vh;
+    color: black;
+    font-size: var(--h4);
 }
 
 /* Text */
+h1 {
+    font-size: var(--h1)
+}
+
+h2 {
+    font-size: var(--h2)
+}
+
+h3 {
+    font-size: var(--h3)
+}
+
+h4 {
+    font-size: var(--h4)
+}
+
+h5 {
+    font-size: var(--h5)
+}
+
+h6 {
+    font-size: var(--h6)
+}
+
 h1, h2, h3, h4, h5, h6 {
     font-family: "Roboto Slab", Georgia, "Times New Roman", Times, serif;
 }
@@ -32,36 +66,67 @@ p, a {
     font-family: "Noto Sans", Verdana, Geneva, Tahoma, sans-serif;
 }
 
+/* Button */
+/* TODO: Decide if other button variations are needed. */
+.dental-button {
+    padding: 0.3em 1.25em;
+    background-color: var(--clr1);
+    border: solid 0.1em var(--clr1);
+    border-radius: 2em;
+    color: white;
+    transition: var(--color-transition);
+}
+
+.dental-button:hover {
+    border-color: var(--ac1);
+    color: var(--ac1);
+}
+
+/* NavBar */
 .navbar {
     box-shadow: 0 1px 8px 0;
 }
 
-.nav-link-current {
-    color: var(--ac1);
-}
-
 .navbar-item {
-    transition: color 200ms linear, background-color 200ms linear;
+    transition: var(--color-transition);
 }
 
 a.navbar-item:hover {
-    background-color: #c0c0c0;
+    background-color: #eeeeee;
     color: var(--clr1);
 }
 
-.main, .admin-main {
+.nav-link-current {
+    color: var(--ac2);
+}
+
+/* Page Content */
+.main {
     flex-grow: 1;
 }
 
+/* Footer */
 .footer {
     display: flex;
-    padding-bottom: 48px;
+    flex-direction: column;
+    align-items: center;
+    padding: 1.5em;
 }
 
 .footer-link {
-    margin-left: 2vw;
+    margin: 0.3125em;
 }
 
-.social-div {
-    margin-left: auto;
+.dental-social-div {
+    margin: 0.7em;
+}
+
+@media only screen and (min-width: 500px) {
+    .footer {
+        flex-direction: row;
+    }
+
+    .dental-social-div {
+        margin-left: auto;
+    }
 }

@@ -7,7 +7,7 @@
     <title>Berks Dental Assistants: Home</title>
     <meta name="description" content="Berks Dental Assistants' Home Page.">
 {% endblock %}
-{% block links %}
+{% block head %}
     {% load static %}
     <link href="{% static "/base/image.css" %}" type="text/css" rel="stylesheet">
     <link href="{% static "/home/home.css" %}" type="text/css" rel="stylesheet">
@@ -15,27 +15,31 @@
 {% block header %}
     <div class="hero is-fullheight-with-navbar">
         <div class="hero-body">
-            <h1 class="landing-header">
-                <span>Berks County</span>
-                <br/>Dental Assistants Society
-            </h1>
+            <div>
+                <h1 class="landing-header-top">Berks County</h1>
+                <h1 class="landing-header-bottom">Dental Assistants Society</h1>
+            </div>
+
         </div>
     </div>
 {% endblock %}
 {% block content %}
     <div class="section columns">
-        <section class="column content">
+        <section class="column">
             <h1>Welcome</h1>
-            <p>Welcome to the Berks County Dental Assistant's Society's Website.</p>
-            <p>The purpose of this site is to keep you up-to-date on various aspects of our organization.</p>
-            <p>For more information, view our <a href="{% url "main:about" %}">About Page</a>,
-                or take a look at our <a href="{% url "main:officers" %}">Officers</a>.</p>
+            <div class="content">
+                <p>Welcome to the Berks County Dental Assistant's Society's Website.</p>
+                <p>The purpose of this site is to keep you up-to-date on various aspects of our organization.</p>
+                <p>For more information, view our <a href="{% url "main:about" %}">About Page</a>,
+                    or take a look at our <a href="{% url "main:officers" %}">Officers</a>.</p>
+            </div>
         </section>
-        <section class="no-top-padding-mobile column">
+        <section class="column">
             <div class="panel">
                 <h1 class="panel-heading">Quick Links</h1>
                 {% for link in external_links %}
-                    <div class="panel-block"><a target="_blank" rel="noopener" href="{{ link.url }}">{{ link.display_name }}&nbsp;<i
+                    <div class="panel-block"><a target="_blank" rel="noopener"
+                                                href="{{ link.url }}">{{ link.display_name }}&nbsp;<i
                             class="fas fa-external-link-alt link-icon"></i></a></div>
                 {% empty %}
                     <p class="panel-block">There are no quick links currently available.</p>
@@ -43,31 +47,29 @@
             </div>
         </section>
     </div>
-    <section class="section upcoming-events content">
+    <section class="section upcoming-events">
         <h1>Upcoming Events</h1>
         {% if upcomingEvents|length != 0 %}
-            <div class="columns is-desktop">
+            <div class="columns">
                 {% for event in upcomingEvents %}
                     <div class="column">
                         <div class="card">
                             <header class="card-header">
                                 <h3 class="card-header-title">{{ event.name }}</h3>
                             </header>
-                            <div class="card-content">
-                                <div class="content">
-                                    {% if event.startDate != event.endDate %}
-                                        <p>Start Date & Time: {{ event.startDate }} at {{ event.startTime }}</p>
-                                        <p>End Date & Time: {{ event.endDate }} at {{ event.endTime }}</p>
-                                    {% else %}
-                                        <p>Date & Time: {{ event.startDate }} at {{ event.startTime }}</p>
-                                    {% endif %}
-                                    {% if event.virtual %}
-                                        <p>Link: <a href="{{ event.link }}">{{ event.link }}</a></p>
-                                    {% else %}
-                                        <p>Location: {{ event.location }}</p>
-                                    {% endif %}
-                                        <p>Description: {{ event.description }}</p>
-                                </div>
+                            <div class="card-content content">
+                                {% if event.startDate != event.endDate %}
+                                    <p><span class="property-title">Starts:</span> {{ event.startDate }} at {{ event.startTime }}</p>
+                                    <p><span class="property-title">Ends:</span> {{ event.endDate }} at {{ event.endTime }}</p>
+                                {% else %}
+                                    <p><span class="property-title">Date & Time:</span> {{ event.startDate }} at {{ event.startTime }}</p>
+                                {% endif %}
+                                {% if event.virtual %}
+                                    <p><span class="property-title">Link:</span> <a href="{{ event.link }}">{{ event.link }}</a></p>
+                                {% else %}
+                                    <p><span class="property-title">Location:</span> {{ event.location }}</p>
+                                {% endif %}
+                                <p><span class="property-title">Description:</span> {{ event.description }}</p>
                             </div>
                         </div>
                     </div>
@@ -77,33 +79,34 @@
                         <header class="card-header">
                             <h3 class="card-header-title">View More</h3>
                         </header>
-                        <div class="card-content">
-                            <div class="content">
-                                <p>To view more events go to the <a href="{% url 'main:events' %}">events page</a>.</p>
-                            </div>
+                        <div class="card-content content">
+                            <p>To view more events go to the <a href="{% url 'main:events' %}">events page</a>.</p>
                         </div>
                     </div>
                 </div>
             </div>
         {% else %}
-            <p>No upcoming events, check back soon! For more information on events go to the <a href="{% url 'main:events' %}">Events Page</a>.</p>
+            <p>No upcoming events, check back soon! For more information on events go to the <a
+                    href="{% url 'main:events' %}">Events Page</a>.</p>
         {% endif %}
     </section>
-    <section class="section content">
+    <section class="section">
         <h1 class="title">Featured Photos</h1>
         {% if featuredPhotos|length > 0 %}
             <p class="subtitle">(Click On A Photo To View It)</p>
             <div class="image-grid small">
                 {% for photo in featuredPhotos %}
-                    <div class="image-grid-item-outer-wrapper">
-                        <a href="{% url 'main:view_photo' %}?id={{ photo.id }}&featured=yes" class="image-grid-item-inner-wrapper">
-                            <img src="{{ photo.photo_link }}" alt="{{ photo.caption }}" />
+                    <div class="image-grid-cell">
+                        <a href="{% url 'main:view_photo' %}?id={{ photo.id }}&featured=yes"
+                           class="image-grid-item-wrapper">
+                            <img class="image-grid-item" src="{{ photo.photo_link }}" alt="{{ photo.caption }}"/>
                         </a>
                     </div>
                 {% endfor %}
             </div>
         {% else %}
-            <p>Currently, there are no featured photos. View all our photos on our <a href="{% url "main:gallery" %}">Gallery Page</a>.</p>
+            <p>Currently, there are no featured photos. View all our photos on our <a href="{% url "main:gallery" %}">Gallery
+                Page</a>.</p>
         {% endif %}
     </section>
 {% endblock %}
