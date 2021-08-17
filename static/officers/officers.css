@@ -1,24 +1,40 @@
-.card-image {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
-.card-header-icon {
-    font-weight: bold;
-    cursor: default;
-}
-
-.columns {
-    align-items: stretch;
+.officer-grid {
+    display: grid;
+    margin: -1em;
+    padding: 3em;
 }
 
 .card {
+    margin: 1em;
+    width: calc(100% - 2em);
     display: flex;
     flex-direction: column;
-    height: 100%;
+}
+
+.card-header {
+    background-color: whitesmoke;
+}
+
+.card-header-title {
+    flex-direction: column;
 }
 
 .card-image {
+    padding: 0.8em;
+    background-image: linear-gradient(0deg, var(--clr1), 0.5%, whitesmoke);
+}
+
+.card-image img {
+    max-height: 25vh;
+}
+
+.card-content {
     flex-grow: 1;
+}
+
+@media only screen and (min-width: 120ch) {
+    .officer-grid {
+        grid-auto-rows: 1fr;
+        grid-template-columns: repeat(auto-fill, minmax(60ch, 1fr));
+    }
 }

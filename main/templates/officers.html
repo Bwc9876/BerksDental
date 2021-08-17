@@ -13,12 +13,44 @@
         </div>
     </div>
 {% endblock %}
-{% block links %}
+{% block head %}
     {% load static %}
     <link href="{% static "/officers/officers.css" %}" type="text/css" rel="stylesheet">
-{% endblock links %}
+{% endblock %}
 {% block content %}
-    {% for officer in officers %}
+    <div class="officer-grid">
+        {% for officer in officers %}
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-header-title">
+                        <h2>{{ officer }}</h2>
+                        <p class="subtitle">{{ officer.title }}</p>
+                    </div>
+                </div>
+                <div class="card-image flex-center">
+                    <div class="image-container">
+                        <img src="{{ officer.photo_link }}" alt="{{ officer }}'s Photo">
+                    </div>
+                </div>
+                <div class="card-content">
+                    <p class="content">{{ officer.biography }}</p>
+                </div>
+                {% if officer.email or officer.phone %}
+                    <div class="card-footer">
+                        {% if officer.email %}
+                            <a class="card-footer-item" href="{{ officer.masked_email_link }}"
+                               aria-label="{{ officer }}'s Email"><i class="fas fa-envelope"></i></a>
+                        {% endif %}
+                        {% if officer.phone %}
+                            <a class="card-footer-item" href="{{ officer.masked_phone_link }}"
+                               aria-label="{{ officer }}'s Phone Number"><i class="fas fa-phone-alt"></i></a>
+                        {% endif %}
+                    </div>
+                {% endif %}
+            </div>
+        {% endfor %}
+    </div>
+    <!--{% for officer in officers %}
         {% if forloop.counter|divisibleby:3 or forloop.first %}
             <div class="section columns">
         {% endif %}
@@ -51,5 +83,5 @@
         {% if forloop.counter|divisibleby:2 or forloop.last %}
             </div>
         {% endif %}
-    {% endfor %}
+    {% endfor %}-->
 {% endblock %}

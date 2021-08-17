@@ -26,8 +26,8 @@
             {% endif %}
         </div>
         <div class="flex-center info-box">
-            <p aria-hidden="true">{{ photo.caption }}</p>
             <p class="has-text-weight-semibold">{{ photo.date_posted|date }}</p>
+            <p aria-hidden="true">{{ photo.caption }}</p>
         </div>
         <div class="flex-center">
             {% if next_link %}
