@@ -3,4 +3,17 @@
     flex-direction: column;
     justify-content: center;
     align-items: center;
+    padding: 2em;
+}
+
+.main > * {
+    text-align: center;
+}
+
+.title {
+    color: var(--ac2);
+}
+
+.subtitle {
+    color: var(--clr2)
 }

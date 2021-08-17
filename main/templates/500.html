@@ -7,11 +7,11 @@
     <title>Berks Dental Assistants: Internal Server Error</title>
     <meta name="description" content="Berks Dental Assistants' 500 Page.">
 {% endblock %}
-{% block links %}
+{% block head %}
     {% load static %}
     <link rel="stylesheet" href="{% static 'base/errors.css' %}" />
 {% endblock %}
 {% block content %}
     <h1 class="title">500 - Internal Server Error</h1>
-    <p class="subtitle">The server had an internal issue when processing your request.</p>
+    <p class="subtitle">The server had an internal issue while processing your request.</p>
 {% endblock %}
