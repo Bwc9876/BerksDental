@@ -70,9 +70,8 @@ p, a {
 /* TODO: Decide if other button variations are needed. */
 .dental-button {
     padding: 0.3em 1.25em;
-    background-color: var(--clr1);
-    border: solid 0.1em var(--clr1);
-    border-radius: 2em;
+    background-color: var(--gr-clr);
+    border: solid 0.2em var(--gr-clr);
     color: white;
     transition: var(--color-transition);
 }
@@ -80,6 +79,10 @@ p, a {
 .dental-button:hover {
     border-color: var(--ac1);
     color: var(--ac1);
+}
+
+.rounded {
+    border-radius: 2em;
 }
 
 /* NavBar */

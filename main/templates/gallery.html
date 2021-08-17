@@ -7,9 +7,23 @@
     <title>Berks Dental Assistants: Gallery</title>
     <meta name="description" content="Berks Dental Assistants' Gallery Page.">
 {% endblock %}
-{% block links %}
+{% block head %}
     {% load static %}
     <link href="{% static "/base/image.css" %}" type="text/css" rel="stylesheet">
+    <style>
+        .hero-body {
+            background-color: whitesmoke;
+        }
+
+        .image-grid {
+            margin: 40px 30px;
+
+        }
+
+        #load-images-button {
+            width: 100%;
+        }
+    </style>
     <script type="text/javascript" src="{% static "/gallery/gallery.js" %}"></script>
 {% endblock %}
 {% block header %}
@@ -21,24 +35,20 @@
 {% endblock %}
 {% block content %}
     {% if photos|length > 0 %}
-        <div class="image-grid" style="margin: 15px;">
+        <div class="image-grid">
             {% for photo in photos %}
-                <div class="image-grid-item-outer-wrapper">
-                    <a href="{% url 'main:view_photo' %}?id={{ photo.id }}" class="image-grid-item-inner-wrapper">
-                        <img src="{{ photo.photo_link }}" alt="{{ photo.caption }}" />
+                <div class="image-grid-cell">
+                    <a href="{% url 'main:view_photo' %}?id={{ photo.id }}" class="image-grid-item-wrapper">
+                        <img class="image-grid-item" src="{{ photo.photo_link }}" alt="{{ photo.caption }}"/>
                     </a>
                 </div>
             {% endfor %}
             {% if hasNext %}
-                <div id="load-images-button" class="image-grid-item-outer-wrapper" style="background-color: white;">
-                    <button style="width: 100%;" class="image-grid-item-inner-wrapper load-more">Load More Images</button>
+                <div id="load-images-cell" class="image-grid-cell">
+                    <button id="load-images-button" class="image-grid-item-wrapper dental-button">Load More Images
+                    </button>
                 </div>
             {% endif %}
-            {% for x in "123" %}
-                <div class="image-grid-item-outer-wrapper empty">
-                    <a aria-hidden="true" href="{% url 'main:view_photo' %}?id={{ photo.id }}" class="image-grid-item-inner-wrapper"></a>
-                </div>
-            {% endfor %}
         </div>
     {% else %}
         <p>Currently, there are no photos. Check back soon!</p>
