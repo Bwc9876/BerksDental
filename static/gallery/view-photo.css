@@ -4,58 +4,27 @@
     height: calc(100vh - 3.25rem);
 }
 
-.main p {
-    color: grey;
-}
-
-.viewer-box {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 50px;
+.image-box {
     flex-grow: 1;
+    background-color: var(--gr-clr);
 }
 
-.viewer-box a, .viewer-box p {
-    display: none;
+.image-box img {
+    max-height: 50vh;
 }
 
-.viewer-box img {
-    width: auto;
-    height: auto;
+.interaction-box {
+    display: flex;
+    min-height: 5em;
+    background-color: whitesmoke;
+}
+
+.interaction-box > * {
+    flex-basis: 5em;
 }
 
 .info-box {
-    display: flex;
-    justify-content: space-between;
-    padding: 0 50px 25px;
-}
-
-.info-box div {
-    max-width: 44%;
-    color: #4a4a4a;
-}
-
-.info-box div p {
-    color: #4a4a4a;
-}
-
-@media only screen and (min-width: 670px) {
-    .viewer-box {
-        min-height: 55vh;
-    }
-
-    .viewer-box a, .viewer-box p {
-        display: initial;
-    }
-
-    .viewer-box img {
-        max-width: 80%;
-        max-height: 500px;
-        padding: 20px;
-    }
-
-    .info-box a, .info-box > p {
-        display: none;
-    }
+    flex-direction: column;
+    flex-grow: 1;
+    gap: 0.3em;
 }

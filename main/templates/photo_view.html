@@ -6,38 +6,37 @@
     <title>Berks Dental Assistants: View Photo</title>
     <meta name="description" content="Berks Dental Assistants' View Photo Page.">
 {% endblock %}
-{% block links %}
+{% block head %}
     {% load static %}
     <link href="{% static "/gallery/view-photo.css" %}" type="text/css" rel="stylesheet">
 {% endblock %}
 {% block content %}
-    <div class="viewer-box">
-        {% if last_link %}
-            <a aria-label="Previous Image" href="{{ last_link|default_if_none:"#" }}"><i class="is-size-4 icon fas fa-arrow-alt-circle-left"></i></a>
-        {% else %}
-            <p><i class="is-size-4 icon fas fa-arrow-alt-circle-left"></i></p>
-        {% endif %}
-        <img alt="{{ photo.caption }}" src="{{ photo.photo_link }}" />
-        {% if next_link %}
-            <a aria-label="Next Image" href="{{ next_link|default_if_none:"#" }}"><i class="is-size-4 icon fas fa-arrow-alt-circle-right"></i></a>
-        {% else %}
-            <p><i class="is-size-4 icon fas fa-arrow-alt-circle-right"></i></p>
-        {% endif %}
+    <div class="image-box flex-center">
+        <img alt="{{ photo.caption }}" src="{{ photo.photo_link }}"/>
     </div>
-    <div class="info-box">
-        {% if last_link %}
-            <a aria-label="Previous Image"  href="{{ last_link|default_if_none:"#" }}"><i class="is-size-4 icon fas fa-arrow-alt-circle-left"></i></a>
-        {% else %}
-            <p><i class="is-size-4 icon fas fa-arrow-alt-circle-left"></i></p>
-        {% endif %}
-        <div>
-            <p class="has-text-weight-semibold">{{ photo.date_posted|date }}</p>
-            <p>{{ photo.caption }}</p>
+    <div class="interaction-box">
+        <div class="flex-center">
+            {% if last_link %}
+                <a aria-label="Previous Image" href="{{ last_link|default_if_none:"#" }}"><i
+                        class="is-size-4 icon fas fa-arrow-alt-circle-left"></i></a>
+            {% else %}
+                <p><i aria-label="There are no previous images."
+                      class="is-size-4 icon fas fa-arrow-alt-circle-left"></i>
+                </p>
+            {% endif %}
         </div>
-        {% if next_link %}
-            <a aria-label="Next Image" href="{{ next_link|default_if_none:"#" }}"><i class="is-size-4 icon fas fa-arrow-alt-circle-right"></i></a>
-        {% else %}
-            <p><i class="is-size-4 icon fas fa-arrow-alt-circle-right"></i></p>
-        {% endif %}
+        <div class="flex-center info-box">
+            <p aria-hidden="true">{{ photo.caption }}</p>
+            <p class="has-text-weight-semibold">{{ photo.date_posted|date }}</p>
+        </div>
+        <div class="flex-center">
+            {% if next_link %}
+                <a aria-label="Next Image" href="{{ next_link|default_if_none:"#" }}"><i
+                        class="is-size-4 icon fas fa-arrow-alt-circle-right"></i></a>
+            {% else %}
+                <p><i aria-label="There are no older images." class="is-size-4 icon fas fa-arrow-alt-circle-right"></i>
+                </p>
+            {% endif %}
+        </div>
     </div>
 {% endblock %}

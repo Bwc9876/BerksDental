@@ -13,6 +13,7 @@ html {
     --ac2: #7BB661;
     --ac3: #609A47;
     --color-transition: color 200ms linear, background-color 200ms linear, border-color 200ms linear;
+
     /* Text Sizes */
     font-size: 16px;
     --h1: 2rem;
@@ -132,4 +133,11 @@ a.navbar-item:hover {
     .dental-social-div {
         margin-left: auto;
     }
+}
+
+/* Utilities */
+.flex-center {
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
