@@ -9,6 +9,7 @@
 {% endblock %}
 {% block head %}
     {% load static %}
+    <link href="{% static "/base/events.css" %}" type="text/css" rel="stylesheet">
     <link href="{% static "/base/image.css" %}" type="text/css" rel="stylesheet">
     <link href="{% static "/home/home.css" %}" type="text/css" rel="stylesheet">
 {% endblock %}
@@ -50,38 +51,38 @@
     <section class="section upcoming-events">
         <h1>Upcoming Events</h1>
         {% if upcomingEvents|length != 0 %}
-            <div class="columns">
+            <div class="event-grid">
                 {% for event in upcomingEvents %}
-                    <div class="column">
-                        <div class="card">
-                            <header class="card-header">
-                                <h3 class="card-header-title">{{ event.name }}</h3>
-                            </header>
-                            <div class="card-content content">
-                                {% if event.startDate != event.endDate %}
-                                    <p><span class="property-title">Starts:</span> {{ event.startDate }} at {{ event.startTime }}</p>
-                                    <p><span class="property-title">Ends:</span> {{ event.endDate }} at {{ event.endTime }}</p>
-                                {% else %}
-                                    <p><span class="property-title">Date & Time:</span> {{ event.startDate }} at {{ event.startTime }}</p>
-                                {% endif %}
-                                {% if event.virtual %}
-                                    <p><span class="property-title">Link:</span> <a href="{{ event.link }}">{{ event.link }}</a></p>
-                                {% else %}
-                                    <p><span class="property-title">Location:</span> {{ event.location }}</p>
-                                {% endif %}
-                                <p><span class="property-title">Description:</span> {{ event.description }}</p>
-                            </div>
+                    <div class="card">
+                        <header class="card-header">
+                            <h3 class="card-header-title">{{ event.name }}</h3>
+                        </header>
+                        <div class="card-content content">
+                            {% if event.startDate != event.endDate %}
+                                <p><span class="property-title">Starts:</span> {{ event.startDate }}
+                                    at {{ event.startTime }}</p>
+                                <p><span class="property-title">Ends:</span> {{ event.endDate }} at {{ event.endTime }}
+                                </p>
+                            {% else %}
+                                <p><span class="property-title">Date & Time:</span> {{ event.startDate }}
+                                    at {{ event.startTime }}</p>
+                            {% endif %}
+                            {% if event.virtual %}
+                                <p><span class="property-title">Link:</span> <a
+                                        href="{{ event.link }}">{{ event.link }}</a></p>
+                            {% else %}
+                                <p><span class="property-title">Location:</span> {{ event.location }}</p>
+                            {% endif %}
+                            <p><span class="property-title">Description:</span> {{ event.description }}</p>
                         </div>
                     </div>
                 {% endfor %}
-                <div class="column">
-                    <div class="card">
-                        <header class="card-header">
-                            <h3 class="card-header-title">View More</h3>
-                        </header>
-                        <div class="card-content content">
-                            <p>To view more events go to the <a href="{% url 'main:events' %}">events page</a>.</p>
-                        </div>
+                <div class="card">
+                    <header class="card-header">
+                        <h3 class="card-header-title">View More</h3>
+                    </header>
+                    <div class="card-content content">
+                        <p>To view more events go to the <a href="{% url 'main:events' %}">events page</a>.</p>
                     </div>
                 </div>
             </div>

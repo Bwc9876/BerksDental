@@ -6,20 +6,28 @@
     <title>Berks Dental Assistants: Events</title>
     <meta name="description" content="Berks Dental Assistants' Events Page.">
 {% endblock %}
-{% block links %}
+{% block head %}
     {% load static %}
     <link href="{% static "/events/shared.css" %}" type="text/css" rel="stylesheet">
+    <link href="{% static "/base/events.css" %}" type="text/css" rel="stylesheet">
     <link href="{% static "/events/list.css" %}" type="text/css" rel="stylesheet">
 {% endblock %}
 {% block header %}
     <div class="hero is-medium">
         <div class="hero-body">
-            <a aria-label="Previous Month" href="{{ previous_link }}"><i class="is-size-4 icon fas fa-arrow-alt-circle-left"></i></a>
-            <div class="center-text">
+            <div class="header-text flex-center">
+                <a href="{% url "main:events" %}?view=list">Today</a>
                 <h1 class="title hero-title has-text-centered">{{ month_name }} {{ year }}</h1>
-                <a class="is-link subtitle" href="{% url "main:events" %}?view=calendar">View As Calendar</a>
+                <a href="{% url "main:events" %}?view=calendar">View As Calendar</a>
             </div>
-            <a aria-label="Next Month" href="{{ next_link }}"><i class="is-size-4 icon fas fa-arrow-alt-circle-right"></i></a>
+            <div class="left-button-box button-box flex-center">
+                <a aria-label="Previous Month" href="{{ previous_link }}"><i
+                        class="is-size-4 icon fas fa-arrow-alt-circle-left"></i></a>
+            </div>
+            <div class="right-button-box button-box flex-center">
+                <a aria-label="Next Month" href="{{ next_link }}"><i
+                        class="is-size-4 icon fas fa-arrow-alt-circle-right"></i></a>
+            </div>
         </div>
     </div>
 {% endblock %}
@@ -33,32 +41,35 @@
                 <div class="list-box p-5">
                     <h2 class="title">{{ day }}</h2>
                     {% if eventsOnThisDate|length != 0 %}
-                        <div class="columns">
-                        {% for event in eventsOnThisDate %}
-                            <div class="column">
+                        <div class="event-grid">
+                            {% for event in eventsOnThisDate %}
                                 <div class="card">
                                     <header class="card-header">
                                         <h3 class="card-header-title">{{ event.name }}</h3>
                                     </header>
-                                    <div class="card-content">
-                                        <div class="content">
-                                            {% if event.startDate != event.endDate %}
-                                                <p>Start Date & Time: {{ event.startDate }} at {{ event.startTime }}</p>
-                                                <p>End Date & Time: {{ event.endDate }} at {{ event.endTime }}</p>
-                                            {% else %}
-                                                <p>Date & Time: {{ event.startDate }} at {{ event.startTime }}</p>
-                                            {% endif %}
-                                            {% if event.virtual %}
-                                                <p>Link: <a href="{{ event.link }}">{{ event.link }}</a></p>
-                                            {% else %}
-                                                <p>Location: {{ event.location }}</p>
-                                            {% endif %}
-                                                <p>Description: {{ event.description }}</p>
-                                        </div>
+                                    <div class="card-content content">
+                                        {% if event.startDate != event.endDate %}
+                                            <p><span class="property-title">Starts:</span> {{ event.startDate }}
+                                                at {{ event.startTime }}</p>
+                                            <p><span class="property-title">Ends:</span> {{ event.endDate }}
+                                                at {{ event.endTime }}</p>
+                                        {% else %}
+                                            <p><span
+                                                    class="property-title">Date & Time:</span> {{ event.startDate }}
+                                                at {{ event.startTime }}</p>
+                                        {% endif %}
+                                        {% if event.virtual %}
+                                            <p><span class="property-title">Link:</span> <a
+                                                    href="{{ event.link }}">{{ event.link }}</a></p>
+                                        {% else %}
+                                            <p><span class="property-title">Location:</span> {{ event.location }}
+                                            </p>
+                                        {% endif %}
+                                        <p><span class="property-title">Description:</span> {{ event.description }}
+                                        </p>
                                     </div>
                                 </div>
-                            </div>
-                        {% endfor %}
+                            {% endfor %}
                         </div>
                     {% else %}
                         <p class="subtitle is-size-6 none-text">None</p>
@@ -67,5 +78,14 @@
             {% endif %}
         {% endfor %}
     {% endfor %}
-    <a class="view-switch-link" href="{% url "main:events" %}?view=calendar">View As Calendar</a>
+    <div class="calendar-footer">
+        <a aria-label="Previous Month" href="{{ previous_link }}"><i
+                class="is-size-4 icon fas fa-arrow-alt-circle-left"></i></a>
+        <div class="header-text flex-center">
+            <a href="{% url "main:events" %}?view=list">Today</a>
+            <a href="{% url "main:events" %}?view=calendar">View As Calendar</a>
+        </div>
+        <a aria-label="Next Month" href="{{ next_link }}"><i
+                class="is-size-4 icon fas fa-arrow-alt-circle-right"></i></a>
+    </div>
 {% endblock %}

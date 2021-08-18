@@ -1,80 +1,88 @@
-.box {
+.box.columns {
+    margin: 0;
     box-shadow: none;
 }
 
 .calendar {
+    position: sticky;
+    top: 2rem;
+    align-self: auto;
     display: grid;
     margin: 0 auto;
-    min-width: 300px;
-    width: 80vw;
-    max-width: calc(100vh - 30px);
+    min-width: 17em;
+    max-width: calc(100vh - 8em);
     grid-template-columns: repeat(7, 1fr);
-    align-self: flex-start;
 }
 
-.calendar-tile, .calendar-weekday, .calendar-event, .out-of-month {
+.calendar-tile {
     box-sizing: border-box;
     position: relative;
     padding-top: 100%;
-    max-width: calc(calc(100vh - 30px) / 7);
     border: 1px black solid;
+}
+
+.weekday-names {
+    color: black;
+    font-weight: bold;
+    font-size: var(--h5);
+    background-color: var(--ac1);
+}
+
+.in-month {
+    cursor: pointer;
+}
+
+.out-of-month {
+    background-color: var(--gr-clr);
+}
+
+.has-event {
+    background-color: lightblue;
+}
+
+.is-today {
+    font-weight: bold;
+}
+
+.is-selected.calendar-tile {
+    background-color: var(--clr1);
+}
+
+.is-selected.event-grid {
+    display: grid;
+}
+
+.d-subtitle.is-selected {
+    display: block;
 }
 
 .tile-content {
     position: absolute;
-    top: 0;
-    left: 0;
-    bottom: 0;
-    right: 0;
-    margin: 5px;
-}
-
-.calendar-weekday {
-    color: black;
-    font-weight: bold;
-}
-
-.calendar-weekday .tile-content {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
-.calendar-event {
-    background-color: lightblue;
-}
-
-.calendar-event::after {
-    content:'';
-    display: none;
-    border-radius: 50%;
-    width: 7px;
-    height: 7px;
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    background-color: black;
-}
-
-.out-of-month {
-    background-color: gray;
-}
-
-.calendar-today {
-    background-color: var(--clr);
+    inset: 0;
 }
 
 .event-descriptions {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+    padding: 3em 2em;
 }
 
-.event-descriptions-list, .event-descriptions-subtitle {
+.title {
+    margin-bottom: 0.3em!important;
+}
+
+.title, .d-subtitle {
+    text-align: center;
+}
+
+.d-subtitle, .event-grid {
     display: none;
-    grid-template-columns: repeat(2, 1fr);
 }
 
-.card {
-    margin: 25px;
+.event-grid {
+    padding-top: 3em;
+}
+
+@media only screen and (min-width: 800px) {
+    .event-grid {
+        grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+    }
 }

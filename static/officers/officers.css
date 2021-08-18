@@ -19,6 +19,10 @@
     flex-direction: column;
 }
 
+.subtitle {
+    text-align: center;
+}
+
 .card-image {
     padding: 0.8em;
     background-image: linear-gradient(0deg, var(--clr1), 0.5%, whitesmoke);

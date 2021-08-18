@@ -35,16 +35,3 @@
 .upcoming-events {
     background-color: var(--ac1);
 }
-
-.upcoming-events .column {
-    flex-basis: 400px;
-    flex-grow: 0;
-}
-
-.card {
-    height: 100%;
-}
-
-.property-title {
-    color: var(--clr3);
-}

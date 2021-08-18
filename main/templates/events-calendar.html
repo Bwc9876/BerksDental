@@ -6,86 +6,110 @@
     <title>Berks Dental Assistants: Events</title>
     <meta name="description" content="Berks Dental Assistants' Events Page.">
 {% endblock %}
-{% block links %}
+{% block head %}
     {% load static %}
+    <link href="{% static "/base/events.css" %}" type="text/css" rel="stylesheet">
     <link href="{% static "/events/shared.css" %}" type="text/css" rel="stylesheet">
     <link href="{% static "/events/calendar.css" %}" type="text/css" rel="stylesheet">
     <script type="text/javascript" src="{% static 'events/calendar.js' %}"></script>
 {% endblock %}
 {% block header %}
-    <div class="hero is-small">
+    <div class="hero is-medium">
         <div class="hero-body">
-            <a aria-label="Previous Month" href="{{ previous_link }}"><i class="is-size-4 icon fas fa-arrow-alt-circle-left"></i></a>
-            <div class="center-text">
+            <div class="header-text flex-center">
+                <a href="{% url "main:events" %}?view=calendar">Today</a>
                 <h1 class="title hero-title has-text-centered">{{ month_name }} {{ year }}</h1>
-                {# TODO: Add "Jump to today" link to calendar view #}
-                <a class="is-link subtitle" href="{% url "main:events" %}?view=list">View As List</a>
+                <a href="{% url "main:events" %}?view=list">View As List</a>
             </div>
-            <a aria-label="Next Month" href="{{ next_link }}"><i class="is-size-4 icon fas fa-arrow-alt-circle-right"></i></a>
+            <div class="left-button-box button-box flex-center">
+                <a aria-label="Previous Month" href="{{ previous_link }}"><i
+                        class="is-size-4 icon fas fa-arrow-alt-circle-left"></i></a>
+            </div>
+            <div class="right-button-box button-box flex-center">
+                <a aria-label="Next Month" href="{{ next_link }}"><i
+                        class="is-size-4 icon fas fa-arrow-alt-circle-right"></i></a>
+            </div>
         </div>
     </div>
 {% endblock %}
 {% block content %}
-    <div class="box columns is-desktop">
+    <div class="columns box is-desktop">
         <div class="calendar column">
             {% for day in weekdays %}
-                <div class="calendar-weekday"><p class="is-size-6 tile-content">{{ day }}</p></div>
+                <div class="calendar-tile weekday-names"><p class="tile-content flex-center">{{ day }}</p></div>
             {% endfor %}
             {% load eventTags %}
             {% for week in weeks %}
                 {% for day in week %}
                     {% makeDateObj as date %}
                     {% getEventsOnDate as eventsOnThisDate %}
-                    <div data-berks-dental-event-date="{{ date|date:"mdY" }}" class="{% if day == 0 %}out-of-month{% else %}calendar-tile{% endif %} {% if eventsOnThisDate|length > 0 %}calendar-event calendar-tile{% endif %} {% if date == today %}calendar-today{% endif %}">
-                    {% if day != 0 %}
-                        <p class="tile-content is-size-5">{{ day }}</p>
-                    {% endif %}
+                    <div data-berks-dental-event-date="{{ date|date:"mdY" }}"
+                         class="calendar-tile {% if day == 0 %}out-of-month{% else %}in-month{% endif %} {% if eventsOnThisDate|length > 0 %}has-event{% endif %} {% if date == today %}is-today is-selected{% endif %}">
+                        {% if day != 0 %}
+                            <p class="flex-center tile-content">{{ day }}</p>
+                        {% endif %}
                     </div>
                 {% endfor %}
             {% endfor %}
         </div>
-        <div class="column content event-descriptions">
-            <h2>Events:</h2>
+        <div class="column event-descriptions">
+            <h2 class="title">Events:</h2>
             {% for week in weeks %}
                 {% for day in week %}
                     {% if day != 0 %}
                         {% makeDateObj as date %}
                         {% getEventsOnDate as eventsOnThisDate %}
-                        {% if eventsOnThisDate|length != 0 %}
-                            <p class="event-descriptions-subtitle {{ date|date:"mdY" }}">{{ date }}</p>
+                        {% if eventsOnThisDate|length == 0 %}
+                            <p class="d-subtitle {{ date|date:"mdY" }}">There are no events
+                                on {{ date }}.</p>
                         {% else %}
-                            <p class="event-descriptions-subtitle {{ date|date:"mdY" }}">There are no events on {{ date }}.</p>
-                        {% endif %}
-                        <div class="event-descriptions-list {{ date|date:"mdY" }}">
-                            {% for event in eventsOnThisDate %}
-                                <div class="card">
-                                    <header class="card-header">
-                                        <h3 class="card-header-title">{{ event.name }}</h3>
-                                    </header>
-                                    <div class="card-content">
-                                        <div class="content">
+                            <p class="d-subtitle {{ date|date:"mdY" }}">{{ date }}</p>
+                            <div class="event-grid {{ date|date:"mdY" }}">
+                                {% for event in eventsOnThisDate %}
+                                    <div class="card">
+                                        <header class="card-header">
+                                            <h3 class="card-header-title">{{ event.name }}</h3>
+                                        </header>
+                                        <div class="card-content content">
                                             {% if event.startDate != event.endDate %}
-                                                <p>Starts on {{ event.startDate }} at {{ event.startTime }}</p>
-                                                <p>Ends on {{ event.endDate }} at {{ event.endTime }}</p>
+                                                <p><span class="property-title">Starts:</span> {{ event.startDate }}
+                                                    at {{ event.startTime }}</p>
+                                                <p><span class="property-title">Ends:</span> {{ event.endDate }}
+                                                    at {{ event.endTime }}</p>
                                             {% else %}
-                                                <p>Date & Time: {{ event.startDate }} at {{ event.startTime }}</p>
+                                                <p><span
+                                                        class="property-title">Date & Time:</span> {{ event.startDate }}
+                                                    at {{ event.startTime }}</p>
                                             {% endif %}
                                             {% if event.virtual %}
-                                                <p>Link: <a href="{{ event.link }}">{{ event.link }}</a></p>
+                                                <p><span class="property-title">Link:</span> <a
+                                                        href="{{ event.link }}">{{ event.link }}</a></p>
                                             {% else %}
-                                                <p>Location: {{ event.location }}</p>
+                                                <p><span class="property-title">Location:</span> {{ event.location }}
+                                                </p>
                                             {% endif %}
-                                            <p>Description: {{ event.description }}</p>
+                                            <p><span class="property-title">Description:</span> {{ event.description }}
+                                            </p>
                                         </div>
                                     </div>
-                                </div>
-                            {% endfor %}
-                        </div>
+                                {% endfor %}
+                            </div>
+                        {% endif %}
                     {% endif %}
                 {% endfor %}
             {% endfor %}
         </div>
     </div>
-    <a class="view-switch-link" href="{% url "main:events" %}?view=list">View As List</a>
-    <a class="view-switch-link" href="webcal://{{ request.get_host }}/{{ ics_link }}">Import To Your Calendar Software</a>
+    <div class="calendar-footer">
+        <a aria-label="Previous Month" href="{{ previous_link }}"><i
+                class="is-size-4 icon fas fa-arrow-alt-circle-left"></i></a>
+        <div class="header-text flex-center">
+            <a href="{% url "main:events" %}?view=calendar">Today</a>
+            <a href="{% url "main:events" %}?view=list">View As List</a>
+            <a class="view-switch-link" href="webcal://{{ request.get_host }}/{{ ics_link }}">Import To Your
+                Calendar</a>
+        </div>
+        <a aria-label="Next Month" href="{{ next_link }}"><i
+                class="is-size-4 icon fas fa-arrow-alt-circle-right"></i></a>
+    </div>
 {% endblock %}

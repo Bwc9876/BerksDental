@@ -1,30 +1,50 @@
-.main {
-    display: flex;
+.hero-body {
+    display: grid;
+    grid-template-areas:
+    "text text"
+    "left right";
+}
+
+.header-text {
+    grid-area: text;
     flex-direction: column;
 }
 
-.hero-body {
+.header-text h1 {
+    margin: 0.2em 0 0.3em!important;
+}
+
+.button-box {
+    padding-top: 3rem;
+}
+
+.left-button-box {
+    grid-area: left;
+}
+
+.right-button-box {
+    grid-area: right;
+}
+
+@media only screen and (min-width: 440px) {
+    .hero-body {
+        grid-template-areas: "left text right";
+    }
+
+    .button-box {
+        padding-top: 0;
+    }
+}
+
+.calendar-footer {
     display: flex;
     justify-content: space-around;
     align-items: center;
+    min-height: 8em;
+    background-color: whitesmoke;
 }
 
-.center-text {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    height: 100px;
-}
-
-.subtitle.is-link {
-    color: #3273dc;
-}
-
-.subtitle.is-link:hover {
-    text-decoration: underline;
-}
-
-.view-switch-link {
-    margin: 35px 35px 35px auto;
+.calendar-footer .header-text {
+    align-self: stretch;
+    justify-content: space-evenly;
 }
