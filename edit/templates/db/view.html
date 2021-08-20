@@ -7,83 +7,63 @@
     We also set the first property to be bold to help with the visuals of the table
 {% endcomment %}
 {% load static %}
-
-{% block adminLinks %}
-
+{% block adminHead %}
     {% load static %}
     <link rel="stylesheet" type="text/css" href="{% static "admin/view.css" %}">
-
 {% endblock %}
 {% load adminTags %}
 {% block additionalNavigation %}
     {% if canEdit %}
         {% if viewSet.ordered %}
-            {% action "add" viewSet.edit_link "fa-plus" "h2" show_name=True %}&nbsp;
-            {% action "order" viewSet.order_link "fa-sort" "h2" show_name=True %}
-        {% else %}
-            {% action "add" viewSet.edit_link "fa-plus" "h2" show_name=True %}
+            {% action "order" viewSet.order_link "fa-sort" "" show_name=True %}
         {% endif %}
+        {% if page.has_other_pages %}
+            <nav class="page-navigation">
+                {% action "First Page" first_link "fa-fast-backward" "" enabled=page.has_previous %}
+                {% action "Previous Page" previous_link "fa-step-backward" "" enabled=page.has_previous %}
+                <p>Page {{ page.number }}/{{ max_pages }}</p>
+                {% action "Next Page" next_link "fa-step-forward" "" enabled=page.has_next %}
+                {% action "Last Page" last_link "fa-fast-forward" "" enabled=page.has_next %}
+            </nav>
+        {% endif %}
+        {% action "add" viewSet.edit_link "fa-plus" "" show_name=True %}
     {% endif %}
 {% endblock %}
-
 {% block adminContent %}
-
-    <div class="table-container">
-        <table class="model-table">
-            <thead>
-            <tr class="header-row">
-                {% if objects|length > 0 %}
-                    {% for header in headers %}
-                        <th>{{ header|title }}</th>
-                    {% endfor %}
-                    {% if canEdit %}
-                        <th colspan="{{ viewSet.additionalActions|length|add:2 }}">Actions</th>
-                    {% endif %}
-                {% endif %}
-            </tr>
-            </thead>
-            <tbody>
-            {% for object in objects %}
-                <tr class="{% cycle "normal" "shaded" %}">
-                    {% for value in object %}
-                        {% if forloop.first %}
-                            <td><b>{{ value|safe|default:"Not Entered" }}</b></td>
-                        {% elif forloop.last %}
-                            {% if canEdit %}
-                                <td><a aria-label="Edit {% getPrimaryValue object %}" class="action edit"
-                                       href="{{ viewSet.edit_link }}?id={{ value }}"><i
-                                        class="fas fa-edit"></i></a></td>
-                                {% for action in viewSet.additionalActions %}
-                                    <td><a aria-label="{{ action.name }} {% getPrimaryValue object %}"
-                                           class="action action-{{ action.icon }}"
-                                           href="{{ action.link }}?id={{ value }}"><i
-                                            class="fas {{ action.icon }}"></i></a></td>
-                                {% endfor %}
-                                <td><a aria-label="Delete {% getPrimaryValue object %}" class="action delete_c"
-                                       href="{{ viewSet.delete_link }}?id={{ value }}"><i
-                                        class="fas fa-trash"></i></a></td>
-                            {% endif %}
-                        {% else %}
-                            <td>{{ value|safe|default:"Not Entered" }}</td>
-                        {% endif %}
-                    {% endfor %}
-                </tr>
-            {% empty %}
-                <tr class="empty-notification-row">
-                    <td class="empty-notification">No {{ viewSet.displayName|title }}s In The Database</td>
-                </tr>
-            {% endfor %}
-            </tbody>
-        </table>
-    </div>
-    {% if page.has_other_pages %}
-        <nav class="admin-navigation page-navigation">
-            {% action "First Page" first_link "fa-fast-backward" "h2" enabled=page.has_previous %}
-            {% action "Previous Page" previous_link "fa-step-backward" "h2" enabled=page.has_previous %}
-            <p>Page {{ page.number }}/{{ max_pages }}</p>
-            {% action "Next Page" next_link "fa-step-forward" "h2" enabled=page.has_next %}
-            {% action "Last Page" last_link "fa-fast-forward" "h2" enabled=page.has_next %}
-        </nav>
+    {% if objects|length > 0 %}
+        {% for header in headers %}
+            <h4 class="view-header">{{ header|title }}</h4>
+        {% endfor %}
+        {% if canEdit %}
+            <h4 class="view-header">Actions</h4>
+        {% endif %}
     {% endif %}
-
+    {% for object in objects %}
+        {% for value in object %}
+            {% if forloop.first %}
+                <p><b>{{ value|safe|default:"Not Entered" }}</b></p>
+            {% elif forloop.last %}
+                <div class="action-links">
+                    {% if canEdit %}
+                        <a aria-label="Edit {% getPrimaryValue object %}" class="action edit"
+                           href="{{ viewSet.edit_link }}?id={{ value }}"><i
+                                class="fas fa-edit"></i></a>
+                        {% for action in viewSet.additionalActions %}
+                            <a aria-label="{{ action.name }} {% getPrimaryValue object %}"
+                               class="action action-{{ action.icon }}"
+                               href="{{ action.link }}?id={{ value }}"><i
+                                    class="fas {{ action.icon }}"></i></a>
+                        {% endfor %}
+                        <a aria-label="Delete {% getPrimaryValue object %}" class="action delete_c"
+                           href="{{ viewSet.delete_link }}?id={{ value }}"><i
+                                class="fas fa-trash"></i></a>
+                    {% endif %}
+                </div>
+            {% else %}
+                <p>{{ value|safe|default:"Not Entered" }}</p>
+            {% endif %}
+        {% endfor %}
+    {% empty %}
+        <p class="empty-notification">No {{ viewSet.displayName|title }}s Have Been Added</p>
+    {% endfor %}
 {% endblock %}

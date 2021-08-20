@@ -140,11 +140,11 @@ def needs_multipart(form):
 @register.simple_tag(name="homeTile")
 def home_tile(url, icon_class, name, new_tab=False):
     return safe(f"""
-        <a {'target="_blank"' if new_tab else ""} href="{url}" class="action">
-            <div class="action-thumbnail">
+        <a {'target="_blank"' if new_tab else " "}href="{url}" class="action flex-center">
+            <div class="action-thumbnail flex-center">
                 <i class="fas fa-{icon_class}"></i>
             </div>
-            <p class="action-name">{title(name)}</p>
+            <h4 class="action-name">{title(name)}</h4>
         </a>
     """)
 

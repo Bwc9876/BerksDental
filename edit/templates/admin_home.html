@@ -4,7 +4,7 @@
     If the user doesn't have permissions to edit something it won't appear
     We also provide a link to django's built-in admin for debugging only
 {% endcomment %}
-{% block adminLinks %}
+{% block adminHead %}
     {% load static %}
     {% load adminTags %}
     <link rel="stylesheet" type="text/css" href="{% static "admin/home.css" %}">
@@ -19,8 +19,8 @@
         {% for vs in viewsets %}
             {% homeTile vs.overview_link vs.pictureClass vs.displayName|add:"s" %}
         {% endfor %}
-        {% homeTile logout_link "sign-out-alt" "logout" %}
         {% homeTile help_link "question-circle" "help" new_tab=True %}
+        {% homeTile logout_link "sign-out-alt" "logout" %}
         {% if debug and user.is_staff %}
             {% homeTile "/debug_admin/" "code" "debug" new_tab=True %}
         {% endif %}

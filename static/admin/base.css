@@ -1,41 +1,47 @@
-:root {
-    --red-color: #e33434;
-    --green-color: #2eb72e;
-    --default-hover-color: #23B7D9;
-    --color-transition-time: 100ms;
-    --hover-transition: color var(--color-transition-time) linear;
-    --hover-bg-transition: background-color var(--color-transition-time) linear;
+.admin-navigation {
+    display: flex;
+    padding: 1em;
+    gap: 0.5em;
+    background-color: #fafafa;
+    flex-wrap: wrap;
+    align-content: flex-start;
+    justify-content: space-between;
 }
 
-.main {
+.admin-navigation > *:last-child {
+    margin-left: auto;
+}
+
+.home-link {
+    margin-left: auto;
+}
+
+.main-admin-navigation {
+    gap: 0.5em;
     display: flex;
-    flex-direction: column;
+    width: 100%;
+}
+
+.alert-box {
+    background-color: #fafafa;
+    padding: 0 1em 1em;
 }
 
 .alert {
     display: flex;
     align-items: center;
-    padding: 10px;
-    margin: 15px 25px -23px;
+    padding: 1em;
     border: solid 3px;
     border-radius: 15px;
-}
-
-.alert > p {
-    color: black;
-}
-
-.alert > * {
-    margin: 0 10px;
+    gap: 1em;
 }
 
 .close-alert-button {
     border: none;
-    background-color: unset;
+    background-color: transparent;
     margin-left: auto;
-    color: #262626;
-    font-size: 1em;
     cursor: pointer;
+    font-size: var(--h4);
 }
 
 .alert-error {
@@ -62,43 +68,16 @@
     background-color: lightgreen;
 }
 
-.admin-navigation {
-    display: flex;
-    margin: 25px 25px 12px;
-}
-
-.navigation-action {
-    color: #353b31;
-    transition: var(--hover-transition);
-}
-
-.navigation-action:hover {
-    color: var(--default-hover-color);
-}
+/*:root {
+    --red-color: #e33434;
+    --green-color: #2eb72e;
+    --default-hover-color: #23B7D9;
+    --color-transition-time: 100ms;
+    --hover-transition: color var(--color-transition-time) linear;
+    --hover-bg-transition: background-color var(--color-transition-time) linear;
+} TODO: Remember this is here
 
 .navigation-action.disabled {
     color: #9ba7ac;
     cursor: default;
-}
-
-.home {
-    margin-left: auto;
-    margin-right: 10px;
-}
-
-.help {
-    display: initial;
-    font-size: 1em;
-    margin-top: 0;
-}
-
-.admin-header {
-    display: flex;
-    justify-content: flex-end;
-    font-size: 1.2em;
-    margin: 0 25px 25px;
-}
-
-.admin-header p {
-    margin-right: auto;
-}
+}*/
