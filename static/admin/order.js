@@ -20,7 +20,6 @@ $(document).ready(() => {
                 new_order.push($(list_item).attr("id"));
             });
             $("#id_new_order").val(new_order.join(","));
-            console.log(new_order);
         });
     } else {
         $(".submit-button").prop("disabled", true);

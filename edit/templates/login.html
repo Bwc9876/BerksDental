@@ -1,9 +1,15 @@
 {% extends 'db/form_base.html' %}
-
 {% comment %}
     This file is used as a form to log the user in
     Form base and template inheritance makes this very easy, all we need to do is override some blocks
 {% endcomment %}
-
+{% block adminHead %}
+    {{ block.super }}
+    <style>
+    form {
+        align-items: center;
+    }
+    </style>
+{% endblock %}
 {% block adminHeader %}Login{% endblock %}
 {% block submitWord %}Login{% endblock %}

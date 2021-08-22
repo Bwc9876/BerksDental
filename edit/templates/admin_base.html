@@ -11,6 +11,13 @@
 {% block head %}
     {% load static %}
     <link type="text/css" rel="stylesheet" href="{% static "admin/base.css" %}">
+    <script type="text/javascript" defer="defer">
+        $(document).ready(() => {
+            $(".close-alert-button").click(() => {
+                $(".alert-box").remove();
+            });
+        });
+    </script>
     {% block adminHead %}{% endblock %}
 {% endblock %}
 {% block header %}
@@ -25,15 +32,16 @@
     </div>
     <nav class="admin-navigation">
         <div class="main-admin-navigation">
-        {% if back_link %}
-            <a href="{{ back_link }}" aria-label="Back"><i class="fas fa-arrow-left"></i></a>
-        {% endif %}
-        {% if not hide_home %}
-            <a class="home-link" href="{% url "edit:admin_home" %}" aria-label="Home"><i class="fas fa-home"></i></a>
-        {% endif %}
-        {% if help_link %}
-            <a href="{{ help_link }}" target="_blank" aria-label="Help"><i class="fas fa-question-circle"></i></a>
-        {% endif %}
+            {% if back_link %}
+                <a href="{{ back_link }}" aria-label="Back"><i class="fas fa-arrow-left"></i></a>
+            {% endif %}
+            {% if not hide_home %}
+                <a class="home-link" href="{% url "edit:admin_home" %}" aria-label="Home"><i
+                        class="fas fa-home"></i></a>
+            {% endif %}
+            {% if help_link %}
+                <a href="{{ help_link }}" target="_blank" aria-label="Help"><i class="fas fa-question-circle"></i></a>
+            {% endif %}
         </div>
         {% block additionalNavigation %}{% endblock %}
     </nav>
@@ -45,9 +53,6 @@
             <script type="text/javascript" defer="defer">
                 $(document).ready(() => {
                     history.pushState({'alert': true}, document.title, window.location.pathname);
-                    $(".close-alert-button").click(() => {
-                        $(".alert-box").remove();
-                    });
                 });
             </script>
             <div class="alert alert-{% getAlertType request %}">

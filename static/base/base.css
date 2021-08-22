@@ -67,8 +67,14 @@ p, a {
     font-family: "Noto Sans", Verdana, Geneva, Tahoma, sans-serif;
 }
 
-/* Button */
+/* Form */
 /* TODO: Decide if other button variations are needed. */
+.field-div > input:focus, .field-div > input:focus-within,
+.field-div > textarea:focus, .field-div > textarea:focus-within,
+.field-div > select:focus, .field-div > select:focus-within {
+    outline: var(--ac1) solid 2px;
+}
+
 .dental-button {
     padding: 0.3em 1.25em;
     background-color: var(--gr-clr);

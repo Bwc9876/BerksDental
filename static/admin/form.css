@@ -1,58 +1,56 @@
-form {
-    margin: 5vw;
+form, .form-flex {
     display: flex;
     flex-direction: column;
-    align-items: center;
     justify-content: space-between;
-}
-
-@media only screen and (max-width: 250px) {
-    form {
-        align-items: flex-start;
-    }
-}
-
-form > * {
-    margin: calc(5px + 1vh) 0;
-}
-
-form > div {
-    display: flex;
     align-items: flex-start;
+    gap: 1em;
+}
+
+form {
+    margin: 5em;
+}
+
+.field-div {
+    display: flex;
     flex-direction: column;
+    align-items: flex-start;
+    gap: 0.3em;
 }
 
 .checkbox_c {
+    flex-wrap: wrap;
     flex-direction: row;
     align-items: center;
 }
 
-.checkbox_c * {
-    margin: 0 4px;
+.checkbox_c input, .checkbox_c .help-text {
+    position: relative;
+    top: 0.1em;
 }
 
-@media only screen and (min-width: 769px) {
-    form > div {
-        flex-direction: row;
-        align-items: center;
-    }
+#Permissions_label {
+    font-size: var(--h2);
 }
 
-form button {
-    font-size: 15px;
+.help-text {
+    font-size: var(--h5);
 }
 
-@keyframes load-spin {
-    from {
-        transform: rotate(0deg);
-    }
-    to {
-        transform: rotate(360deg);
-    }
+.checkbox_c .help-text {
+    order: 1;
 }
 
-.loading {
-    animation: load-spin 2s 0s linear infinite;
+textarea {
+    resize: none;
+    min-height: 20vh;
+}
+
+.error-list {
+    color: #c40000;
+}
+
+.dental-button {
+    margin-top: 0.5em;
 }
 
 .hidden {

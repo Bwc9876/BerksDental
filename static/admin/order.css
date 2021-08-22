@@ -14,29 +14,19 @@ form > div {
 
 .sort_list {
     list-style: none;
-    margin-bottom: 20px;
     padding: 0;
 }
 
 .sort-target {
     box-shadow: grey 0 1px 2px;
-    margin: 5px auto;
     padding: 0;
     user-select: none;
-    width: calc(100% - 250px);
+    width: 100%;
+    margin: 5px;
 }
 
 .help-text {
     margin-left: 0;
-}
-
-@media only screen and (max-width: 700px) {
-
-    .sort-target {
-        width: 99%;
-        margin: 5px;
-    }
-
 }
 
 .handle {
@@ -46,5 +36,5 @@ form > div {
 }
 
 .ghost-sort-target {
-    background-color: var(--ac-light);
+    background-color: var(--ac1);
 }
