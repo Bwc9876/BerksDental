@@ -207,15 +207,6 @@ class ConfirmWidget(TextInput):
         context['widget']['object_name'] = self.object_name
         return context
 
-    class Media:
-        """
-        This class defines additional css and js we want to use in the input
-        """
-
-        css = {
-            "all": ("admin/confirm_style.css",)
-        }
-
 
 class ConfirmField(fields.CharField):
     """
