@@ -68,7 +68,6 @@ p, a {
 }
 
 /* Form */
-/* TODO: Decide if other button variations are needed. */
 .field-div > input:focus, .field-div > input:focus-within,
 .field-div > textarea:focus, .field-div > textarea:focus-within,
 .field-div > select:focus, .field-div > select:focus-within {
@@ -86,10 +85,6 @@ p, a {
 .dental-button:hover {
     border-color: var(--ac1);
     color: var(--ac1);
-}
-
-.rounded {
-    border-radius: 2em;
 }
 
 /* NavBar */

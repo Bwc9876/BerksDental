@@ -30,6 +30,11 @@
 
 .in-month {
     cursor: pointer;
+    transition: var(--color-transition);
+}
+
+.in-month:hover {
+    background-color: var(--clr2);
 }
 
 .out-of-month {

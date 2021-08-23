@@ -104,6 +104,10 @@
                         </a>
                     </div>
                 {% endfor %}
+                <a href="{% url 'main:gallery' %}" class="image-grid-cell">
+                    <button id="load-images-button" class="image-grid-item-wrapper dental-button">View All Photos
+                    </button>
+                </a>
             </div>
         {% else %}
             <p>Currently, there are no featured photos. View all our photos on our <a href="{% url "main:gallery" %}">Gallery
