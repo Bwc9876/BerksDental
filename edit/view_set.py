@@ -32,7 +32,7 @@ formatters = {
                                                  f'{"fa-check-circle" if input_val is True else "fa-times-circle"}'
                                                  f' fa-lg bool-icon"></i>',
     model_fields.TimeField: lambda input_val: input_val.strftime("%I:%M %p"),
-    model_fields.DateField: lambda input_val: input_val.strftime("%d-%m-%y")
+    model_fields.DateField: lambda input_val: input_val.strftime("%m/%d/%y")
 }
 
 

@@ -166,9 +166,6 @@ class PermInput(TextInput):
         This class defines additional css and js we want to use in the input
         """
 
-        css = {
-            "all": ("admin/permissionStyle.css",)
-        }
         js = ("admin/permissionLogic.js",)
 
 

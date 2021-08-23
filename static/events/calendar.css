@@ -59,6 +59,7 @@
 .tile-content {
     position: absolute;
     inset: 0;
+    user-select: none;
 }
 
 .event-descriptions {

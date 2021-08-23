@@ -53,6 +53,19 @@ textarea {
     margin-top: 0.5em;
 }
 
+@keyframes load-spin {
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+.loading {
+    animation: load-spin 2s 0s linear infinite;
+}
+
 .hidden {
     display: none;
 }
