@@ -19,7 +19,7 @@ DEBUG = STAGE != "PRODUCTION"
 
 if STAGE == "PRODUCTION":
     # Will be changed to the domain we want to host the site on in production
-    ALLOWED_HOSTS = ['ProductionHost']
+    ALLOWED_HOSTS = [os.getenv('HOSTNAME')]
     INSTALLED_APPS = [
         'django.contrib.auth',
         'django.contrib.contenttypes',
