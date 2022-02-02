@@ -19,7 +19,9 @@
         {% for vs in viewsets %}
             {% homeTile vs.overview_link vs.pictureClass vs.displayName|add:"s" %}
         {% endfor %}
-        {% homeTile help_link "question-circle" "help" new_tab=True %}
+        {% comment %}
+            {% homeTile help_link "question-circle" "help" new_tab=True %}
+        {% endcomment %}
         {% homeTile logout_link "sign-out-alt" "logout" %}
         {% if debug and user.is_staff %}
             {% homeTile "/debug_admin/" "code" "debug" new_tab=True %}
